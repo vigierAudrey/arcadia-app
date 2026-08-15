@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TeachingAreaKind {
+  SUBJECT
+  BLOCK
+}
+
+enum SequenceStatus {
+  DRAFT
+  LOCKED
+  OPEN
+}
+
+enum ActivityPublicationStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Program {
+  id         String    @id @default(uuid()) @db.Uuid
+  name       String    @unique @db.VarChar(100)
+  position   Int       @default(0)
+  archivedAt DateTime? @db.Timestamptz(3)
+  createdAt  DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime  @updatedAt @db.Timestamptz(3)
+  levels     Level[]
+
+  @@index([archivedAt, position])
+}
+
+model Level {
+  id         String      @id @default(uuid()) @db.Uuid
+  programId  String      @db.Uuid
+  name       String      @db.VarChar(100)
+  position   Int         @default(0)
+  archivedAt DateTime?   @db.Timestamptz(3)
+  createdAt  DateTime    @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime    @updatedAt @db.Timestamptz(3)
+  program    Program     @relation(fields: [programId], references: [id], onDelete: Restrict)
+  classrooms Classroom[]
+
+  @@unique([programId, name])
+  @@index([programId, archivedAt, position])
+}
+
+model Classroom {
+  id            String         @id @default(uuid()) @db.Uuid
+  levelId       String         @db.Uuid
+  name          String         @db.VarChar(100)
+  position      Int            @default(0)
+  archivedAt    DateTime?      @db.Timestamptz(3)
+  createdAt     DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime       @updatedAt @db.Timestamptz(3)
+  level         Level          @relation(fields: [levelId], references: [id], onDelete: Restrict)
+  teachingAreas TeachingArea[]
+
+  @@unique([levelId, name])
+  @@index([levelId, archivedAt, position])
+}
+
+model TeachingArea {
+  id                String             @id @default(uuid()) @db.Uuid
+  classroomId       String             @db.Uuid
+  name              String             @db.VarChar(120)
+  kind              TeachingAreaKind
+  position          Int                @default(0)
+  archivedAt        DateTime?          @db.Timestamptz(3)
+  createdAt         DateTime           @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime           @updatedAt @db.Timestamptz(3)
+  classroom         Classroom          @relation(fields: [classroomId], references: [id], onDelete: Restrict)
+  learningSequences LearningSequence[]
+
+  @@unique([classroomId, name])
+  @@index([classroomId, archivedAt, position])
+}
+
+model LearningSequence {
+  id             String         @id @default(uuid()) @db.Uuid
+  teachingAreaId String         @db.Uuid
+  title          String         @db.VarChar(160)
+  description    String?        @db.Text
+  position       Int            @default(0)
+  status         SequenceStatus @default(DRAFT)
+  archivedAt     DateTime?      @db.Timestamptz(3)
+  createdAt      DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime       @updatedAt @db.Timestamptz(3)
+  teachingArea   TeachingArea   @relation(fields: [teachingAreaId], references: [id], onDelete: Restrict)
+  activities     Activity[]
+
+  @@unique([teachingAreaId, title])
+  @@index([teachingAreaId, archivedAt, position])
+  @@index([teachingAreaId, status, archivedAt])
+}
+
+model Activity {
+  id                   String                    @id @default(uuid()) @db.Uuid
+  learningSequenceId   String                    @db.Uuid
+  title                String                    @db.VarChar(160)
+  type                 String                    @db.VarChar(50)
+  instructions         String                    @db.Text
+  payload              Json
+  payloadSchemaVersion Int                       @default(1)
+  position             Int                       @default(0)
+  publicationStatus    ActivityPublicationStatus @default(DRAFT)
+  archivedAt           DateTime?                 @db.Timestamptz(3)
+  createdAt            DateTime                  @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime                  @updatedAt @db.Timestamptz(3)
+  learningSequence     LearningSequence          @relation(fields: [learningSequenceId], references: [id], onDelete: Restrict)
+
+  @@unique([learningSequenceId, title])
+  @@index([learningSequenceId, archivedAt, position])
+  @@index([learningSequenceId, publicationStatus, archivedAt])
+}

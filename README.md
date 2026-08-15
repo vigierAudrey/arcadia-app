@@ -3,16 +3,32 @@
 Socle d'une plateforme pédagogique mobile-first destinée aux élèves de lycée
 professionnel et de CAP.
 
-Cette première étape contient uniquement :
+Le projet contient actuellement :
 
 - une page élève statique sur `/` ;
-- une page d'administration de démonstration sur `/admin` ;
+- une page d'administration en lecture seule sur `/admin` ;
 - un manifest PWA, sans service worker ni fonctionnement hors ligne ;
-- des données temporaires pour visualiser la future hiérarchie pédagogique.
+- un catalogue pédagogique stocké dans PostgreSQL local via Prisma.
 
-L'administration n'est pas encore protégée et aucune donnée n'est enregistrée.
+L'administration n'est pas encore protégée et aucune action de l'interface
+n'écrit dans la base.
 
-## Lancer le projet
+## Préparer l'environnement local
+
+Copier `.env.example` vers `.env`, puis remplacer le mot de passe de
+développement dans les deux variables concernées. Ensuite :
+
+```bash
+pnpm install
+pnpm db:start
+pnpm db:migrate
+pnpm db:seed
+```
+
+Le conteneur PostgreSQL est réservé au développement de ce projet. Il utilise
+le port `127.0.0.1:5433`, un réseau et un volume Docker dédiés.
+
+## Lancer l'application
 
 ```bash
 pnpm dev
@@ -25,12 +41,22 @@ l'aperçu de l'administration.
 ## Vérifications
 
 ```bash
+pnpm test
 pnpm lint
 pnpm build
 ```
 
+## Modèle pédagogique
+
+```text
+Formation → Niveau → Classe → Enseignement → Séquence → Activité
+```
+
+Les séquences peuvent être en brouillon, verrouillées ou ouvertes. Les
+activités utilisent un type textuel et un payload JSON versionné, validé par le
+code applicatif afin de pouvoir ajouter de nouveaux moteurs progressivement.
+
 ## Périmètre différé
 
-Prisma, PostgreSQL, l'authentification, IndexedDB, le service worker, Docker et
-la gestion réelle des contenus seront traités dans les étapes suivantes après
-validation.
+L'authentification, les codes classe, l'édition des contenus, IndexedDB, le
+service worker, le mode hors ligne et le déploiement restent différés.
