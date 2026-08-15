@@ -6,12 +6,13 @@ professionnel et de CAP.
 Le projet contient actuellement :
 
 - une page élève statique sur `/` ;
-- une page d'administration en lecture seule sur `/admin` ;
+- une page d'administration du catalogue sur `/admin` ;
 - un manifest PWA, sans service worker ni fonctionnement hors ligne ;
 - un catalogue pédagogique stocké dans PostgreSQL local via Prisma.
 
-L'administration n'est pas encore protégée et aucune action de l'interface
-n'écrit dans la base.
+L'administration n'est pas encore authentifiée. Ses écritures sont disponibles
+en développement local et volontairement bloquées en production jusqu'à
+l'ajout de la protection administrateur.
 
 ## Préparer l'environnement local
 
@@ -49,14 +50,16 @@ pnpm build
 ## Modèle pédagogique
 
 ```text
-Formation → Niveau → Classe → Enseignement → Séquence → Activité
+Formation → Niveau → Classe → Enseignement → Séquence → Séance → Activité
 ```
 
-Les séquences peuvent être en brouillon, verrouillées ou ouvertes. Les
-activités utilisent un type textuel et un payload JSON versionné, validé par le
-code applicatif afin de pouvoir ajouter de nouveaux moteurs progressivement.
+Les séquences peuvent être en brouillon, verrouillées ou ouvertes. Les séances
+peuvent être en brouillon ou publiées. Le futur sommaire est généré directement
+depuis cette hiérarchie ordonnée, sans table dédiée. Les activités sont
+rattachées à une séance et conservent un type textuel et un payload JSON
+versionné afin de pouvoir ajouter de nouveaux moteurs progressivement.
 
 ## Périmètre différé
 
-L'authentification, les codes classe, l'édition des contenus, IndexedDB, le
+L'authentification, les codes classe, l'édition des activités, IndexedDB, le
 service worker, le mode hors ligne et le déploiement restent différés.

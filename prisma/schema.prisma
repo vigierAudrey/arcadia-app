@@ -18,7 +18,7 @@ enum SequenceStatus {
   OPEN
 }
 
-enum ActivityPublicationStatus {
+enum PublicationStatus {
   DRAFT
   PUBLISHED
 }
@@ -92,29 +92,47 @@ model LearningSequence {
   createdAt      DateTime       @default(now()) @db.Timestamptz(3)
   updatedAt      DateTime       @updatedAt @db.Timestamptz(3)
   teachingArea   TeachingArea   @relation(fields: [teachingAreaId], references: [id], onDelete: Restrict)
-  activities     Activity[]
+  lessons        Lesson[]
 
   @@unique([teachingAreaId, title])
   @@index([teachingAreaId, archivedAt, position])
   @@index([teachingAreaId, status, archivedAt])
 }
 
+model Lesson {
+  id                String            @id @default(uuid()) @db.Uuid
+  sequenceId        String            @db.Uuid
+  title             String            @db.VarChar(160)
+  description       String?           @db.Text
+  position          Int               @default(0)
+  publicationStatus PublicationStatus @default(DRAFT)
+  archivedAt        DateTime?         @db.Timestamptz(3)
+  createdAt         DateTime          @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime          @updatedAt @db.Timestamptz(3)
+  sequence          LearningSequence  @relation(fields: [sequenceId], references: [id], onDelete: Restrict)
+  activities        Activity[]
+
+  @@unique([sequenceId, title])
+  @@index([sequenceId, archivedAt, position])
+  @@index([sequenceId, publicationStatus, archivedAt])
+}
+
 model Activity {
   id                   String                    @id @default(uuid()) @db.Uuid
-  learningSequenceId   String                    @db.Uuid
+  lessonId             String                    @db.Uuid
   title                String                    @db.VarChar(160)
   type                 String                    @db.VarChar(50)
   instructions         String                    @db.Text
   payload              Json
   payloadSchemaVersion Int                       @default(1)
   position             Int                       @default(0)
-  publicationStatus    ActivityPublicationStatus @default(DRAFT)
+  publicationStatus    PublicationStatus         @default(DRAFT)
   archivedAt           DateTime?                 @db.Timestamptz(3)
   createdAt            DateTime                  @default(now()) @db.Timestamptz(3)
   updatedAt            DateTime                  @updatedAt @db.Timestamptz(3)
-  learningSequence     LearningSequence          @relation(fields: [learningSequenceId], references: [id], onDelete: Restrict)
+  lesson               Lesson                    @relation(fields: [lessonId], references: [id], onDelete: Restrict)
 
-  @@unique([learningSequenceId, title])
-  @@index([learningSequenceId, archivedAt, position])
-  @@index([learningSequenceId, publicationStatus, archivedAt])
+  @@unique([lessonId, title])
+  @@index([lessonId, archivedAt, position])
+  @@index([lessonId, publicationStatus, archivedAt])
 }

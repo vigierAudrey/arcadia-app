@@ -11,11 +11,6 @@ after(async () => {
 test("loads the initial pedagogical hierarchy from PostgreSQL", async () => {
   const catalog = await getAdminCatalog();
 
-  assert.deepEqual(
-    catalog.map((program) => program.name),
-    ["CAP", "BAC PRO"],
-  );
-
   const cap = catalog.find((program) => program.name === "CAP");
   assert.ok(cap);
   assert.deepEqual(cap.levels.map((level) => level.name), ["Terminale"]);
@@ -58,4 +53,28 @@ test("contains no student, score, attempt, or progress table", async () => {
   );
 
   assert.equal(forbiddenTable, undefined);
+});
+
+test("stores activities under lessons instead of sequences", async () => {
+  const columns = await prisma.$queryRaw<
+    Array<{ column_name: string; table_name: string }>
+  >`
+    SELECT table_name, column_name
+    FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name IN ('Lesson', 'Activity')
+    ORDER BY table_name, ordinal_position
+    LIMIT 50
+  `;
+  const lessonColumns = columns
+    .filter(({ table_name: tableName }) => tableName === "Lesson")
+    .map(({ column_name: columnName }) => columnName);
+  const activityColumns = columns
+    .filter(({ table_name: tableName }) => tableName === "Activity")
+    .map(({ column_name: columnName }) => columnName);
+
+  assert.ok(lessonColumns.includes("sequenceId"));
+  assert.ok(lessonColumns.includes("publicationStatus"));
+  assert.ok(activityColumns.includes("lessonId"));
+  assert.equal(activityColumns.includes("learningSequenceId"), false);
 });

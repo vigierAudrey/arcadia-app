@@ -96,6 +96,18 @@ export default function Home() {
               <span className={styles.missionState} aria-label="Ouverte">
                 ▶
               </span>
+              <ol className={styles.lessonPreviewList} aria-label="Étapes de la mission 1">
+                <li>
+                  <span>Étape 01</span>
+                  <strong>Identifier les situations à risque</strong>
+                  <small>Disponible</small>
+                </li>
+                <li>
+                  <span>Étape 02</span>
+                  <strong>Choisir une mesure de prévention</strong>
+                  <small>Disponible</small>
+                </li>
+              </ol>
             </li>
             <li className={styles.missionOpen}>
               <span className={styles.missionNumber}>02</span>
@@ -106,6 +118,18 @@ export default function Home() {
               <span className={styles.missionState} aria-label="Ouverte">
                 ▶
               </span>
+              <ol className={styles.lessonPreviewList} aria-label="Étapes de la mission 2">
+                <li>
+                  <span>Étape 01</span>
+                  <strong>Observer les signaux du corps</strong>
+                  <small>Disponible</small>
+                </li>
+                <li>
+                  <span>Étape 02</span>
+                  <strong>Adopter les bons réflexes</strong>
+                  <small>À découvrir</small>
+                </li>
+              </ol>
             </li>
             <li className={styles.missionLocked}>
               <span className={styles.missionNumber}>03</span>
@@ -116,6 +140,16 @@ export default function Home() {
               <span className={styles.lockIcon} aria-label="Verrouillée">
                 <span aria-hidden="true" />
               </span>
+              <ol
+                className={`${styles.lessonPreviewList} ${styles.lessonPreviewLocked}`}
+                aria-label="Étapes verrouillées de la mission 3"
+              >
+                <li>
+                  <span>Étape ??</span>
+                  <strong>Contenu à débloquer</strong>
+                  <small>Verrouillée</small>
+                </li>
+              </ol>
             </li>
           </ol>
           <p className={styles.previewNote}>

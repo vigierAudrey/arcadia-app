@@ -164,7 +164,7 @@
   line-height: 1.55;
 }
 
-.headingRow button {
+.headingRow :global(.admin-submit) {
   display: inline-flex;
   width: fit-content;
   min-height: 2.9rem;
@@ -182,7 +182,7 @@
   box-shadow: 4px 4px 0 rgb(242 56 197 / 55%);
 }
 
-.headingRow button:disabled {
+.headingRow :global(.admin-submit):disabled {
   cursor: not-allowed;
   opacity: 0.72;
 }
@@ -283,6 +283,10 @@
   background: linear-gradient(90deg, rgb(53 234 223 / 8%), transparent 62%);
 }
 
+.programHeader > .toolsPanel {
+  grid-column: 1 / -1;
+}
+
 .programIndex {
   display: grid;
   width: 2.6rem;
@@ -351,6 +355,10 @@
   margin-bottom: 0.75rem;
 }
 
+.levelColumn {
+  min-width: 0;
+}
+
 .levelHeading h3 {
   color: var(--yellow-300);
   font-family: var(--font-pixel);
@@ -373,6 +381,13 @@
   font-size: 0.98rem;
 }
 
+.classHeadingRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .teachingList {
   display: grid;
   gap: 0.45rem;
@@ -391,18 +406,25 @@
 
 .teachingHeading {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
 }
 
-.teachingHeading > span {
+.teachingHeading > div {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.teachingHeading > div > span {
   color: var(--text-100);
   font-size: 0.76rem;
   font-weight: 750;
 }
 
-.teachingHeading > small {
+.teachingHeading > div > small {
   flex: 0 0 auto;
   color: var(--cyan-300);
   font-family: var(--font-pixel);
@@ -452,6 +474,102 @@
   grid-column: 1 / -1;
 }
 
+.sequenceList > li > .toolsPanel {
+  grid-column: 1 / -1;
+}
+
+.sequenceList > li > .createPanel,
+.sequenceList > li > .lessonList,
+.sequenceList > li > .emptyLesson {
+  grid-column: 1 / -1;
+}
+
+.sequenceMain p {
+  margin: 0.15rem 0 0;
+  color: var(--text-300);
+  font-size: 0.65rem;
+  line-height: 1.45;
+  white-space: normal;
+}
+
+.lessonList {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.2rem 0 0;
+  padding: 0 0 0 0.65rem;
+  border-left: 2px solid rgb(255 91 216 / 58%);
+  list-style: none;
+}
+
+.lessonList > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem 0.6rem;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid rgb(169 179 214 / 16%);
+  background: rgb(5 6 21 / 65%);
+}
+
+.lessonMain {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.lessonMain > span,
+.lessonList > li > small {
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.48rem;
+  text-transform: uppercase;
+}
+
+.lessonMain strong {
+  overflow: hidden;
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lessonMain p {
+  margin: 0.15rem 0 0;
+  color: var(--text-300);
+  font-size: 0.62rem;
+  line-height: 1.45;
+}
+
+.lessonList > li > small,
+.lessonList > li > .toolsPanel {
+  grid-column: 1 / -1;
+}
+
+.lessonStatus {
+  align-self: start;
+  padding: 0.22rem 0.3rem;
+  border: 1px solid currentColor;
+  font-family: var(--font-pixel);
+  font-size: 0.45rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.lessonPublished {
+  color: var(--green-400);
+}
+
+.lessonDraft {
+  color: var(--text-500);
+}
+
+.emptyLesson {
+  margin: 0.2rem 0 0;
+  padding: 0.55rem 0.65rem;
+  border-left: 2px solid rgb(255 91 216 / 42%);
+  color: var(--text-500);
+  font-size: 0.62rem;
+  font-style: italic;
+}
+
 .sequenceStatus {
   align-self: start;
   padding: 0.25rem 0.35rem;
@@ -497,6 +615,193 @@
   text-align: center;
 }
 
+.createPanel,
+.toolsPanel {
+  position: relative;
+  color: var(--text-300);
+}
+
+.createPanel > summary,
+.toolsPanel > summary {
+  width: fit-content;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-pixel);
+  font-size: 0.56rem;
+  font-weight: 850;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.createPanel > summary::-webkit-details-marker,
+.toolsPanel > summary::-webkit-details-marker {
+  display: none;
+}
+
+.createPanel > summary {
+  min-height: 2.5rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px dashed rgb(53 234 223 / 55%);
+  color: var(--cyan-300);
+}
+
+.createPanel[open] > summary {
+  border-style: solid;
+  background: rgb(53 234 223 / 8%);
+}
+
+.toolsPanel > summary {
+  min-height: 2rem;
+  padding: 0.48rem 0.58rem;
+  border: 1px solid rgb(169 179 214 / 34%);
+  color: var(--text-300);
+}
+
+.toolsPanel[open] > summary {
+  border-color: var(--magenta-400);
+  color: var(--magenta-400);
+}
+
+.toolsContent,
+.createPanel > form {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.55rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line-soft);
+  background: var(--night-1000);
+  box-shadow: 3px 3px 0 rgb(5 6 21 / 65%);
+}
+
+.toolsPanel[open] {
+  width: 100%;
+}
+
+.compactForm,
+.inlineForm,
+.archiveForm,
+.orderForm {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.compactForm + .orderForm,
+.inlineForm + .orderForm,
+.orderForm + .archiveForm,
+.compactForm + .inlineForm {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.compactForm label,
+.inlineForm label {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.compactForm label > span,
+.inlineForm label > span {
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.52rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.compactForm input,
+.compactForm select,
+.compactForm textarea,
+.inlineForm select {
+  width: 100%;
+  min-height: 2.65rem;
+  padding: 0.65rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: var(--night-850);
+  color: var(--text-100);
+  font: inherit;
+}
+
+.compactForm textarea {
+  min-height: 5rem;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+:global(.admin-submit),
+:global(.admin-order-buttons button) {
+  min-height: 2.5rem;
+  padding: 0.58rem 0.72rem;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+:global(.admin-submit) {
+  width: fit-content;
+  background: var(--cyan-300);
+  color: var(--night-1000);
+  box-shadow: 3px 3px 0 rgb(242 56 197 / 45%);
+}
+
+:global(.admin-submit--secondary) {
+  background: transparent;
+  color: var(--cyan-300);
+  box-shadow: none;
+}
+
+:global(.admin-submit--danger) {
+  background: transparent;
+  color: var(--red-400);
+  box-shadow: none;
+}
+
+:global(.admin-submit):disabled,
+:global(.admin-order-buttons button):disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+:global(.admin-order-buttons) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+:global(.admin-order-buttons button) {
+  background: transparent;
+  color: var(--yellow-300);
+}
+
+:global(.admin-action-feedback) {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+:global(.admin-action-feedback--success) {
+  color: var(--green-400);
+}
+
+:global(.admin-action-feedback--error) {
+  color: var(--red-400);
+}
+
+.archiveForm p {
+  margin: 0;
+  color: var(--text-500);
+  font-size: 0.64rem;
+  line-height: 1.4;
+}
+
+.programAddRow {
+  padding: 0 1.1rem 1.1rem;
+}
+
 @media (min-width: 42rem) {
   .topbar,
   .previewWarning {
@@ -530,6 +835,10 @@
     padding: 1.25rem;
   }
 
+  .programHeader > .toolsPanel {
+    grid-column: auto;
+  }
+
   .demoTag {
     display: inline-flex;
   }
@@ -543,6 +852,10 @@
 
   .classGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .classGrid > .createPanel {
+    grid-column: 1 / -1;
   }
 }
 
