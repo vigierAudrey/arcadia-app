@@ -1,0 +1,58 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.72rem;
+  color: var(--text-100);
+  text-decoration: none;
+}
+
+.brand > span:last-child {
+  display: grid;
+  gap: 0.08rem;
+}
+
+.brand strong {
+  font-family: var(--font-pixel);
+  font-size: 0.82rem;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.brand small {
+  color: var(--text-500);
+  font-size: 0.66rem;
+}
+
+.symbol {
+  display: flex;
+  width: 2.35rem;
+  height: 2.35rem;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.18rem;
+  padding: 0.48rem;
+  border: 2px solid var(--cyan-400);
+  background: var(--night-1000);
+  box-shadow:
+    3px 3px 0 var(--magenta-500),
+    0 0 1rem rgb(53 234 223 / 20%);
+}
+
+.symbol span {
+  width: 0.24rem;
+  background: var(--cyan-300);
+}
+
+.symbol span:nth-child(1) {
+  height: 45%;
+}
+
+.symbol span:nth-child(2) {
+  height: 100%;
+  background: var(--magenta-400);
+}
+
+.symbol span:nth-child(3) {
+  height: 68%;
+  background: var(--yellow-400);
+}

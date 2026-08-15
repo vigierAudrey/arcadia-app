@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">PSE Interactif</title>
+  <rect width="512" height="512" rx="72" fill="#090b20"/>
+  <path d="M139 342V228c0-27 22-49 49-49h68v185h-95c-12 0-22-10-22-22Z" fill="#75fff5"/>
+  <path d="M373 342V228c0-27-22-49-49-49h-68v185h95c12 0 22-10 22-22Z" fill="#35eadf"/>
+  <path d="M256 179v185" stroke="#090b20" stroke-width="12" stroke-linecap="square"/>
+  <rect x="321" y="106" width="90" height="90" fill="#f238c5"/>
+  <path d="m342 151 13 13 25-28" fill="none" stroke="#ffe873" stroke-width="12" stroke-linecap="square" stroke-linejoin="miter"/>
+</svg>
