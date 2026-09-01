@@ -11,7 +11,9 @@ import {
 } from "@/generated/prisma/enums";
 import { getAdminCatalog } from "@/server/catalog/queries";
 import type { CatalogEntityReference } from "@/server/catalog/validation";
+import { requireAdminPage } from "@/server/auth/require-admin";
 
+import { logoutAdminAction } from "./auth-actions";
 import {
   archiveCatalogItemAction,
   changeLessonPublicationStatusAction,
@@ -404,6 +406,7 @@ function LessonTools({
 
 export default async function AdminPage() {
   await connection();
+  const admin = await requireAdminPage();
   const catalog = await getAdminCatalog();
   const classroomCount = catalog.reduce(
     (total, program) =>
@@ -434,19 +437,19 @@ export default async function AdminPage() {
     <div className={styles.adminShell}>
       <header className={styles.topbar}>
         <BrandMark context="Administration" />
-        <Link className={styles.studentLink} href="/">
-          Voir l’espace élève
-          <span aria-hidden="true">↗</span>
-        </Link>
+        <div className={styles.topbarActions}>
+          <span className={styles.adminIdentity}>{admin.login}</span>
+          <Link className={styles.studentLink} href="/">
+            Voir l’espace élève
+            <span aria-hidden="true">↗</span>
+          </Link>
+          <form action={logoutAdminAction}>
+            <button className={styles.logoutButton} type="submit">
+              Déconnexion
+            </button>
+          </form>
+        </div>
       </header>
-
-      <div className={styles.previewWarning} role="status">
-        <span aria-hidden="true">Local</span>
-        <p>
-          Administration non authentifiée : les écritures fonctionnent uniquement
-          en développement et sont bloquées en production jusqu’à l’étape sécurité.
-        </p>
-      </div>
 
       <div className={styles.workspace}>
         <aside className={styles.sidebar} aria-label="Navigation administration">

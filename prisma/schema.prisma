@@ -136,3 +136,35 @@ model Activity {
   @@index([lessonId, archivedAt, position])
   @@index([lessonId, publicationStatus, archivedAt])
 }
+
+model AdminUser {
+  id           String         @id @default(uuid()) @db.Uuid
+  login        String         @unique @db.VarChar(100)
+  passwordHash String         @db.VarChar(255)
+  createdAt    DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime       @updatedAt @db.Timestamptz(3)
+  sessions     AdminSession[]
+}
+
+model AdminSession {
+  id          String    @id @default(uuid()) @db.Uuid
+  adminUserId String    @db.Uuid
+  tokenHash   String    @unique @db.Char(64)
+  expiresAt   DateTime  @db.Timestamptz(3)
+  revokedAt   DateTime? @db.Timestamptz(3)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId, expiresAt])
+  @@index([expiresAt, revokedAt])
+}
+
+model AdminLoginRateLimit {
+  keyHash         String    @id @db.Char(64)
+  attemptCount    Int       @default(0)
+  windowStartedAt DateTime  @db.Timestamptz(3)
+  blockedUntil    DateTime? @db.Timestamptz(3)
+  updatedAt       DateTime  @updatedAt @db.Timestamptz(3)
+
+  @@index([updatedAt])
+}

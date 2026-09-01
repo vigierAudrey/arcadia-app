@@ -13,11 +13,13 @@
     "db:stop": "docker compose -f compose.dev.yaml stop",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "admin:create": "tsx scripts/create-admin.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.9.1",
     "@prisma/client": "7.9.1",
+    "argon2": "0.45.1",
     "dotenv": "17.4.2",
     "next": "16.3.1",
     "pg": "8.23.0",

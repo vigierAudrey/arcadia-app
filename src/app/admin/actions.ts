@@ -105,9 +105,7 @@ async function runAction(
     }
 
     if (error instanceof AdminAccessError) {
-      return validationError(
-        "Les modifications sont désactivées tant que l’administration n’est pas protégée.",
-      );
+      return validationError("Session expirée ou accès refusé.");
     }
 
     return validationError("L’opération a échoué. Rechargez puis réessayez.");
