@@ -4,6 +4,7 @@ import { connection } from "next/server";
 
 import { BrandMark } from "@/components/brand-mark";
 import { AdminForm, OrderForm } from "@/features/admin/admin-forms";
+import { ClassAccessPanel } from "@/features/admin/class-access-panel";
 import {
   PublicationStatus,
   SequenceStatus,
@@ -572,6 +573,18 @@ export default async function AdminPage() {
                                       updatedAt={classroom.updatedAt}
                                     />
                                   </div>
+
+                                  <ClassAccessPanel
+                                    classroomId={classroom.id}
+                                    className={classroom.name}
+                                    status={
+                                      !classroom.classAccessCode
+                                        ? "none"
+                                        : classroom.classAccessCode.active
+                                          ? "active"
+                                          : "disabled"
+                                    }
+                                  />
 
                                   {classroom.teachingAreas.length > 0 ? (
                                     <ul className={styles.teachingList} aria-label={`Enseignements de ${classroom.name}`}>

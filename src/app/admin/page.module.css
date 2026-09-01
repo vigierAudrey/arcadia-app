@@ -444,6 +444,66 @@
   gap: 0.75rem;
 }
 
+.classAccessPanel {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.85rem 0 0;
+  padding: 0.75rem 0.8rem;
+  border: 1px dashed rgb(169 179 214 / 25%);
+  background: rgb(5 6 21 / 40%);
+}
+
+.classAccessStatus {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.classAccessStatus > span {
+  color: var(--text-500);
+}
+
+.classAccessNone {
+  color: var(--text-500);
+}
+
+.classAccessActive {
+  color: var(--green-400);
+}
+
+.classAccessDisabled {
+  color: var(--red-400);
+}
+
+.classAccessCode {
+  margin: 0;
+  border-left: 3px solid var(--yellow-400);
+  padding: 0.55rem 0.7rem;
+  background: rgb(255 212 71 / 8%);
+  color: var(--text-300);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.classAccessCode code {
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+}
+
+.classAccessActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 .teachingList {
   display: grid;
   gap: 0.45rem;

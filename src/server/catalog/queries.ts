@@ -37,6 +37,9 @@ export async function getAdminCatalog() {
               name: true,
               position: true,
               updatedAt: true,
+              classAccessCode: {
+                select: { active: true, updatedAt: true },
+              },
               teachingAreas: {
                 where: { archivedAt: null },
                 orderBy: [{ position: "asc" }, { name: "asc" }],

@@ -1,0 +1,197 @@
+.pageShell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 85% 12%, rgb(242 56 197 / 13%), transparent 24rem),
+    radial-gradient(circle at 12% 30%, rgb(53 234 223 / 10%), transparent 28rem),
+    var(--night-950);
+}
+
+.header,
+.main {
+  position: relative;
+  z-index: 1;
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
+}
+
+.header {
+  display: flex;
+  min-height: 5.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.leaveButton {
+  min-height: 2.5rem;
+  border: 1px solid rgb(255 113 134 / 58%);
+  border-radius: 0;
+  padding: 0.55rem 0.9rem;
+  background: rgb(255 113 134 / 8%);
+  color: var(--red-400);
+  cursor: pointer;
+  font-family: var(--font-pixel);
+  font-size: 0.62rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.main {
+  padding-block: 2.5rem 4rem;
+}
+
+.classHero {
+  margin-bottom: 2.5rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.6rem;
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.classHero h1 {
+  margin: 0;
+  color: var(--text-100);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8vw, 3.4rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-shadow: 4px 4px 0 var(--night-1000);
+  text-transform: uppercase;
+}
+
+.missionCount {
+  display: inline-block;
+  margin-top: 0.85rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--cyan-400);
+  color: var(--cyan-300);
+  font-family: var(--font-pixel);
+  font-size: 0.64rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.teachingArea {
+  margin-top: 2.5rem;
+}
+
+.teachingArea h2 {
+  margin: 0 0 1rem;
+  color: var(--magenta-400);
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.missionList {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mission {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.85rem 1rem;
+  padding: 1rem;
+  border-left: 4px solid var(--cyan-400);
+  background: var(--night-850);
+}
+
+.missionNumber {
+  display: grid;
+  width: 2.55rem;
+  height: 2.55rem;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  color: var(--cyan-300);
+  font-family: var(--font-pixel);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.missionCopy {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.missionCopy strong {
+  font-size: 1rem;
+}
+
+.missionCopy p {
+  margin: 0;
+  color: var(--text-500);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.stepList {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 0.4rem;
+  margin: 0.35rem 0 0;
+  padding: 0.75rem 0 0;
+  border-top: 1px solid var(--line-soft);
+  list-style: none;
+}
+
+.stepList li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.2rem 0.65rem;
+  align-items: center;
+  padding: 0.55rem 0.6rem;
+  border-left: 2px solid rgb(117 255 245 / 45%);
+  background: rgb(5 6 21 / 50%);
+}
+
+.stepList li > span {
+  color: var(--cyan-300);
+  font-family: var(--font-pixel);
+  font-size: 0.53rem;
+  text-transform: uppercase;
+}
+
+.stepList li > strong {
+  overflow: hidden;
+  font-size: 0.78rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stepList li > small {
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+}
+
+.emptyState {
+  margin: 0;
+  padding: 0.9rem;
+  border: 1px dashed var(--line-soft);
+  color: var(--text-500);
+  font-size: 0.82rem;
+}
+
+@media (min-width: 42rem) {
+  .header,
+  .main {
+    width: min(100% - 4rem, 72rem);
+  }
+}
