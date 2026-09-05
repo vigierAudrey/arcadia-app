@@ -90,6 +90,16 @@ etc.
 PSE : leurs programmes officiels sont distincts, même quand leur architecture se
 ressemble (voir le constat du test du 2026-08-16 dans base-documentaire.md).
 
+**Une même Classroom peut porter plusieurs TeachingArea indépendants.** Exemple réel :
+la classe T AGAA porte à la fois PSE, Maths appliquées et Bloc 2 — trois TeachingArea
+distincts, chacun avec sa propre progression, ses propres séquences/séances, son propre
+référentiel et ses propres règles de conformité. Le système ne doit jamais supposer
+qu'un TeachingArea donné d'une Classroom est « le » TeachingArea PSE, ni traiter les
+noms `PSE`, `Maths appliquées` ou `Bloc 2` comme des constantes en dur dans la logique
+métier : ce sont des données administrables, créées et nommées librement depuis
+l'administration. Une source ou un référentiel associé à un TeachingArea ne doit jamais
+être réutilisé pour un autre TeachingArea de la même Classroom sans validation explicite.
+
 ## 6. Traçabilité obligatoire
 
 Pour chaque activité pédagogique générée, indiquer au minimum :
@@ -111,6 +121,17 @@ Le format portable de ces métadonnées (sans jamais de chemin absolu Windows/WS
 défini dans [`pedagogie-mapping-format.md`](pedagogie-mapping-format.md) : `typeSource`,
 `titreSource`, `referenceRelative`, `sectionOuPage`, `extraitOuNotionUtilisee`,
 `conformite`, `commentaire`.
+
+**Avant toute génération ou association de source, le système doit résoudre le contexte
+pédagogique complet de la cible et identifier son TeachingArea réel. Aucune source ne
+doit être rattachée sur la seule base d'un nom de fichier ou d'une supposition.**
+Techniquement, `createPedagogicalSourceReference` (voir `server/pedagogie/mutations.ts`)
+résout toujours ce contexte via `getTeachingContextForLesson`/
+`getTeachingContextForActivity` (`server/pedagogie/context.ts`) avant d'écrire — le
+contexte réel fait autorité ; une valeur fournie par l'appelant (`expectedTeachingAreaId`)
+ne sert que de garde supplémentaire, jamais de source de vérité. Toute future génération
+pédagogique doit utiliser ces mêmes helpers pour connaître le contexte complet avant de
+rechercher ou associer des sources.
 
 ## 7. Incertitude
 

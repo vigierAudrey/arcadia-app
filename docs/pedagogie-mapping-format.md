@@ -84,13 +84,43 @@ type PedagogyMappingEntry = {
     "conformiteReferentiel": "A_VERIFIER",
     "etat": "PROPOSE",
     "proposePar": "auto"
+  },
+  {
+    "formation": "CAP AAGA",
+    "niveau": "Tle",
+    "classe": "T AGAA",
+    "enseignement": "Bloc 2",
+    "sequence": "Séquence 4",
+    "seance": "S4 séance 1 — Appareil locomoteur",
+    "sources": [
+      {
+        "typeSource": "REFERENTIEL",
+        "titreSource": "Référentiel du diplôme CAP AAGA",
+        "referenceRelative": "CAP/le_nouveau_referentiel_cap_aaga_-_agent_accompagnant_au_grand_age.pdf",
+        "sectionOuPage": "Bloc 2, compétences C2.1.1-6",
+        "extraitOuNotionUtilisee": "Observer et adapter sans diagnostiquer"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 4 - Séance 1 (version prof)",
+        "referenceRelative": "CAP/CAP AAGA - Bloc 2/Sequences/Sequence_4/S4_seance_01_appareil_locomoteur_observer_et_adapter_sans_diagnostiq/S4_seance_01_version_prof.docx"
+      }
+    ],
+    "conformiteReferentiel": "A_VERIFIER",
+    "etat": "PROPOSE",
+    "proposePar": "auto"
   }
 ]
 ```
 
-Cette entrée illustre le format uniquement : elle n'a pas été validée, son état
-`PROPOSE` interdit explicitement de l'utiliser pour générer une activité CORE tant
-qu'elle n'est pas passée à `VALIDE`.
+Ces deux entrées illustrent le format pour deux `TeachingArea` différents d'une même
+famille de classe (`2 AERO` en PSE, `T AGAA` en Bloc 2) : le champ `enseignement`
+distingue explicitement les deux, et leurs `sources[].referenceRelative` pointent vers
+des dossiers `cours-source/` totalement séparés — jamais de confusion entre les
+programmes/référentiels des différents enseignements d'une même classe, même quand ils
+partagent la même `Classroom` applicative. Aucune des deux n'a été validée : leur état
+`PROPOSE` interdit explicitement de les utiliser pour générer une activité CORE tant
+qu'elles ne sont pas passées à `VALIDE`.
 
 ## Ce qui n'est pas fait à ce stade
 

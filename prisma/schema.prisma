@@ -23,6 +23,36 @@ enum PublicationStatus {
   PUBLISHED
 }
 
+/// CORE = lié directement à la progression, la séance et les cours de
+/// l'enseignante. BONUS = facultatif ("Pour aller plus loin"), jamais déduit
+/// automatiquement. Défaut : CORE.
+enum ActivityTrack {
+  CORE
+  BONUS
+}
+
+enum PedagogicalSourceType {
+  REFERENTIEL
+  PROGRESSION
+  COURS
+  RESSOURCE
+}
+
+enum PedagogicalConformityStatus {
+  CONFIRME
+  A_VERIFIER
+}
+
+/// Compatible avec les futurs états du mapping documentaire (voir
+/// docs/pedagogie-mapping-format.md). Une ligne de PedagogicalSourceReference
+/// représente une référence retenue ; PROPOSE reste possible pour une
+/// proposition non encore validée directement enregistrée en base.
+enum PedagogicalReviewStatus {
+  PROPOSE
+  VALIDE
+  A_REVOIR
+}
+
 model Program {
   id         String    @id @default(uuid()) @db.Uuid
   name       String    @unique @db.VarChar(100)
@@ -102,17 +132,18 @@ model LearningSequence {
 }
 
 model Lesson {
-  id                String            @id @default(uuid()) @db.Uuid
-  sequenceId        String            @db.Uuid
-  title             String            @db.VarChar(160)
-  description       String?           @db.Text
-  position          Int               @default(0)
-  publicationStatus PublicationStatus @default(DRAFT)
-  archivedAt        DateTime?         @db.Timestamptz(3)
-  createdAt         DateTime          @default(now()) @db.Timestamptz(3)
-  updatedAt         DateTime          @updatedAt @db.Timestamptz(3)
-  sequence          LearningSequence  @relation(fields: [sequenceId], references: [id], onDelete: Restrict)
-  activities        Activity[]
+  id                          String                       @id @default(uuid()) @db.Uuid
+  sequenceId                  String                       @db.Uuid
+  title                       String                       @db.VarChar(160)
+  description                 String?                      @db.Text
+  position                    Int                          @default(0)
+  publicationStatus           PublicationStatus            @default(DRAFT)
+  archivedAt                  DateTime?                    @db.Timestamptz(3)
+  createdAt                   DateTime                     @default(now()) @db.Timestamptz(3)
+  updatedAt                   DateTime                     @updatedAt @db.Timestamptz(3)
+  sequence                    LearningSequence             @relation(fields: [sequenceId], references: [id], onDelete: Restrict)
+  activities                  Activity[]
+  pedagogicalSourceReferences PedagogicalSourceReference[]
 
   @@unique([sequenceId, title])
   @@index([sequenceId, archivedAt, position])
@@ -120,23 +151,51 @@ model Lesson {
 }
 
 model Activity {
-  id                   String                    @id @default(uuid()) @db.Uuid
-  lessonId             String                    @db.Uuid
-  title                String                    @db.VarChar(160)
-  type                 String                    @db.VarChar(50)
-  instructions         String                    @db.Text
-  payload              Json
-  payloadSchemaVersion Int                       @default(1)
-  position             Int                       @default(0)
-  publicationStatus    PublicationStatus         @default(DRAFT)
-  archivedAt           DateTime?                 @db.Timestamptz(3)
-  createdAt            DateTime                  @default(now()) @db.Timestamptz(3)
-  updatedAt            DateTime                  @updatedAt @db.Timestamptz(3)
-  lesson               Lesson                    @relation(fields: [lessonId], references: [id], onDelete: Restrict)
+  id                          String                       @id @default(uuid()) @db.Uuid
+  lessonId                    String                       @db.Uuid
+  title                       String                       @db.VarChar(160)
+  type                        String                       @db.VarChar(50)
+  instructions                String                       @db.Text
+  payload                     Json
+  payloadSchemaVersion        Int                          @default(1)
+  track                       ActivityTrack                @default(CORE)
+  position                    Int                          @default(0)
+  publicationStatus           PublicationStatus            @default(DRAFT)
+  archivedAt                  DateTime?                    @db.Timestamptz(3)
+  createdAt                   DateTime                     @default(now()) @db.Timestamptz(3)
+  updatedAt                   DateTime                     @updatedAt @db.Timestamptz(3)
+  lesson                      Lesson                       @relation(fields: [lessonId], references: [id], onDelete: Restrict)
+  pedagogicalSourceReferences PedagogicalSourceReference[]
 
   @@unique([lessonId, title])
   @@index([lessonId, archivedAt, position])
   @@index([lessonId, publicationStatus, archivedAt])
+  @@index([lessonId, track, archivedAt])
+}
+
+/// Traçabilité pédagogique portable : jamais de chemin absolu Windows/WSL,
+/// jamais de copie de contenu. Rattachée à exactement une Lesson OU une
+/// Activity (XOR appliqué en code, voir server/pedagogie/mutations.ts).
+/// Métadonnées internes uniquement — jamais affichées aux élèves.
+model PedagogicalSourceReference {
+  id              String                      @id @default(uuid()) @db.Uuid
+  lessonId        String?                     @db.Uuid
+  activityId      String?                     @db.Uuid
+  sourceType      PedagogicalSourceType
+  sourceTitle     String                      @db.VarChar(200)
+  relativePath    String                      @db.VarChar(500)
+  sectionOrPage   String?                     @db.VarChar(200)
+  excerptOrNotion String?                     @db.Text
+  conformity      PedagogicalConformityStatus @default(A_VERIFIER)
+  reviewStatus    PedagogicalReviewStatus     @default(VALIDE)
+  comment         String?                     @db.Text
+  createdAt       DateTime                    @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime                    @updatedAt @db.Timestamptz(3)
+  lesson          Lesson?                     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  activity        Activity?                   @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId])
+  @@index([activityId])
 }
 
 model AdminUser {
