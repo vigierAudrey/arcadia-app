@@ -6,6 +6,11 @@ import { BrandMark } from "@/components/brand-mark";
 import { AdminForm, OrderForm } from "@/features/admin/admin-forms";
 import { ClassAccessPanel } from "@/features/admin/class-access-panel";
 import {
+  getOpenItems,
+  getToggleHref,
+  type AdminSearchParams,
+} from "@/features/admin/open-state";
+import {
   PublicationStatus,
   SequenceStatus,
   TeachingAreaKind,
@@ -46,11 +51,7 @@ type CreateContext =
   | { type: "program" }
   | {
       type:
-        | "level"
-        | "classroom"
-        | "teachingArea"
-        | "learningSequence"
-        | "lesson";
+        "level" | "classroom" | "teachingArea" | "learningSequence" | "lesson";
       parentId: string;
     };
 
@@ -66,6 +67,10 @@ type EntityToolsProps = {
   updatedAt: Date;
 };
 
+type AdminPageProps = {
+  searchParams?: Promise<AdminSearchParams>;
+};
+
 function getSequenceStatusClass(status: SequenceStatus) {
   switch (status) {
     case SequenceStatus.OPEN:
@@ -75,6 +80,40 @@ function getSequenceStatusClass(status: SequenceStatus) {
     case SequenceStatus.DRAFT:
       return styles.sequenceDraft;
   }
+}
+
+function TreeToggle({
+  href,
+  isOpen,
+  label,
+  title,
+  meta,
+  controls,
+}: {
+  href: string;
+  isOpen: boolean;
+  label: string;
+  title: string;
+  meta?: string;
+  controls: string;
+}) {
+  return (
+    <Link
+      className={styles.treeToggle}
+      href={href}
+      aria-expanded={isOpen}
+      aria-controls={controls}
+    >
+      <span className={styles.treeToggleIcon} aria-hidden="true">
+        {isOpen ? "−" : "+"}
+      </span>
+      <span className={styles.treeToggleText}>
+        <span>{label}</span>
+        <strong>{title}</strong>
+        {meta ? <small>{meta}</small> : null}
+      </span>
+    </Link>
+  );
 }
 
 function CreateItemForm({
@@ -103,7 +142,9 @@ function CreateItemForm({
             name={hasTitleAndDescription ? "title" : "name"}
             type="text"
             required
-            maxLength={hasTitleAndDescription ? 160 : isTeachingArea ? 120 : 100}
+            maxLength={
+              hasTitleAndDescription ? 160 : isTeachingArea ? 120 : 100
+            }
             autoComplete="off"
           />
         </label>
@@ -150,7 +191,7 @@ function EntityTools({
 
   return (
     <details className={styles.toolsPanel}>
-      <summary>Gérer</summary>
+      <summary>Modifier / archiver</summary>
       <div className={styles.toolsContent}>
         <AdminForm
           action={editAction}
@@ -180,9 +221,10 @@ function EntityTools({
           action={archiveAction}
           className={styles.archiveForm}
           confirmMessage={`Archiver ${label} « ${name} » ? Cette action est impossible tant que des éléments actifs y sont rattachés.`}
-          submitLabel="Archiver"
+          submitLabel={`Archiver ${label}`}
           submitVariant="danger"
         >
+          <strong>Archivage</strong>
           <p>Aucune suppression définitive ne sera effectuée.</p>
         </AdminForm>
       </div>
@@ -235,7 +277,7 @@ function SequenceTools({
 
   return (
     <details className={styles.toolsPanel}>
-      <summary>Gérer</summary>
+      <summary>Modifier / archiver</summary>
       <div className={styles.toolsContent}>
         <AdminForm
           action={editAction}
@@ -289,10 +331,13 @@ function SequenceTools({
           action={archiveAction}
           className={styles.archiveForm}
           confirmMessage={`Archiver la séquence « ${sequence.title} » ? Elle disparaîtra du catalogue actif.`}
-          submitLabel="Archiver"
+          submitLabel="Archiver la séquence"
           submitVariant="danger"
         >
-          <p>L’archivage est refusé si des séances actives y sont rattachées.</p>
+          <strong>Archivage</strong>
+          <p>
+            L’archivage est refusé si des séances actives y sont rattachées.
+          </p>
         </AdminForm>
       </div>
     </details>
@@ -339,7 +384,7 @@ function LessonTools({
 
   return (
     <details className={styles.toolsPanel}>
-      <summary>Gérer</summary>
+      <summary>Modifier / archiver</summary>
       <div className={styles.toolsContent}>
         <AdminForm
           action={editAction}
@@ -395,18 +440,22 @@ function LessonTools({
           action={archiveAction}
           className={styles.archiveForm}
           confirmMessage={`Archiver la séance « ${lesson.title} » ? Elle disparaîtra du sommaire actif.`}
-          submitLabel="Archiver"
+          submitLabel="Archiver la séance"
           submitVariant="danger"
         >
-          <p>L’archivage est refusé si des activités actives y sont rattachées.</p>
+          <strong>Archivage</strong>
+          <p>
+            L’archivage est refusé si des activités actives y sont rattachées.
+          </p>
         </AdminForm>
       </div>
     </details>
   );
 }
 
-export default async function AdminPage() {
+export default async function AdminPage({ searchParams }: AdminPageProps) {
   await connection();
+  const openItems = getOpenItems((await searchParams) ?? {});
   const admin = await requireAdminPage();
   const catalog = await getAdminCatalog();
   const classroomCount = catalog.reduce(
@@ -453,7 +502,10 @@ export default async function AdminPage() {
       </header>
 
       <div className={styles.workspace}>
-        <aside className={styles.sidebar} aria-label="Navigation administration">
+        <aside
+          className={styles.sidebar}
+          aria-label="Navigation administration"
+        >
           <p className={styles.navLabel}>Gérer</p>
           <nav>
             <a className={styles.activeNavItem} href="#structure">
@@ -482,14 +534,20 @@ export default async function AdminPage() {
               <h1>Structure pédagogique</h1>
               <p className={styles.intro}>
                 Créez, renommez, ordonnez et archivez vos contenus jusqu’aux
-                séances. Toutes les modifications sont enregistrées dans la
-                base locale.
+                séances. Toutes les modifications sont enregistrées dans la base
+                locale.
               </p>
             </div>
-            <CreateItemForm context={{ type: "program" }} label="une formation" />
+            <CreateItemForm
+              context={{ type: "program" }}
+              label="une formation"
+            />
           </div>
 
-          <ol className={styles.hierarchyPath} aria-label="Hiérarchie pédagogique">
+          <ol
+            className={styles.hierarchyPath}
+            aria-label="Hiérarchie pédagogique"
+          >
             <li>Formation</li>
             <li>Niveau</li>
             <li>Classe</li>
@@ -500,22 +558,51 @@ export default async function AdminPage() {
           </ol>
 
           <section className={styles.stats} aria-label="Résumé du catalogue">
-            <article><strong>{catalog.length}</strong><span>formations</span></article>
-            <article><strong>{classroomCount}</strong><span>classes</span></article>
-            <article><strong>{teachingCount}</strong><span>enseignements renseignés</span></article>
+            <article>
+              <strong>{catalog.length}</strong>
+              <span>formations</span>
+            </article>
+            <article>
+              <strong>{classroomCount}</strong>
+              <span>classes</span>
+            </article>
+            <article>
+              <strong>{teachingCount}</strong>
+              <span>enseignements renseignés</span>
+            </article>
           </section>
 
-          <section className={styles.catalog} id="catalogue" aria-label="Hiérarchie pédagogique">
+          <section
+            className={styles.catalog}
+            id="catalogue"
+            aria-label="Hiérarchie pédagogique"
+          >
             {catalog.map((program, programIndex) => {
-              const programReference = { type: "program", id: program.id } as const;
+              const programReference = {
+                type: "program",
+                id: program.id,
+              } as const;
+              const programOpen = openItems.has(program.id);
+              const programPanelId = `panel-${program.id}`;
 
               return (
-                <article className={styles.programCard} key={program.id}>
+                <article
+                  className={styles.programCard}
+                  id={`node-${program.id}`}
+                  key={program.id}
+                >
                   <header className={styles.programHeader}>
                     <span className={styles.programIndex} aria-hidden="true">
                       {String(programIndex + 1).padStart(2, "0")}
                     </span>
-                    <div><p>Formation</p><h2>{program.name}</h2></div>
+                    <TreeToggle
+                      href={getToggleHref(openItems, program.id)}
+                      isOpen={programOpen}
+                      label="Formation"
+                      title={program.name}
+                      meta={`${program.levels.length} niveau${program.levels.length > 1 ? "x" : ""}`}
+                      controls={programPanelId}
+                    />
                     <EntityTools
                       index={program.position}
                       label="la formation"
@@ -526,202 +613,470 @@ export default async function AdminPage() {
                     />
                   </header>
 
-                  <div className={styles.levelList}>
-                    {program.levels.map((level) => {
-                      const levelReference = {
-                        type: "level",
-                        id: level.id,
-                        parentId: program.id,
-                      } as const;
+                  {programOpen ? (
+                    <div className={styles.levelList} id={programPanelId}>
+                      {program.levels.map((level) => {
+                        const levelReference = {
+                          type: "level",
+                          id: level.id,
+                          parentId: program.id,
+                        } as const;
+                        const levelOpen = openItems.has(level.id);
+                        const levelPanelId = `panel-${level.id}`;
 
-                      return (
-                        <section className={styles.level} key={level.id}>
-                          <div className={styles.levelColumn}>
-                            <div className={styles.levelHeading}>
-                              <span>Niveau</span><h3>{level.name}</h3>
+                        return (
+                          <section
+                            className={styles.level}
+                            id={`node-${level.id}`}
+                            key={level.id}
+                          >
+                            <div className={styles.levelColumn}>
+                              <div className={styles.levelHeading}>
+                                <TreeToggle
+                                  href={getToggleHref(openItems, level.id)}
+                                  isOpen={levelOpen}
+                                  label="Niveau"
+                                  title={level.name}
+                                  meta={`${level.classrooms.length} classe${level.classrooms.length > 1 ? "s" : ""}`}
+                                  controls={levelPanelId}
+                                />
+                              </div>
+                              <EntityTools
+                                index={level.position}
+                                label="le niveau"
+                                name={level.name}
+                                reference={levelReference}
+                                total={program.levels.length}
+                                updatedAt={level.updatedAt}
+                              />
                             </div>
-                            <EntityTools
-                              index={level.position}
-                              label="le niveau"
-                              name={level.name}
-                              reference={levelReference}
-                              total={program.levels.length}
-                              updatedAt={level.updatedAt}
-                            />
-                          </div>
 
-                          <div className={styles.classGrid}>
-                            {level.classrooms.map((classroom) => {
-                              const classroomReference = {
-                                type: "classroom",
-                                id: classroom.id,
-                                parentId: level.id,
-                              } as const;
+                            {levelOpen ? (
+                              <div
+                                className={styles.classGrid}
+                                id={levelPanelId}
+                              >
+                                {level.classrooms.map((classroom) => {
+                                  const classroomReference = {
+                                    type: "classroom",
+                                    id: classroom.id,
+                                    parentId: level.id,
+                                  } as const;
+                                  const classroomOpen = openItems.has(
+                                    classroom.id,
+                                  );
+                                  const classroomPanelId = `panel-${classroom.id}`;
 
-                              return (
-                                <article className={styles.classCard} key={classroom.id}>
-                                  <div className={styles.classHeadingRow}>
-                                    <div className={styles.classHeading}>
-                                      <span>Classe</span><h4>{classroom.name}</h4>
-                                    </div>
-                                    <EntityTools
-                                      index={classroom.position}
-                                      label="la classe"
-                                      name={classroom.name}
-                                      reference={classroomReference}
-                                      total={level.classrooms.length}
-                                      updatedAt={classroom.updatedAt}
-                                    />
-                                  </div>
-
-                                  <ClassAccessPanel
-                                    classroomId={classroom.id}
-                                    className={classroom.name}
-                                    status={
-                                      !classroom.classAccessCode
-                                        ? "none"
-                                        : classroom.classAccessCode.active
-                                          ? "active"
-                                          : "disabled"
-                                    }
-                                  />
-
-                                  {classroom.teachingAreas.length > 0 ? (
-                                    <ul className={styles.teachingList} aria-label={`Enseignements de ${classroom.name}`}>
-                                      {classroom.teachingAreas.map((teachingArea) => {
-                                        const teachingAreaReference = {
-                                          type: "teachingArea",
-                                          id: teachingArea.id,
-                                          parentId: classroom.id,
-                                        } as const;
-
-                                        return (
-                                          <li key={teachingArea.id}>
-                                            <div className={styles.teachingHeading}>
-                                              <div>
-                                                <span>{teachingArea.name}</span>
-                                                <small>{teachingArea.kind === TeachingAreaKind.BLOCK ? "Bloc" : "Matière"}</small>
-                                              </div>
-                                              <EntityTools
-                                                index={teachingArea.position}
-                                                label="l’enseignement"
-                                                name={teachingArea.name}
-                                                reference={teachingAreaReference}
-                                                total={classroom.teachingAreas.length}
-                                                updatedAt={teachingArea.updatedAt}
-                                              />
-                                            </div>
-
-                                            {teachingArea.learningSequences.length > 0 ? (
-                                              <ol className={styles.sequenceList}>
-                                                {teachingArea.learningSequences.map((sequence, sequenceIndex) => (
-                                                  <li key={sequence.id}>
-                                                    <div className={styles.sequenceMain}>
-                                                      <span>Séquence</span>
-                                                      <strong>{sequence.title}</strong>
-                                                      {sequence.description ? <p>{sequence.description}</p> : null}
-                                                    </div>
-                                                    <span className={`${styles.sequenceStatus} ${getSequenceStatusClass(sequence.status)}`}>
-                                                      {sequenceStatusLabels[sequence.status]}
-                                                    </span>
-                                                    <small>
-                                                      {sequence.lessons.length} séance{sequence.lessons.length > 1 ? "s" : ""}
-                                                    </small>
-                                                    <SequenceTools
-                                                      index={sequenceIndex}
-                                                      sequence={sequence}
-                                                      teachingAreaId={teachingArea.id}
-                                                      total={teachingArea.learningSequences.length}
-                                                    />
-                                                    {sequence.lessons.length > 0 ? (
-                                                      <ol
-                                                        className={styles.lessonList}
-                                                        aria-label={`Séances de ${sequence.title}`}
-                                                      >
-                                                        {sequence.lessons.map((lesson, lessonIndex) => (
-                                                          <li key={lesson.id}>
-                                                            <div className={styles.lessonMain}>
-                                                              <span>
-                                                                Séance {String(lessonIndex + 1).padStart(2, "0")}
-                                                              </span>
-                                                              <strong>{lesson.title}</strong>
-                                                              {lesson.description ? <p>{lesson.description}</p> : null}
-                                                            </div>
-                                                            <span
-                                                              className={`${styles.lessonStatus} ${
-                                                                lesson.publicationStatus === PublicationStatus.PUBLISHED
-                                                                  ? styles.lessonPublished
-                                                                  : styles.lessonDraft
-                                                              }`}
-                                                            >
-                                                              {publicationStatusLabels[lesson.publicationStatus]}
-                                                            </span>
-                                                            <small>
-                                                              {lesson._count.activities} activité{lesson._count.activities > 1 ? "s" : ""}
-                                                            </small>
-                                                            <LessonTools
-                                                              index={lessonIndex}
-                                                              lesson={lesson}
-                                                              sequenceId={sequence.id}
-                                                              total={sequence.lessons.length}
-                                                            />
-                                                          </li>
-                                                        ))}
-                                                      </ol>
-                                                    ) : (
-                                                      <p className={styles.emptyLesson}>
-                                                        Aucune séance dans cette séquence.
-                                                      </p>
-                                                    )}
-                                                    <CreateItemForm
-                                                      context={{ type: "lesson", parentId: sequence.id }}
-                                                      label="une séance"
-                                                    />
-                                                  </li>
-                                                ))}
-                                              </ol>
-                                            ) : (
-                                              <p className={styles.emptySequence}>Aucune séquence pour le moment.</p>
+                                  return (
+                                    <article
+                                      className={styles.classCard}
+                                      id={`node-${classroom.id}`}
+                                      key={classroom.id}
+                                    >
+                                      <div className={styles.classHeadingRow}>
+                                        <div className={styles.classHeading}>
+                                          <TreeToggle
+                                            href={getToggleHref(
+                                              openItems,
+                                              classroom.id,
                                             )}
-                                            <CreateItemForm
-                                              context={{ type: "learningSequence", parentId: teachingArea.id }}
-                                              label="une séquence"
-                                            />
-                                          </li>
-                                        );
-                                      })}
-                                    </ul>
-                                  ) : (
-                                    <p className={styles.emptyTeaching}>Aucun enseignement configuré</p>
-                                  )}
-                                  <CreateItemForm
-                                    context={{ type: "teachingArea", parentId: classroom.id }}
-                                    label="un enseignement"
-                                  />
-                                </article>
-                              );
-                            })}
-                            <CreateItemForm
-                              context={{ type: "classroom", parentId: level.id }}
-                              label="une classe"
-                            />
-                          </div>
-                        </section>
-                      );
-                    })}
-                    <div className={styles.programAddRow}>
-                      <CreateItemForm
-                        context={{ type: "level", parentId: program.id }}
-                        label="un niveau"
-                      />
+                                            isOpen={classroomOpen}
+                                            label="Classe"
+                                            title={classroom.name}
+                                            meta={`${classroom.teachingAreas.length} enseignement${classroom.teachingAreas.length > 1 ? "s" : ""}`}
+                                            controls={classroomPanelId}
+                                          />
+                                        </div>
+                                        <EntityTools
+                                          index={classroom.position}
+                                          label="la classe"
+                                          name={classroom.name}
+                                          reference={classroomReference}
+                                          total={level.classrooms.length}
+                                          updatedAt={classroom.updatedAt}
+                                        />
+                                      </div>
+
+                                      {classroomOpen ? (
+                                        <div id={classroomPanelId}>
+                                          <ClassAccessPanel
+                                            classroomId={classroom.id}
+                                            className={classroom.name}
+                                            status={
+                                              !classroom.classAccessCode
+                                                ? "none"
+                                                : classroom.classAccessCode
+                                                      .active
+                                                  ? "active"
+                                                  : "disabled"
+                                            }
+                                          />
+
+                                          {classroom.teachingAreas.length >
+                                          0 ? (
+                                            <ul
+                                              className={styles.teachingList}
+                                              aria-label={`Enseignements de ${classroom.name}`}
+                                            >
+                                              {classroom.teachingAreas.map(
+                                                (teachingArea) => {
+                                                  const teachingAreaReference =
+                                                    {
+                                                      type: "teachingArea",
+                                                      id: teachingArea.id,
+                                                      parentId: classroom.id,
+                                                    } as const;
+                                                  const teachingAreaOpen =
+                                                    openItems.has(
+                                                      teachingArea.id,
+                                                    );
+                                                  const teachingAreaPanelId = `panel-${teachingArea.id}`;
+
+                                                  return (
+                                                    <li
+                                                      id={`node-${teachingArea.id}`}
+                                                      key={teachingArea.id}
+                                                    >
+                                                      <div
+                                                        className={
+                                                          styles.teachingHeading
+                                                        }
+                                                      >
+                                                        <div>
+                                                          <TreeToggle
+                                                            href={getToggleHref(
+                                                              openItems,
+                                                              teachingArea.id,
+                                                            )}
+                                                            isOpen={
+                                                              teachingAreaOpen
+                                                            }
+                                                            label="Enseignement"
+                                                            title={
+                                                              teachingArea.name
+                                                            }
+                                                            meta={`${teachingArea.kind === TeachingAreaKind.BLOCK ? "Bloc" : "Matière"} · ${teachingArea.learningSequences.length} séquence${teachingArea.learningSequences.length > 1 ? "s" : ""}`}
+                                                            controls={
+                                                              teachingAreaPanelId
+                                                            }
+                                                          />
+                                                        </div>
+                                                        <EntityTools
+                                                          index={
+                                                            teachingArea.position
+                                                          }
+                                                          label="l’enseignement"
+                                                          name={
+                                                            teachingArea.name
+                                                          }
+                                                          reference={
+                                                            teachingAreaReference
+                                                          }
+                                                          total={
+                                                            classroom
+                                                              .teachingAreas
+                                                              .length
+                                                          }
+                                                          updatedAt={
+                                                            teachingArea.updatedAt
+                                                          }
+                                                        />
+                                                      </div>
+
+                                                      {teachingAreaOpen ? (
+                                                        <div
+                                                          id={
+                                                            teachingAreaPanelId
+                                                          }
+                                                        >
+                                                          {teachingArea
+                                                            .learningSequences
+                                                            .length > 0 ? (
+                                                            <ol
+                                                              className={
+                                                                styles.sequenceList
+                                                              }
+                                                            >
+                                                              {teachingArea.learningSequences.map(
+                                                                (
+                                                                  sequence,
+                                                                  sequenceIndex,
+                                                                ) => {
+                                                                  const sequenceOpen =
+                                                                    openItems.has(
+                                                                      sequence.id,
+                                                                    );
+                                                                  const sequencePanelId = `panel-${sequence.id}`;
+
+                                                                  return (
+                                                                    <li
+                                                                      id={`node-${sequence.id}`}
+                                                                      key={
+                                                                        sequence.id
+                                                                      }
+                                                                    >
+                                                                      <div
+                                                                        className={
+                                                                          styles.sequenceMain
+                                                                        }
+                                                                      >
+                                                                        <TreeToggle
+                                                                          href={getToggleHref(
+                                                                            openItems,
+                                                                            sequence.id,
+                                                                          )}
+                                                                          isOpen={
+                                                                            sequenceOpen
+                                                                          }
+                                                                          label="Séquence"
+                                                                          title={
+                                                                            sequence.title
+                                                                          }
+                                                                          meta={`${sequence.lessons.length} séance${sequence.lessons.length > 1 ? "s" : ""}`}
+                                                                          controls={
+                                                                            sequencePanelId
+                                                                          }
+                                                                        />
+                                                                        {sequence.description ? (
+                                                                          <p>
+                                                                            {
+                                                                              sequence.description
+                                                                            }
+                                                                          </p>
+                                                                        ) : null}
+                                                                      </div>
+                                                                      <span
+                                                                        className={`${styles.sequenceStatus} ${getSequenceStatusClass(sequence.status)}`}
+                                                                      >
+                                                                        {
+                                                                          sequenceStatusLabels[
+                                                                            sequence
+                                                                              .status
+                                                                          ]
+                                                                        }
+                                                                      </span>
+                                                                      <SequenceTools
+                                                                        index={
+                                                                          sequenceIndex
+                                                                        }
+                                                                        sequence={
+                                                                          sequence
+                                                                        }
+                                                                        teachingAreaId={
+                                                                          teachingArea.id
+                                                                        }
+                                                                        total={
+                                                                          teachingArea
+                                                                            .learningSequences
+                                                                            .length
+                                                                        }
+                                                                      />
+                                                                      {sequenceOpen ? (
+                                                                        <div
+                                                                          id={
+                                                                            sequencePanelId
+                                                                          }
+                                                                          className={
+                                                                            styles.sequencePanel
+                                                                          }
+                                                                        >
+                                                                          {sequence
+                                                                            .lessons
+                                                                            .length >
+                                                                          0 ? (
+                                                                            <ol
+                                                                              className={
+                                                                                styles.lessonList
+                                                                              }
+                                                                              aria-label={`Séances de ${sequence.title}`}
+                                                                            >
+                                                                              {sequence.lessons.map(
+                                                                                (
+                                                                                  lesson,
+                                                                                  lessonIndex,
+                                                                                ) => (
+                                                                                  <li
+                                                                                    id={`node-${lesson.id}`}
+                                                                                    key={
+                                                                                      lesson.id
+                                                                                    }
+                                                                                  >
+                                                                                    <div
+                                                                                      className={
+                                                                                        styles.lessonMain
+                                                                                      }
+                                                                                    >
+                                                                                      <span>
+                                                                                        Séance{" "}
+                                                                                        {String(
+                                                                                          lessonIndex +
+                                                                                            1,
+                                                                                        ).padStart(
+                                                                                          2,
+                                                                                          "0",
+                                                                                        )}
+                                                                                      </span>
+                                                                                      <strong>
+                                                                                        {
+                                                                                          lesson.title
+                                                                                        }
+                                                                                      </strong>
+                                                                                      {lesson.description ? (
+                                                                                        <p>
+                                                                                          {
+                                                                                            lesson.description
+                                                                                          }
+                                                                                        </p>
+                                                                                      ) : null}
+                                                                                    </div>
+                                                                                    <span
+                                                                                      className={`${styles.lessonStatus} ${
+                                                                                        lesson.publicationStatus ===
+                                                                                        PublicationStatus.PUBLISHED
+                                                                                          ? styles.lessonPublished
+                                                                                          : styles.lessonDraft
+                                                                                      }`}
+                                                                                    >
+                                                                                      {
+                                                                                        publicationStatusLabels[
+                                                                                          lesson
+                                                                                            .publicationStatus
+                                                                                        ]
+                                                                                      }
+                                                                                    </span>
+                                                                                    <small>
+                                                                                      {
+                                                                                        lesson
+                                                                                          ._count
+                                                                                          .activities
+                                                                                      }{" "}
+                                                                                      activité
+                                                                                      {lesson
+                                                                                        ._count
+                                                                                        .activities >
+                                                                                      1
+                                                                                        ? "s"
+                                                                                        : ""}
+                                                                                    </small>
+                                                                                    <LessonTools
+                                                                                      index={
+                                                                                        lessonIndex
+                                                                                      }
+                                                                                      lesson={
+                                                                                        lesson
+                                                                                      }
+                                                                                      sequenceId={
+                                                                                        sequence.id
+                                                                                      }
+                                                                                      total={
+                                                                                        sequence
+                                                                                          .lessons
+                                                                                          .length
+                                                                                      }
+                                                                                    />
+                                                                                  </li>
+                                                                                ),
+                                                                              )}
+                                                                            </ol>
+                                                                          ) : (
+                                                                            <p
+                                                                              className={
+                                                                                styles.emptyLesson
+                                                                              }
+                                                                            >
+                                                                              Aucune
+                                                                              séance
+                                                                              dans
+                                                                              cette
+                                                                              séquence.
+                                                                            </p>
+                                                                          )}
+                                                                          <CreateItemForm
+                                                                            context={{
+                                                                              type: "lesson",
+                                                                              parentId:
+                                                                                sequence.id,
+                                                                            }}
+                                                                            label="une séance"
+                                                                          />
+                                                                        </div>
+                                                                      ) : null}
+                                                                    </li>
+                                                                  );
+                                                                },
+                                                              )}
+                                                            </ol>
+                                                          ) : (
+                                                            <p
+                                                              className={
+                                                                styles.emptySequence
+                                                              }
+                                                            >
+                                                              Aucune séquence
+                                                              pour le moment.
+                                                            </p>
+                                                          )}
+                                                          <CreateItemForm
+                                                            context={{
+                                                              type: "learningSequence",
+                                                              parentId:
+                                                                teachingArea.id,
+                                                            }}
+                                                            label="une séquence"
+                                                          />
+                                                        </div>
+                                                      ) : null}
+                                                    </li>
+                                                  );
+                                                },
+                                              )}
+                                            </ul>
+                                          ) : (
+                                            <p className={styles.emptyTeaching}>
+                                              Aucun enseignement configuré
+                                            </p>
+                                          )}
+                                          <CreateItemForm
+                                            context={{
+                                              type: "teachingArea",
+                                              parentId: classroom.id,
+                                            }}
+                                            label="un enseignement"
+                                          />
+                                        </div>
+                                      ) : null}
+                                    </article>
+                                  );
+                                })}
+                                <CreateItemForm
+                                  context={{
+                                    type: "classroom",
+                                    parentId: level.id,
+                                  }}
+                                  label="une classe"
+                                />
+                              </div>
+                            ) : null}
+                          </section>
+                        );
+                      })}
+                      <div className={styles.programAddRow}>
+                        <CreateItemForm
+                          context={{ type: "level", parentId: program.id }}
+                          label="un niveau"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
                 </article>
               );
             })}
 
             {catalog.length === 0 ? (
-              <p className={styles.emptyCatalog}>Aucune formation active. Ajoutez la première formation ci-dessus.</p>
+              <p className={styles.emptyCatalog}>
+                Aucune formation active. Ajoutez la première formation
+                ci-dessus.
+              </p>
             ) : null}
           </section>
         </main>
