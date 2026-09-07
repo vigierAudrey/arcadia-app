@@ -43,6 +43,30 @@ function alreadyThere(indent: number, label: string) {
 let corrections = 0;
 let refusals = 0;
 
+/**
+ * Renommages prévus mais pas encore écrits (mode simulation).
+ *
+ * Sans cette mémoire, la simulation mentirait : une séance renommée serait
+ * ensuite cherchée sous son nouveau titre, introuvable, et annoncée comme « à
+ * créer » — alors qu'en mode --apply le renommage a lieu d'abord et la séance
+ * est bien retrouvée. Clé : [identifiant du parent, nouveau titre] ;
+ * valeur : titre encore en base.
+ */
+const plannedRenames = new Map<string, string>();
+
+function renameKey(parentId: string, title: string): string {
+  return JSON.stringify([parentId, title]);
+}
+
+function planRename(parentId: string, from: string, to: string) {
+  plannedRenames.set(renameKey(parentId, to), from);
+}
+
+/** Titre sous lequel la ligne existe encore en base, renommage non écrit compris. */
+function currentTitle(parentId: string, title: string): string {
+  return plannedRenames.get(renameKey(parentId, title)) ?? title;
+}
+
 function willCorrect(label: string) {
   corrections += 1;
   lines.push(`  ~ ${label}`);
@@ -188,7 +212,7 @@ async function importSequence(
   for (const initialLesson of entry.sequence.lessons) {
     const existingLesson = sequenceId
       ? await transaction.lesson.findFirst({
-          where: { sequenceId, title: initialLesson.title },
+          where: { sequenceId, title: currentTitle(sequenceId, initialLesson.title) },
           select: { id: true, archivedAt: true },
         })
       : null;
@@ -323,7 +347,11 @@ async function applyCorrection(
 
   if (correction.lesson) {
     const lesson = await transaction.lesson.findFirst({
-      where: { sequenceId: sequence.id, title: correction.lesson, archivedAt: null },
+      where: {
+        sequenceId: sequence.id,
+        title: currentTitle(sequence.id, correction.lesson),
+        archivedAt: null,
+      },
       select: { id: true, title: true, description: true },
     });
 
@@ -357,6 +385,11 @@ async function applyCorrection(
         });
     } else {
       current = correction.field === "title" ? lesson.title : lesson.description;
+
+      if (correction.field === "title" && !apply) {
+        planRename(sequence.id, lesson.title, correction.to);
+      }
+
       write = (value) =>
         transaction.lesson.update({
           where: { id: lesson.id },
