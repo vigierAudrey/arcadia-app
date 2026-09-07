@@ -353,6 +353,32 @@ distant (build, migration, démarrage).
 
 ---
 
+## Incident du 2026-09-07 — le script distant s'arrêtait après les migrations
+
+Les trois premiers déploiements ont été rapportés « success » alors que le script
+distant s'arrêtait silencieusement juste après `prisma migrate deploy` : ni
+`docker compose up -d --build`, ni `docker compose ps` n'ont jamais tourné.
+L'application est donc restée sur le conteneur démarré à la main lors de
+l'installation initiale, et le smoke test passait — il interrogeait l'ancien
+conteneur, bien vivant.
+
+**Cause.** Le script est exécuté par `ssh 'bash -s' < remote-deploy.sh` : bash lit
+ses instructions sur l'entrée standard. `docker compose run` transmet cette même
+entrée standard au conteneur, dont le processus a consommé le reste du script.
+Bash n'avait plus rien à lire et s'est terminé normalement, avec un code de sortie
+nul — d'où l'absence totale d'erreur.
+
+**Correctif.** Chaque `docker compose run` du script distant se termine par
+`< /dev/null`. **Ne jamais retirer cette redirection** : sans elle, toute
+instruction placée après le premier `docker compose run` est silencieusement
+ignorée.
+
+**Limite connue, non corrigée.** Le smoke test vérifie que le site répond, pas
+qu'il sert bien le commit déployé. Un conteneur périmé mais fonctionnel passe le
+test. Ajouter un contrôle de version servie reste à faire.
+
+---
+
 ## Interdits, et comment ils sont appliqués
 
 | Interdit | Application |

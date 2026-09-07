@@ -242,12 +242,23 @@ jobs:
           # ── Migrations : migrate deploy UNIQUEMENT ────────────────────────
           # -T : pas de TTY, obligatoire en contexte non interactif.
           # Aucun seed : le catalogue réel ne doit jamais être écrasé.
-          $DC run --rm -T arcadia-web pnpm prisma migrate deploy
+          #
+          # `< /dev/null` EST INDISPENSABLE, ne pas le retirer. Ce script est
+          # exécuté par `ssh 'bash -s' < remote-deploy.sh` : bash lit ses
+          # instructions sur l'entrée standard. Sans redirection, le conteneur
+          # lancé par `docker compose run` hérite de cette même entrée standard
+          # et AVALE le reste du script — tout ce qui suit n'est jamais exécuté,
+          # sans la moindre erreur. C'est ce qui s'est produit lors des
+          # déploiements du 2026-09-07 : `up -d --build` n'a jamais tourné, et
+          # l'application est restée sur le conteneur démarré à la main lors de
+          # l'installation initiale.
+          $DC run --rm -T arcadia-web pnpm prisma migrate deploy < /dev/null
 
           # ── Démarrage de la nouvelle version ──────────────────────────────
           $DC up -d --build
 
           trap - ERR
+          echo "─── Conteneurs après démarrage ───"
           $DC ps
 
           # ── Exercices : AJOUT SEUL, jamais d'écrasement ────────────────────
@@ -260,13 +271,13 @@ jobs:
           case "$CONTENUS" in
             simulation)
               echo "─── Exercices : SIMULATION, aucune écriture ───"
-              $DC run --rm -T arcadia-web pnpm pse:import
+              $DC run --rm -T arcadia-web pnpm pse:import < /dev/null
               ;;
             appliquer)
               echo "─── Exercices : simulation préalable ───"
-              $DC run --rm -T arcadia-web pnpm pse:import
+              $DC run --rm -T arcadia-web pnpm pse:import < /dev/null
               echo "─── Exercices : ajout réel ───"
-              $DC run --rm -T arcadia-web pnpm pse:import --apply
+              $DC run --rm -T arcadia-web pnpm pse:import --apply < /dev/null
               ;;
             *)
               echo "─── Exercices : étape ignorée ───"
