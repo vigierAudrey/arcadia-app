@@ -5,7 +5,9 @@ Ce document définit uniquement le **format** de correspondance entre les docume
 TeachingArea → thème/module référentiel → notion/capacité). Voir la règle d'autorité complète et les états dans
 [`pedagogie-agents.md`](pedagogie-agents.md) (§9-10).
 
-**Aucun mapping réel n'a été généré à partir de ce format.** Il ne couvre, à ce stade,
+**Un seul mapping réel a été produit à ce jour** — voir
+[`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) (T AERO / PSE / module C7).
+En dehors de celui-ci, le format ne couvre
 aucun des 4121 fichiers de `cours-source/` — voir « Ce qui n'est pas fait » en fin de
 document.
 
