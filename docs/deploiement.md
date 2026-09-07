@@ -350,6 +350,12 @@ Ce que le script garantit, et pourquoi :
 Variables surchargeables : `ENV_FILE`, `BACKUP_DIR`, `BACKUP_STATE_FILE`,
 `ARCADIA_PG_CONTAINER`, `BACKUP_RETENTION_DAYS` (défaut 14), `BACKUP_MIN_BYTES`.
 
+`ENV_FILE` vaut par défaut `$HOME/arcadia-app/.env.production`, comme
+`BACKUP_DIR` et `BACKUP_STATE_FILE` qui reposent déjà sur `$HOME`. Le script
+doit donc tourner sous le compte propriétaire de l'installation — ce que fait
+la ligne de cron ci-dessus. Sous un autre compte (ou via `sudo` sans `-H`),
+passer `ENV_FILE` explicitement.
+
 ### Restauration
 
 ```bash

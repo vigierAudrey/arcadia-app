@@ -58,7 +58,7 @@ arcadia.blobsurf.com {
 
 	# ─── Logs dédiés ArcadiA ──────────────────────────────────────────────────
 	# Fichier distinct de ceux de Blob, persisté sur l'hôte via le montage
-	# /home/audrey/arcadia-app/logs/caddy:/var/log/caddy (voir deploy/README.md).
+	# /home/<VPS_USER>/arcadia-app/logs/caddy:/var/log/caddy (voir deploy/README.md).
 	# Rotation gérée par Caddy lui-même : pas de logrotate à configurer.
 	log {
 		output file /var/log/caddy/arcadia-access.log {

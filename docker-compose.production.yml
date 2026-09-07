@@ -15,7 +15,7 @@
 # base de Blob. D'où les noms explicites « arcadia-postgres » et « arcadia-web »,
 # repris tels quels dans DATABASE_URL et dans deploy/caddy/arcadia.caddy.
 #
-# Usage sur le serveur (depuis /home/audrey/arcadia-app) :
+# Usage sur le serveur (depuis /home/<VPS_USER>/arcadia-app) :
 #   docker compose -f docker-compose.production.yml --env-file .env.production up -d --build
 #
 # Toutes les commandes d'exploitation sont dans docs/deploiement.md.

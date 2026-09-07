@@ -19,7 +19,7 @@
 #   ./scripts/backup-arcadia-pg.sh --dry-run
 #
 # Variables surchargeables :
-#   ENV_FILE               défaut /home/audrey/arcadia-app/.env.production
+#   ENV_FILE               défaut $HOME/arcadia-app/.env.production
 #   BACKUP_DIR             défaut $HOME/backups/arcadia/pg
 #   BACKUP_STATE_FILE      défaut $HOME/backups/arcadia/last-backup.json
 #   ARCADIA_PG_CONTAINER   défaut arcadia-postgres
@@ -27,11 +27,11 @@
 #   BACKUP_MIN_BYTES       défaut 1024
 #
 # Cron (voir docs/deploiement.md) :
-#   30 3 * * * /home/audrey/arcadia-app/scripts/backup-arcadia-pg.sh >> /home/audrey/backups/arcadia/logs/backup-pg.log 2>&1
+#   30 3 * * * /home/<VPS_USER>/arcadia-app/scripts/backup-arcadia-pg.sh >> /home/<VPS_USER>/backups/arcadia/logs/backup-pg.log 2>&1
 
 set -euo pipefail
 
-ENV_FILE="${ENV_FILE:-/home/audrey/arcadia-app/.env.production}"
+ENV_FILE="${ENV_FILE:-$HOME/arcadia-app/.env.production}"
 BACKUP_DIR="${BACKUP_DIR:-$HOME/backups/arcadia/pg}"
 BACKUP_STATE_FILE="${BACKUP_STATE_FILE:-$HOME/backups/arcadia/last-backup.json}"
 ARCADIA_PG_CONTAINER="${ARCADIA_PG_CONTAINER:-arcadia-postgres}"
