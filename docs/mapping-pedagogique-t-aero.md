@@ -121,3 +121,11 @@ première position de la séquence.
 Les consignes ne peuvent pas afficher le verbe **en gras** : le champ `instructions` est
 rendu en texte brut (`src/app/classe/student-activity.tsx`), et des marqueurs Markdown
 s'afficheraient littéralement. Le verbe reste en tête de consigne, à l'infinitif.
+
+## Emplacement du contenu
+
+Le contenu de cette séquence vit dans [`prisma/content/pse-taero-c7.ts`](../prisma/content/pse-taero-c7.ts)
+et est inscrit au registre de mise en ligne
+([`prisma/content/index.ts`](../prisma/content/index.ts)) : il part sur le site en ligne
+par ajout seul, sans jamais écraser l'existant — voir
+[`mettre-des-exercices-en-ligne.md`](mettre-des-exercices-en-ligne.md).

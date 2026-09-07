@@ -22,6 +22,20 @@ sur `https://arcadia.blobsurf.com` ?**
 En pratique : un premier clic en `simulation` pour regarder, un second en `appliquer`
 pour de vrai. Une fois en confiance, `appliquer` directement.
 
+## Ce qui part en ligne aujourd'hui
+
+| Classe / enseignement | Séquence | Contenu | Traçabilité |
+|---|---|---|---|
+| 1 AERO / PSE | `C3. Les acteurs de prévention` | 3 séances, 21 activités | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
+| T AERO / PSE | `C7. Le suivi de la santé au travail` | 3 séances, 17 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
+
+**Volontairement absente du registre : la séquence `C1. Les différents contrats de travail`
+de T AGAA**, présente dans le fichier de démonstration depuis les débuts du projet. Deux
+raisons de ne pas la mettre en ligne telle quelle : elle n'a aucune fiche de traçabilité
+(règle §7 de [`pedagogie-agents.md`](pedagogie-agents.md)), et ses consignes emploient des
+verbes hors liste officielle (« Lis », « Choisis », « Sélectionne » au lieu de « Repérer »,
+« Identifier », « Classer »). À reprendre avant de l'ajouter au registre.
+
 ## Ce qui ne peut pas arriver
 
 L'ajout se fait par `pnpm pse:import` ([`scripts/import-contenus.ts`](../scripts/import-contenus.ts)),

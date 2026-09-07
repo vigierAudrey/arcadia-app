@@ -171,3 +171,11 @@ s'afficheraient littéralement. Le verbe reste en tête de consigne, à l'infini
 `1 AERO` n'avait aucun TeachingArea. Le seed crée : PSE (`SUBJECT`), une séquence
 `C3. Les acteurs de prévention` (`OPEN`), 3 séances et 21 activités publiées — 6 `qcm`, 5 `true_false`, 4 `matching`,
 3 `content` et 3 `sorting`.
+
+## Emplacement du contenu
+
+Le contenu de cette séquence vit dans [`prisma/content/pse-1aero-c3.ts`](../prisma/content/pse-1aero-c3.ts)
+et est inscrit au registre de mise en ligne
+([`prisma/content/index.ts`](../prisma/content/index.ts)) : il part sur le site en ligne
+par ajout seul, sans jamais écraser l'existant — voir
+[`mettre-des-exercices-en-ligne.md`](mettre-des-exercices-en-ligne.md).

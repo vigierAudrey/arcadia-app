@@ -2,6 +2,7 @@ import { TeachingAreaKind } from "../../src/generated/prisma/enums";
 
 import type { InitialLearningSequence } from "./catalog-types";
 import { pse1AeroC3Sequence } from "./pse-1aero-c3";
+import { pseTAeroC7Sequence } from "./pse-taero-c7";
 
 /**
  * Où se placer dans le catalogue : les quatre noms doivent correspondre
@@ -33,5 +34,13 @@ export const contentImports: readonly ContentImport[] = [
     teachingArea: "PSE",
     teachingAreaKind: TeachingAreaKind.SUBJECT,
     sequence: pse1AeroC3Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Terminale",
+    classroom: "T AERO",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pseTAeroC7Sequence,
   },
 ];
