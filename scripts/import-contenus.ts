@@ -346,10 +346,19 @@ async function applyCorrection(
   let write: (value: string) => Promise<unknown>;
 
   if (correction.lesson) {
+    // Un renommage déjà appliqué lors d'un passage précédent fait que la séance
+    // n'existe plus sous son ancien titre : on la retrouve sous le nouveau, et
+    // la correction se signale « déjà corrigé » au lieu d'un faux refus.
+    const lessonTitles = [currentTitle(sequence.id, correction.lesson)];
+
+    if (correction.field === "title" && !lessonTitles.includes(correction.to)) {
+      lessonTitles.push(correction.to);
+    }
+
     const lesson = await transaction.lesson.findFirst({
       where: {
         sequenceId: sequence.id,
-        title: currentTitle(sequence.id, correction.lesson),
+        title: { in: lessonTitles },
         archivedAt: null,
       },
       select: { id: true, title: true, description: true },
