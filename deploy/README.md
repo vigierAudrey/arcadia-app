@@ -13,13 +13,13 @@ charger des configurations externes, **une fois pour toutes**.
 ## Les 3 lignes à ajouter côté Blob (opération unique)
 
 Dépôt Blob : `~/dev/blobevolutionClaudeCodex` (sur le serveur :
-`/home/audrey/blob-app`).
+`/home/<VPS_USER>/blob-app`).
 
 ### 1. `docker/Caddyfile` — une ligne, tout à la fin du fichier
 
 ```caddyfile
 # Configurations de sites externes (projets voisins hébergés sur ce serveur).
-# ArcadiA : /home/audrey/arcadia-app/deploy/caddy/arcadia.caddy
+# ArcadiA : /home/<VPS_USER>/arcadia-app/deploy/caddy/arcadia.caddy
 import /etc/caddy/conf.d/*.caddy
 ```
 
@@ -35,16 +35,16 @@ import /etc/caddy/conf.d/*.caddy
       - caddy-data:/data
       # ── Ajouts ArcadiA ──────────────────────────────────────────────────
       # Configuration ArcadiA, en lecture seule : Caddy ne peut pas la modifier.
-      - /home/audrey/arcadia-app/deploy/caddy:/etc/caddy/conf.d:ro
+      - /home/<VPS_USER>/arcadia-app/deploy/caddy:/etc/caddy/conf.d:ro
       # Logs d'accès ArcadiA, persistés sur l'hôte (Caddy doit pouvoir écrire).
-      - /home/audrey/arcadia-app/logs/caddy:/var/log/caddy
+      - /home/<VPS_USER>/arcadia-app/logs/caddy:/var/log/caddy
 ```
 
 ### Application
 
 ```bash
-cd /home/audrey/blob-app
-install -d -m 755 /home/audrey/arcadia-app/logs/caddy
+cd /home/<VPS_USER>/blob-app
+install -d -m 755 /home/<VPS_USER>/arcadia-app/logs/caddy
 
 # Contrôle de syntaxe AVANT de toucher au conteneur en production
 docker compose -f docker-compose.vps.yml --env-file .env.vps exec caddy \
@@ -98,11 +98,11 @@ Le dépôt Blob possède des garde-fous qui inspectent les Caddyfiles. Les respe
 | Ressource | Séparation |
 |---|---|
 | Base de données | `arcadia-postgres` sur le réseau privé `arcadia` (172.23.0.0/16), volume `arcadia-pgdata`. Invisible depuis Blob. |
-| Secrets | `/home/audrey/arcadia-app/.env.production`, aucune valeur commune avec `.env.vps`. |
-| Dossier serveur | `/home/audrey/arcadia-app/` vs `/home/audrey/blob-app/`. |
+| Secrets | `/home/<VPS_USER>/arcadia-app/.env.production`, aucune valeur commune avec `.env.vps`. |
+| Dossier serveur | `/home/<VPS_USER>/arcadia-app/` vs `/home/<VPS_USER>/blob-app/`. |
 | Volumes | `arcadia-pgdata` vs `pgdata-vps` / `miniodata-vps`. |
 | Logs applicatifs | `docker compose -p arcadia logs` + `arcadia-access.log` dédié. |
-| Sauvegardes | `/home/audrey/backups/arcadia/` vs `/home/audrey/backups/blobsurf/`. |
+| Sauvegardes | `/home/<VPS_USER>/backups/arcadia/` vs `/home/<VPS_USER>/backups/blobsurf/`. |
 | Projet Compose | `arcadia` vs `blobconnect-vps`. |
 
 Seul point de contact : le service `arcadia-web` est attaché au réseau

@@ -6,14 +6,26 @@ Procédure complète de mise en ligne sur `https://arcadia.blobsurf.com`.
 
 | | Valeur |
 |---|---|
-| Serveur | `blobsurf-prevps` — Hetzner Cloud |
+| Serveur | `<VPS_HOSTNAME>` — Hetzner Cloud |
 | Région | `eu-central`, Nuremberg |
 | Architecture | x86 |
 | Disque | 40 Go |
-| IPv4 publique | `46.224.144.57` |
+| IPv4 publique | `<VPS_PUBLIC_IP>` |
 | Domaine | `blobsurf.com` (zone DNS chez **Cloudflare**) |
 | Sous-domaine ArcadiA | `arcadia.blobsurf.com` |
 | URL élèves (QR code) | `https://arcadia.blobsurf.com/classe` |
+
+> **Conventions de ce document.** Le dépôt étant public, les coordonnées exactes
+> du serveur sont remplacées par des placeholders. Substituer mentalement :
+>
+> | Placeholder | Où retrouver la vraie valeur |
+> |---|---|
+> | `<VPS_PUBLIC_IP>` | Console Hetzner, ou secret GitHub `ARCADIA_VPS_HOST` |
+> | `<VPS_USER>` | Secret GitHub `ARCADIA_VPS_USER` |
+> | `<VPS_HOSTNAME>` | Console Hetzner (nom de la machine) |
+>
+> Le domaine public `arcadia.blobsurf.com` est volontairement écrit en clair :
+> il est de toute façon visible de tous.
 
 > **Deux remarques factuelles sur la fiche serveur.**
 >
@@ -39,7 +51,7 @@ l'unique modification à faire côté Blob.
 
 | | Blob | ArcadiA |
 |---|---|---|
-| Dossier | `/home/audrey/blob-app` | `/home/audrey/arcadia-app` |
+| Dossier | `/home/<VPS_USER>/blob-app` | `/home/<VPS_USER>/arcadia-app` |
 | Projet Compose | `blobconnect-vps` | `arcadia` |
 | Sous-réseau | `172.21.0.0/16` | `172.23.0.0/16` |
 | Base | `pgdata-vps` (PostGIS 15) | `arcadia-pgdata` (PostgreSQL 16) |
@@ -62,7 +74,7 @@ l'unique modification à faire côté Blob.
 ## 1. Vérifications serveur
 
 ```bash
-ssh audrey@46.224.144.57
+ssh <VPS_USER>@<VPS_PUBLIC_IP>
 
 free -h      # ≥ ~2 Go disponibles : le build Next fait un typecheck de ~75 s
 df -h        # ≥ ~8 Go libres : image ~1,5 Go + cache de build + volume PostgreSQL
@@ -105,7 +117,7 @@ chez Cloudflare** : un enregistrement créé côté OVH n'aurait aucun effet.
 - [ ] Cloudflare → zone `blobsurf.com` → **Add record**
   - Type : `A`
   - Name : `arcadia`
-  - IPv4 : `46.224.144.57`
+  - IPv4 : `<VPS_PUBLIC_IP>`
   - Proxy status : **DNS only (nuage gris)** pour le premier déploiement
   - TTL : Auto
 - [ ] Vérifier la propagation :
@@ -127,7 +139,7 @@ Suivre [`deploy/README.md`](../deploy/README.md) : ligne `import` dans
 `docker/Caddyfile`, deux montages dans le service `caddy`, `caddy validate`, puis
 `up -d caddy`.
 
-- [ ] `install -d -m 755 /home/audrey/arcadia-app/logs/caddy`
+- [ ] `install -d -m 755 /home/<VPS_USER>/arcadia-app/logs/caddy`
 - [ ] `caddy validate` retourne « Valid configuration »
 - [ ] `https://blobsurf.com` répond toujours après le recreate
 
@@ -140,8 +152,8 @@ Suivre [`deploy/README.md`](../deploy/README.md) : ligne `import` dans
 # clé pour le dépôt de Blob, et GitHub identifie le dépôt par la clé présentée.
 # L'alias est défini dans ~/.ssh/config du serveur et pointe sur ~/.ssh/arcadia-deploy.
 # Prérequis : la deploy key « arcadia-vps-readonly » est enregistrée côté GitHub.
-git clone git@github-arcadia:vigierAudrey/arcadia-app.git /home/audrey/arcadia-app
-cd /home/audrey/arcadia-app
+git clone git@github-arcadia:vigierAudrey/arcadia-app.git /home/<VPS_USER>/arcadia-app
+cd /home/<VPS_USER>/arcadia-app
 
 cp .env.production.example .env.production
 chmod 600 .env.production
@@ -169,7 +181,7 @@ openssl rand -base64 32    # -> POSTGRES_PASSWORD
 ## 5. Démarrage de la stack
 
 ```bash
-cd /home/audrey/arcadia-app
+cd /home/<VPS_USER>/arcadia-app
 
 docker compose -f docker-compose.production.yml --env-file .env.production up -d --build
 docker compose -f docker-compose.production.yml --env-file .env.production ps
@@ -229,7 +241,7 @@ Attendu : `HTTP/2 200`, certificat Let's Encrypt valide, en-tête
 En cas d'échec du certificat :
 
 ```bash
-cd /home/audrey/blob-app
+cd /home/<VPS_USER>/blob-app
 docker compose -f docker-compose.vps.yml --env-file .env.vps logs caddy --tail=80
 ```
 
@@ -294,15 +306,15 @@ des données : catalogue, comptes, codes classe, traçabilité pédagogique.
 ### Préparation
 
 ```bash
-install -d -m 700 /home/audrey/backups/arcadia
-install -d -m 700 /home/audrey/backups/arcadia/pg
-install -d -m 755 /home/audrey/backups/arcadia/logs
+install -d -m 700 /home/<VPS_USER>/backups/arcadia
+install -d -m 700 /home/<VPS_USER>/backups/arcadia/pg
+install -d -m 755 /home/<VPS_USER>/backups/arcadia/logs
 ```
 
 ### Premier essai
 
 ```bash
-cd /home/audrey/arcadia-app
+cd /home/<VPS_USER>/arcadia-app
 
 # Affiche ce qui serait fait, sans rien écrire ni supprimer
 ./scripts/backup-arcadia-pg.sh --dry-run
@@ -326,13 +338,13 @@ Ce que le script garantit, et pourquoi :
 
 ### Automatisation
 
-`crontab -e` (utilisateur `audrey`) :
+`crontab -e` (utilisateur `<VPS_USER>`) :
 
 ```cron
 # ArcadiA — dump PostgreSQL quotidien 3h30 UTC
 # Décalé de 30 min par rapport au backup Blob de 3h00 pour ne pas charger
 # le disque et le CPU en même temps.
-30 3 * * * /home/audrey/arcadia-app/scripts/backup-arcadia-pg.sh >> /home/audrey/backups/arcadia/logs/backup-pg.log 2>&1
+30 3 * * * /home/<VPS_USER>/arcadia-app/scripts/backup-arcadia-pg.sh >> /home/<VPS_USER>/backups/arcadia/logs/backup-pg.log 2>&1
 ```
 
 Variables surchargeables : `ENV_FILE`, `BACKUP_DIR`, `BACKUP_STATE_FILE`,
@@ -343,7 +355,7 @@ Variables surchargeables : `ENV_FILE`, `BACKUP_DIR`, `BACKUP_STATE_FILE`,
 ```bash
 docker exec -i arcadia-postgres \
   pg_restore -U arcadia -d arcadia --clean --if-exists \
-  < /home/audrey/backups/arcadia/pg/arcadia_<horodatage>.dump
+  < /home/<VPS_USER>/backups/arcadia/pg/arcadia_<horodatage>.dump
 ```
 
 - [ ] `--dry-run` affiche les bons chemins
@@ -364,7 +376,7 @@ docker exec -i arcadia-postgres \
 ## Exploitation courante
 
 ```bash
-cd /home/audrey/arcadia-app
+cd /home/<VPS_USER>/arcadia-app
 alias adc='docker compose -f docker-compose.production.yml --env-file .env.production'
 
 adc ps                       # état des services
@@ -376,7 +388,7 @@ adc restart arcadia-web
 Logs d'accès HTTP dédiés (sur l'hôte, hors conteneur) :
 
 ```bash
-tail -f /home/audrey/arcadia-app/logs/caddy/arcadia-access.log
+tail -f /home/<VPS_USER>/arcadia-app/logs/caddy/arcadia-access.log
 ```
 
 Inspecter la base sans jamais l'exposer — `arcadia-postgres` n'est résolvable
@@ -389,7 +401,7 @@ docker exec -it arcadia-postgres psql -U arcadia -d arcadia
 ### Mise à jour du code
 
 ```bash
-cd /home/audrey/arcadia-app
+cd /home/<VPS_USER>/arcadia-app
 git pull
 adc up -d --build
 adc run --rm arcadia-web pnpm prisma migrate deploy
@@ -400,7 +412,7 @@ adc run --rm arcadia-web pnpm prisma migrate deploy
 Modifier `deploy/caddy/arcadia.caddy`, `git pull`, puis :
 
 ```bash
-cd /home/audrey/blob-app
+cd /home/<VPS_USER>/blob-app
 docker compose -f docker-compose.vps.yml --env-file .env.vps exec caddy \
   caddy reload --config /etc/caddy/Caddyfile
 ```

@@ -10,12 +10,24 @@ stratégie éprouvée du projet Blob.
 
 | | Valeur |
 |---|---|
-| Serveur | `blobsurf-prevps` — Hetzner, Nuremberg, `46.224.144.57` |
-| Utilisateur | `audrey` (à confirmer, voir § Première mise en place) |
-| Chemin | `/home/audrey/arcadia-app` |
+| Serveur | `<VPS_HOSTNAME>` — Hetzner, Nuremberg, `<VPS_PUBLIC_IP>` |
+| Utilisateur | `<VPS_USER>` (à confirmer, voir § Première mise en place) |
+| Chemin | `/home/<VPS_USER>/arcadia-app` |
 | Projet Compose | `arcadia` |
 | Domaine | `https://arcadia.blobsurf.com` |
 | Smoke test | `https://arcadia.blobsurf.com/classe` |
+
+> **Conventions de ce document.** Le dépôt étant public, les coordonnées exactes
+> du serveur sont remplacées par des placeholders. Substituer mentalement :
+>
+> | Placeholder | Où retrouver la vraie valeur |
+> |---|---|
+> | `<VPS_PUBLIC_IP>` | Console Hetzner, ou secret GitHub `ARCADIA_VPS_HOST` |
+> | `<VPS_USER>` | Secret GitHub `ARCADIA_VPS_USER` |
+> | `<VPS_HOSTNAME>` | Console Hetzner (nom de la machine) |
+>
+> Le domaine public `arcadia.blobsurf.com` est volontairement écrit en clair :
+> il est de toute façon visible de tous.
 
 ---
 
@@ -54,7 +66,7 @@ ne déclenche rien du tout, il faut lancer le workflow à la main.
 passait au vert sur `main`. Le tout premier push du dépôt a donc lancé un
 déploiement que personne n'avait demandé (run `34095005546`).
 
-Il n'a fait aucun dégât : `/home/audrey/arcadia-app` n'existait pas encore sur
+Il n'a fait aucun dégât : `/home/<VPS_USER>/arcadia-app` n'existait pas encore sur
 le VPS, le script distant s'est arrêté sur son `cd` — avant `git reset --hard`,
 avant `docker compose`, avant toute migration. Mais le garde-fou censé
 l'arrêter, l'approbation d'environment, n'était pas actif : **les required
@@ -107,17 +119,17 @@ production**, où il écraserait le catalogue réel par des démonstrations.
 
 | Secret | Valeur | Obligatoire |
 |---|---|---|
-| `ARCADIA_VPS_HOST` | `46.224.144.57` | oui |
-| `ARCADIA_VPS_USER` | `audrey` | oui |
+| `ARCADIA_VPS_HOST` | `<VPS_PUBLIC_IP>` | oui |
+| `ARCADIA_VPS_USER` | `<VPS_USER>` | oui |
 | `ARCADIA_VPS_PORT` | `22`, ou le port SSH réel | oui |
 | `ARCADIA_VPS_SSH_KEY` | Contenu de la **clé privée** dédiée, en entier | oui |
-| `ARCADIA_DEPLOY_PATH` | `/home/audrey/arcadia-app` | oui |
+| `ARCADIA_DEPLOY_PATH` | `/home/<VPS_USER>/arcadia-app` | oui |
 | `ARCADIA_VPS_HOST_KEY` | Clé publique du serveur, pour épingler l'empreinte | recommandé |
 
 **Ne jamais mettre dans les secrets GitHub** : `.env.production`, les secrets de
 session, le mot de passe PostgreSQL, ou toute clé privée autre que celle dédiée
 au déploiement. Le workflow n'en a pas besoin : les secrets applicatifs vivent
-uniquement dans `/home/audrey/arcadia-app/.env.production`, sur le serveur.
+uniquement dans `/home/<VPS_USER>/arcadia-app/.env.production`, sur le serveur.
 
 Le workflow refuse de démarrer si un secret obligatoire manque, si le port n'est
 pas numérique, ou si le chemin de déploiement pointe vers un répertoire système
@@ -153,7 +165,7 @@ Ne jamais commiter ces fichiers, ne jamais les envoyer par message.
 ### Installer la clé publique sur le serveur
 
 ```bash
-ssh audrey@46.224.144.57
+ssh <VPS_USER>@<VPS_PUBLIC_IP>
 
 install -d -m 700 ~/.ssh
 cat >> ~/.ssh/authorized_keys   # coller le contenu de arcadia-deploy.pub, puis Ctrl-D
@@ -164,7 +176,7 @@ Vérifier depuis ta machine que la clé fonctionne **avant** de configurer le
 workflow :
 
 ```bash
-ssh -i ~/.ssh/arcadia-deploy audrey@46.224.144.57 'echo connexion OK'
+ssh -i ~/.ssh/arcadia-deploy <VPS_USER>@<VPS_PUBLIC_IP> 'echo connexion OK'
 ```
 
 ### Épingler la clé hôte (recommandé)
@@ -176,14 +188,14 @@ au réseau lors du premier contact, et le workflow émet un avertissement.
 Le mode recommandé épingle l'empreinte :
 
 ```bash
-ssh-keyscan -p 22 -H 46.224.144.57
+ssh-keyscan -p 22 -H <VPS_PUBLIC_IP>
 ```
 
 Comparer l'empreinte obtenue avec celle affichée dans la **console Hetzner**
 (ou depuis une session SSH déjà fiable) :
 
 ```bash
-ssh-keyscan -p 22 46.224.144.57 | ssh-keygen -lf -
+ssh-keyscan -p 22 <VPS_PUBLIC_IP> | ssh-keygen -lf -
 ```
 
 Si elles correspondent, coller la sortie complète de `ssh-keyscan -H` dans le
@@ -245,9 +257,9 @@ La première mise en ligne se fait à la main, en suivant
 [`deploiement.md`](deploiement.md). Résumé des prérequis côté serveur :
 
 - [ ] `free -h`, `df -h`, `docker ps` vérifiés (disque de 40 Go partagé avec Blob)
-- [ ] Enregistrement Cloudflare `A arcadia -> 46.224.144.57`, nuage gris
+- [ ] Enregistrement Cloudflare `A arcadia -> <VPS_PUBLIC_IP>`, nuage gris
 - [ ] Modification unique côté Blob appliquée ([`deploy/README.md`](../deploy/README.md))
-- [ ] Dépôt cloné dans `/home/audrey/arcadia-app`
+- [ ] Dépôt cloné dans `/home/<VPS_USER>/arcadia-app`
 - [ ] `.env.production` créé et rempli, en `chmod 600`
 - [ ] Stack démarrée, migrations appliquées, compte admin créé
 - [ ] `https://arcadia.blobsurf.com` répond en HTTPS
@@ -259,17 +271,17 @@ Puis, spécifiquement pour la CI/CD :
       ne pas écraser silencieusement un correctif en cours
 - [ ] `git fetch origin main` fonctionne depuis le serveur, sans mot de passe
       (clé de déploiement en lecture seule côté GitHub, ou dépôt public)
-- [ ] L'utilisateur `audrey` peut lancer `docker compose` sans `sudo`
+- [ ] L'utilisateur `<VPS_USER>` peut lancer `docker compose` sans `sudo`
       (`docker ps` doit répondre)
 - [ ] Les 5 secrets obligatoires sont renseignés
 - [ ] L'environment `arcadia-production` existe ; required reviewers configurés
       si le dépôt est public (facultatif, le workflow est déjà manuel)
 
-> **`ARCADIA_VPS_USER`** : `audrey` est l'utilisateur qui exploite Blob (cron,
+> **`ARCADIA_VPS_USER`** : `<VPS_USER>` est l'utilisateur qui exploite Blob (cron,
 > `docker compose`). Confirmer qu'il s'agit bien du même compte avant de le
 > mettre dans les secrets. Un utilisateur `deploy` distinct serait plus propre
 > à terme, mais il devrait appartenir au groupe `docker` et pouvoir écrire dans
-> `/home/audrey/arcadia-app`.
+> `/home/<VPS_USER>/arcadia-app`.
 
 ---
 
@@ -365,8 +377,8 @@ Côté GitHub : `Actions -> Deploy -> dernier run`.
 Côté serveur :
 
 ```bash
-ssh audrey@46.224.144.57
-cd /home/audrey/arcadia-app
+ssh <VPS_USER>@<VPS_PUBLIC_IP>
+cd /home/<VPS_USER>/arcadia-app
 
 docker compose -p arcadia --env-file .env.production -f docker-compose.production.yml ps
 docker compose -p arcadia --env-file .env.production -f docker-compose.production.yml logs arcadia-web --tail=100
