@@ -5,9 +5,10 @@ Ce document définit uniquement le **format** de correspondance entre les docume
 TeachingArea → thème/module référentiel → notion/capacité). Voir la règle d'autorité complète et les états dans
 [`pedagogie-agents.md`](pedagogie-agents.md) (§9-10).
 
-**Un seul mapping réel a été produit à ce jour** — voir
-[`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) (T AERO / PSE / module C7).
-En dehors de celui-ci, le format ne couvre
+**Deux mappings réels ont été produits à ce jour** — voir
+[`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) (T AERO / PSE / module C7)
+et [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) (1 AERO / PSE /
+module C3). En dehors de ceux-ci, le format ne couvre
 aucun des 4121 fichiers de `cours-source/` — voir « Ce qui n'est pas fait » en fin de
 document.
 
@@ -126,7 +127,8 @@ qu'elles ne sont pas passées à `VALIDE`.
 
 ## Ce qui n'est pas fait à ce stade
 
-- Aucun fichier de mapping réel n'existe dans le dépôt.
+- Aucun fichier de mapping réel n'existe dans le dépôt (les deux mappings produits sont
+  documentaires, pas des données).
 - Aucune génération automatique de propositions (`PROPOSE`) n'a été lancée sur
   `cours-source/`.
 - Le mécanisme qui produirait ces propositions à partir de `.cours-index/` (arborescence,

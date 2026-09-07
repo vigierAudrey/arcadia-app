@@ -205,7 +205,9 @@ docker compose -f docker-compose.production.yml --env-file .env.production \
 > `prisma db push --accept-data-loss`.
 >
 > **Ne pas seeder.** `prisma/seed.ts` crée un catalogue de démonstration. Les
-> vraies données se saisissent depuis `/admin`.
+> vraies données se saisissent depuis `/admin`, et les exercices écrits dans le
+> dépôt arrivent par `pnpm pse:import` — ajout seul, jamais d'écrasement, voir
+> [`mettre-des-exercices-en-ligne.md`](mettre-des-exercices-en-ligne.md).
 
 ---
 

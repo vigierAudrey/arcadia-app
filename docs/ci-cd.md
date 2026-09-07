@@ -51,6 +51,8 @@ Actions -> Deploy -> Run workflow   (branche main, raison saisie)
    -> docker compose up -d arcadia-postgres
    -> pnpm prisma migrate deploy      (dans le conteneur web)
    -> docker compose up -d --build
+   -> pnpm pse:import                 (exercices : simulation / appliquer /
+                                       ignorer, choisi au lancement)
    -> smoke test public sur https://arcadia.blobsurf.com
    -> si échec : rollback sur le commit précédent
 ```
@@ -357,7 +359,7 @@ distant (build, migration, démarrage).
 |---|---|
 | `prisma migrate dev` en production | Contrôle automatique du script distant avant l'envoi — le workflow échoue si la chaîne apparaît |
 | `prisma db push` | idem |
-| `pnpm db:seed` en production | idem — écraserait le catalogue réel |
+| `pnpm db:seed` en production | idem — écraserait le catalogue réel. La seule écriture de contenu autorisée est `pnpm pse:import`, qui n'ajoute que ce qui manque et ne modifie jamais l'existant — voir [`mettre-des-exercices-en-ligne.md`](mettre-des-exercices-en-ligne.md) |
 | `docker volume prune` | idem — détruirait `arcadia-pgdata` et les certificats de Blob |
 | Déploiement hors `main` | Étape `Vérifier la branche déployée` (échec si `GITHUB_REF_NAME != main`) + `Deployment branches` sur l'environment |
 | Déploiement automatique non voulu | `deploy.yml` n'a qu'un déclencheur : `workflow_dispatch`. Aucun `push`, `workflow_run` ni `schedule` |

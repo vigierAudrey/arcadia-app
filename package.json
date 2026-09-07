@@ -16,6 +16,7 @@
     "db:seed": "prisma db seed",
     "admin:create": "tsx scripts/create-admin.ts",
     "admin:reset": "tsx scripts/reset-admin.ts",
+    "pse:import": "tsx scripts/import-contenus.ts",
     "cours:index": "tsx scripts/cours-index/index.ts",
     "cours:search": "tsx scripts/cours-index/search.ts"
   },
