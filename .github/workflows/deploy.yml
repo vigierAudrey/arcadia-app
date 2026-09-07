@@ -23,6 +23,8 @@
 #             -> docker compose build
 #             -> pnpm prisma migrate deploy
 #             -> docker compose up -d --build
+#             -> exercices : `pnpm pse:import` selon le mode choisi au
+#                lancement (simulation / appliquer / ignorer)
 #             -> smoke test public sur https://arcadia.blobsurf.com/classe
 #             -> rollback sur le commit précédent si le smoke test échoue
 #
@@ -31,6 +33,10 @@
 #   - jamais `prisma db push`       (perte de données possible)
 #   - jamais `pnpm db:seed`         (écraserait le catalogue réel par des démos)
 #   - aucun secret affiché dans les logs
+#
+# La seule écriture de contenu autorisée est `pnpm pse:import`, qui n'ajoute
+# que ce qui manque et ne modifie jamais une ligne existante. Voir
+# docs/mettre-des-exercices-en-ligne.md.
 #
 # Un contrôle automatique en fin de workflow vérifie que ces commandes
 # n'apparaissent pas dans le script distant.
@@ -49,6 +55,15 @@ on:
         description: 'Raison du déclenchement manuel (ex: première mise en ligne, redéploiement après incident)'
         required: false
         default: 'redéploiement manuel'
+      contenus:
+        description: 'Exercices : « simulation » affiche ce qui serait ajouté sans rien écrire · « appliquer » ajoute ce qui manque · « ignorer » ne touche pas aux contenus'
+        required: true
+        default: 'simulation'
+        type: choice
+        options:
+          - simulation
+          - appliquer
+          - ignorer
 
 permissions:
   contents: read
@@ -83,6 +98,8 @@ jobs:
       VPS_HOST_KEY: ${{ secrets.ARCADIA_VPS_HOST_KEY }}
       DEPLOY_PATH: ${{ secrets.ARCADIA_DEPLOY_PATH }}
       SMOKE_BASE_URL: https://arcadia.blobsurf.com
+      # Mode choisi au lancement pour les exercices : simulation / appliquer / ignorer.
+      CONTENUS: ${{ inputs.contenus }}
 
     steps:
       # ─────────────────────────────────────────────────────────────────────
@@ -181,6 +198,7 @@ jobs:
           set -euo pipefail
 
           DEPLOY_PATH="$1"
+          CONTENUS="${2:-ignorer}"
           cd "$DEPLOY_PATH"
 
           DC="docker compose -p arcadia --env-file .env.production -f docker-compose.production.yml"
@@ -231,6 +249,29 @@ jobs:
 
           trap - ERR
           $DC ps
+
+          # ── Exercices : AJOUT SEUL, jamais d'écrasement ────────────────────
+          # `pnpm pse:import` ne touche qu'aux séquences listées dans
+          # prisma/content/index.ts, ne crée que ce qui manque et ne modifie
+          # aucune ligne existante. Il n'a rien à voir avec le seed, qui reste
+          # interdit ici. Placé après le désarmement du trap : un échec fait
+          # échouer le déploiement sans ramener le code en arrière, et sans
+          # rien écrire (tout se joue dans une transaction).
+          case "$CONTENUS" in
+            simulation)
+              echo "─── Exercices : SIMULATION, aucune écriture ───"
+              $DC run --rm -T arcadia-web pnpm pse:import
+              ;;
+            appliquer)
+              echo "─── Exercices : simulation préalable ───"
+              $DC run --rm -T arcadia-web pnpm pse:import
+              echo "─── Exercices : ajout réel ───"
+              $DC run --rm -T arcadia-web pnpm pse:import --apply
+              ;;
+            *)
+              echo "─── Exercices : étape ignorée ───"
+              ;;
+          esac
           REMOTE
 
           # Garde-fou : le script distant ne doit contenir aucune commande
@@ -255,7 +296,7 @@ jobs:
               -o BatchMode=yes \
               -p "$VPS_PORT" \
               "$VPS_USER@$VPS_HOST" \
-              'bash -s' -- "$DEPLOY_PATH" < remote-deploy.sh | tee deploy.log
+              'bash -s' -- "$DEPLOY_PATH" "$CONTENUS" < remote-deploy.sh | tee deploy.log
 
           # Mémorisé pour un éventuel rollback déclenché par le smoke test.
           PREV_SHA="$(grep -m1 '^PREV_SHA=' deploy.log | cut -d= -f2)"
