@@ -1,0 +1,352 @@
+.activity {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.8rem;
+  padding: 1rem;
+  border: 1px solid rgb(117 255 245 / 30%);
+  background:
+    linear-gradient(135deg, rgb(117 255 245 / 7%), transparent 45%),
+    var(--night-900);
+  box-shadow: 5px 5px 0 rgb(5 6 21 / 65%);
+  animation: activity-in 420ms ease-out both;
+}
+
+.activityHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.activityTag {
+  padding: 0.28rem 0.4rem;
+  border: 1px solid var(--yellow-300);
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.52rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.activity h3 {
+  margin: 0;
+  color: var(--text-100);
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.instructions,
+.question,
+.contentBody p,
+.explanation,
+.feedbackSuccess,
+.feedbackHint,
+.unavailable {
+  margin: 0;
+  color: var(--text-500);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.contentBody {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.8rem;
+  border-left: 3px solid var(--yellow-300);
+  background: rgb(5 6 21 / 60%);
+}
+
+.contentBody p {
+  white-space: pre-line;
+}
+
+.question {
+  color: var(--text-100);
+  font-weight: 700;
+}
+
+.choiceGrid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.sortingItems,
+.categoryGrid {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.gameCard,
+.categoryButton,
+.matchCard {
+  min-height: 2.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  padding: 0.6rem 0.7rem;
+  background: rgb(5 6 21 / 62%);
+  color: var(--text-300);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  text-align: left;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.gameCard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.gameCard:hover,
+.gameCard:focus-visible,
+.categoryButton:hover,
+.categoryButton:focus-visible,
+.gameCardSelected,
+.matchCardLinked {
+  border-color: var(--cyan-300);
+  background: rgb(117 255 245 / 12%);
+  color: var(--text-100);
+  transform: translateX(3px);
+}
+
+.gameCard small {
+  color: var(--cyan-300);
+  font-family: var(--font-pixel);
+  font-size: 0.48rem;
+  text-transform: uppercase;
+}
+
+.gameCardMark {
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.65rem;
+}
+
+.categoryGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.categoryButton {
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.categoryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  transform: none;
+}
+
+.matchCard {
+  display: flex;
+  align-items: center;
+  min-height: 3rem;
+  cursor: default;
+}
+
+.matchingRows {
+  gap: 0.65rem;
+}
+
+.matchingRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: center;
+  padding: 0.35rem;
+  border: 1px solid var(--line-strong);
+  background: rgb(5 6 21 / 42%);
+}
+
+.matchArrow {
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.8rem;
+}
+
+.matchSelectLabel {
+  min-width: 0;
+}
+
+.matchSelect {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid var(--cyan-300);
+  border-radius: 0;
+  padding: 0.6rem 0.7rem;
+  background: rgb(117 255 245 / 9%);
+  color: var(--text-100);
+  color-scheme: dark;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.matchSelect option {
+  background: var(--night-900);
+  color: var(--text-100);
+}
+
+.matchSelect:focus-visible {
+  outline: 2px solid var(--yellow-300);
+  outline-offset: 2px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.gameCardCorrect {
+  border-color: var(--green-400);
+  background: rgb(93 255 157 / 15%);
+}
+
+.gameCardWrong {
+  border-color: var(--red-400);
+  background: rgb(255 113 134 / 13%);
+}
+
+.gameHint {
+  margin: 0;
+  color: var(--text-500);
+  font-size: 0.72rem;
+  font-style: italic;
+}
+
+.choice,
+.checkButton {
+  min-height: 2.8rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  padding: 0.65rem 0.75rem;
+  background: rgb(5 6 21 / 62%);
+  color: var(--text-300);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  text-align: left;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.choice:hover,
+.choice:focus-visible,
+.choiceSelected {
+  border-color: var(--cyan-300);
+  background: rgb(117 255 245 / 12%);
+  color: var(--text-100);
+  transform: translateX(3px);
+}
+
+.choiceCorrect {
+  border-color: var(--green-400);
+  background: rgb(93 255 157 / 15%);
+}
+
+.choiceWrong {
+  border-color: var(--red-400);
+  background: rgb(255 113 134 / 13%);
+}
+
+.choiceCursor {
+  display: inline-block;
+  width: 2.2rem;
+  color: var(--cyan-300);
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  font-weight: 800;
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.checkButton {
+  border-color: var(--yellow-300);
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.checkButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.feedbackSuccess {
+  color: var(--green-400);
+  font-weight: 700;
+}
+
+.feedbackHint {
+  color: var(--yellow-300);
+}
+
+.explanation {
+  padding: 0.65rem 0.75rem;
+  border-left: 2px solid var(--green-400);
+  background: rgb(93 255 157 / 8%);
+}
+
+.unavailable {
+  color: var(--red-400);
+}
+
+@keyframes activity-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 42rem) {
+  .choiceGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 36rem) {
+  .categoryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .matchingRow {
+    grid-template-columns: 1fr;
+  }
+
+  .matchArrow {
+    justify-self: center;
+    transform: rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activity,
+  .choice,
+  .checkButton {
+    animation: none;
+    transition: none;
+  }
+}

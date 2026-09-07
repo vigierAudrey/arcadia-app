@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "PSE Interactif",
-    short_name: "PSE",
+    name: "ArcadiA",
+    short_name: "ArcadiA",
     description:
       "Une plateforme pédagogique simple pour accéder aux activités de sa classe.",
     start_url: "/",

@@ -44,6 +44,26 @@
   padding-block: 2.5rem 4rem;
 }
 
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 2rem;
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  text-transform: uppercase;
+}
+
+.breadcrumbs a {
+  color: var(--cyan-300);
+}
+
+.breadcrumbs strong {
+  color: var(--yellow-300);
+  font-weight: 800;
+}
+
 .classHero {
   margin-bottom: 2.5rem;
 }
@@ -85,12 +105,148 @@
   margin-top: 2.5rem;
 }
 
-.teachingArea h2 {
-  margin: 0 0 1rem;
+.sectionHeading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sectionHeading .eyebrow {
+  margin: 0;
+}
+
+.sectionHint {
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+}
+
+.areaGrid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.areaCard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid var(--line-strong);
+  border-left: 4px solid var(--magenta-400);
+  background: var(--night-850);
+  color: var(--text-100);
+  text-decoration: none;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.areaCard:hover,
+.areaCard:focus-visible {
+  border-color: var(--cyan-300);
+  background: rgb(117 255 245 / 8%);
+  transform: translateX(4px);
+}
+
+.areaCardIndex {
+  display: grid;
+  width: 2.55rem;
+  height: 2.55rem;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  color: var(--cyan-300);
+  font-family: var(--font-pixel);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.areaCardCopy {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.areaCardCopy strong {
+  font-family: var(--font-pixel);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.areaCardCopy small {
+  color: var(--text-500);
+  font-size: 0.78rem;
+}
+
+.areaCardArrow {
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+}
+
+.areaDisclosure,
+.mission,
+.stepDisclosure,
+.activityGroup {
+  min-width: 0;
+}
+
+.areaSummary,
+.missionSummary,
+.stepSummary,
+.groupSummary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.areaSummary::-webkit-details-marker,
+.missionSummary::-webkit-details-marker,
+.stepSummary::-webkit-details-marker,
+.groupSummary::-webkit-details-marker {
+  display: none;
+}
+
+.areaSummary::after,
+.missionSummary::after,
+.stepSummary::after,
+.groupSummary::after {
+  content: "+";
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+details[open] > .areaSummary::after,
+details[open] > .missionSummary::after,
+details[open] > .stepSummary::after,
+details[open] > .groupSummary::after {
+  content: "-";
+}
+
+.areaSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.areaSummary h2 {
+  margin: 0;
   color: var(--magenta-400);
   font-family: var(--font-pixel);
   font-size: 1rem;
   letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.areaSummary > span:not(:first-child) {
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
   text-transform: uppercase;
 }
 
@@ -103,12 +259,16 @@
 }
 
 .mission {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 0.85rem 1rem;
-  padding: 1rem;
   border-left: 4px solid var(--cyan-400);
   background: var(--night-850);
+}
+
+.missionSummary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.85rem 1rem;
+  align-items: center;
+  padding: 1rem;
 }
 
 .missionNumber {
@@ -133,11 +293,17 @@
   font-size: 1rem;
 }
 
-.missionCopy p {
-  margin: 0;
+.missionCopy > span {
   color: var(--text-500);
   font-size: 0.82rem;
   line-height: 1.5;
+}
+
+.missionMeta {
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  text-transform: uppercase;
 }
 
 .stepList {
@@ -151,13 +317,16 @@
 }
 
 .stepList li {
+  border-left: 2px solid rgb(117 255 245 / 45%);
+  background: rgb(5 6 21 / 50%);
+}
+
+.stepSummary {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 0.2rem 0.65rem;
   align-items: center;
-  padding: 0.55rem 0.6rem;
-  border-left: 2px solid rgb(117 255 245 / 45%);
-  background: rgb(5 6 21 / 50%);
+  padding: 0.65rem 0.6rem;
 }
 
 .stepList li > span {
@@ -181,6 +350,41 @@
   text-transform: uppercase;
 }
 
+.activityGroups,
+.activityList {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 0.75rem;
+  min-width: 0;
+  padding-top: 0.35rem;
+}
+
+.activityGroup {
+  border-top: 1px solid var(--line-soft);
+}
+
+.groupSummary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.6rem;
+  color: var(--cyan-300);
+  font-family: var(--font-pixel);
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.groupSummary small {
+  color: var(--text-500);
+  font-size: 0.52rem;
+}
+
+.activityGroup > .activityList {
+  padding: 0 0.35rem 0.75rem;
+}
+
 .emptyState {
   margin: 0;
   padding: 0.9rem;
@@ -193,5 +397,20 @@
   .header,
   .main {
     width: min(100% - 4rem, 72rem);
+  }
+}
+
+@media (max-width: 41.99rem) {
+  .missionSummary,
+  .stepSummary {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .missionMeta {
+    grid-column: 2 / -1;
+  }
+
+  .stepSummary > small {
+    grid-column: 2 / -1;
   }
 }

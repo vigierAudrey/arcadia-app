@@ -1,0 +1,71 @@
+# deploy/caddy/arcadia.caddy — Bloc de site ArcadiA
+#
+# Ce fichier est chargé par le Caddy DÉJÀ EN PLACE de la stack Blob, via la ligne
+#   import /etc/caddy/conf.d/*.caddy
+# ajoutée une seule fois au Caddyfile de Blob (voir deploy/README.md).
+#
+# Il vit dans le dépôt ArcadiA et est monté en lecture seule dans le conteneur
+# Caddy. Toute évolution du routage ArcadiA se fait ICI, puis `caddy reload` —
+# le dépôt Blob n'est plus jamais modifié.
+#
+# Contraintes de syntaxe imposées par les garde-fous CI de Blob :
+#   - `{$VAR}` uniquement, JAMAIS `{env.VAR}` (panne de production confirmée
+#     côté Blob le 2026-05-25 : « subject does not qualify for certificate »).
+#   - `header_up X-Forwarded-For {remote_host}`, JAMAIS `{header.X-Forwarded-For}`
+#     (guard-caddyfile-xff.sh). Voir le commentaire détaillé plus bas.
+#
+# TLS : Caddy obtient et renouvelle seul le certificat Let's Encrypt (ACME
+# HTTP-01 sur le port 80). Aucun certificat à gérer à la main. Les certificats
+# persistent dans le volume caddy-data de la stack Blob.
+
+arcadia.blobsurf.com {
+	encode zstd gzip
+
+	# ─── En-têtes de sécurité ─────────────────────────────────────────────────
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# La plateforme n'a pas besoin de ces API navigateur.
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+		# Ne pas divulguer le serveur.
+		-Server
+	}
+
+	# ArcadiA ne reçoit aucun téléversement : tout corps de requête volumineux
+	# est anormal. Marge confortable pour les Server Actions des formulaires.
+	request_body {
+		max_size 4MB
+	}
+
+	reverse_proxy arcadia-web:3000 {
+		# Host préservé : Next.js compare l'en-tête Origin au Host (ou
+		# X-Forwarded-Host) pour la protection CSRF des Server Actions. Sans
+		# cela, TOUS les formulaires (connexion admin, saisie du code classe)
+		# seraient rejetés.
+		header_up Host {host}
+
+		header_up X-Real-IP {remote_host}
+
+		# {remote_host} = IP de la connexion TCP entrante, non falsifiable.
+		# Ne JAMAIS écrire {header.X-Forwarded-For} : le client contrôlerait
+		# alors la valeur et contournerait le rate limiting des codes classe
+		# (src/server/class-auth/client-ip.ts lit le premier maillon de cet
+		# en-tête pour construire la clé HMAC de limitation).
+		header_up X-Forwarded-For {remote_host}
+	}
+
+	# ─── Logs dédiés ArcadiA ──────────────────────────────────────────────────
+	# Fichier distinct de ceux de Blob, persisté sur l'hôte via le montage
+	# /home/audrey/arcadia-app/logs/caddy:/var/log/caddy (voir deploy/README.md).
+	# Rotation gérée par Caddy lui-même : pas de logrotate à configurer.
+	log {
+		output file /var/log/caddy/arcadia-access.log {
+			roll_size 10MiB
+			roll_keep 10
+			roll_keep_for 720h
+		}
+		format json
+	}
+}

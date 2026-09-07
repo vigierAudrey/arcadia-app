@@ -1,0 +1,314 @@
+# .github/workflows/deploy.yml — Déploiement ArcadiA vers le VPS Hetzner
+#
+# Stratégie reprise de Blob (docs/ops/deploy-vps.md), adaptée à ArcadiA :
+#
+#   push main -> workflow « CI »
+#             -> ce workflow, UNIQUEMENT si la CI est verte sur main
+#             -> ATTENTE D'APPROBATION sur l'environment `arcadia-production`
+#             -> SSH vers le VPS (clé dédiée, StrictHostKeyChecking=yes)
+#             -> git fetch + git reset --hard origin/main
+#             -> docker compose build
+#             -> pnpm prisma migrate deploy
+#             -> docker compose up -d --build
+#             -> smoke test public sur https://arcadia.blobsurf.com/classe
+#             -> rollback sur le commit précédent si le smoke test échoue
+#
+# INTERDITS APPLIQUÉS ICI :
+#   - jamais `prisma migrate dev`   (peut proposer de réinitialiser la base)
+#   - jamais `prisma db push`       (perte de données possible)
+#   - jamais `pnpm db:seed`         (écraserait le catalogue réel par des démos)
+#   - aucun secret affiché dans les logs
+#
+# Un contrôle automatique en fin de workflow vérifie que ces commandes
+# n'apparaissent pas dans le script distant.
+
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Raison du déclenchement manuel (ex: redéploiement après incident)'
+        required: false
+        default: 'redéploiement manuel'
+
+permissions:
+  contents: read
+
+# Un seul déploiement à la fois. cancel-in-progress: false — interrompre un
+# déploiement au milieu d'une migration laisserait la base dans un état incertain.
+concurrency:
+  group: deploy-arcadia-main
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Déployer main sur le VPS
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    # GARDE-FOU PRINCIPAL : le job reste en attente jusqu'à l'approbation d'un
+    # reviewer requis. Cette protection doit être configurée dans
+    # Settings -> Environments -> arcadia-production -> Required reviewers.
+    # Sans elle, GitHub crée l'environment sans règle et le déploiement part seul.
+    environment:
+      name: arcadia-production
+      url: https://arcadia.blobsurf.com
+
+    # Ne déploie que depuis une CI verte sur main, ou sur déclenchement manuel.
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main')
+
+    env:
+      VPS_HOST: ${{ secrets.ARCADIA_VPS_HOST }}
+      VPS_USER: ${{ secrets.ARCADIA_VPS_USER }}
+      VPS_PORT: ${{ secrets.ARCADIA_VPS_PORT }}
+      VPS_SSH_KEY: ${{ secrets.ARCADIA_VPS_SSH_KEY }}
+      VPS_HOST_KEY: ${{ secrets.ARCADIA_VPS_HOST_KEY }}
+      DEPLOY_PATH: ${{ secrets.ARCADIA_DEPLOY_PATH }}
+      SMOKE_BASE_URL: https://arcadia.blobsurf.com
+
+    steps:
+      # ─────────────────────────────────────────────────────────────────────
+      - name: Vérifier les secrets de déploiement
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          missing=0
+          for name in VPS_HOST VPS_USER VPS_PORT VPS_SSH_KEY DEPLOY_PATH; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error title=Secret manquant::${name} doit être défini dans les secrets GitHub Actions."
+              missing=1
+            fi
+          done
+          [ "$missing" -eq 0 ] || exit 1
+
+          if ! [[ "$VPS_PORT" =~ ^[0-9]+$ ]]; then
+            echo "::error title=Secret invalide::ARCADIA_VPS_PORT doit être numérique."
+            exit 1
+          fi
+
+          # Un chemin de déploiement trop haut transformerait le
+          # `git reset --hard` en destruction du serveur.
+          case "$DEPLOY_PATH" in
+            "" | "/" | "/root" | "/home" | "/etc" | "/var" | "/usr" | "/opt")
+              echo "::error title=Chemin dangereux::ARCADIA_DEPLOY_PATH pointe vers un répertoire système."
+              exit 1
+              ;;
+          esac
+
+          case "$DEPLOY_PATH" in
+            /*) ;;
+            *)
+              echo "::error title=Chemin invalide::ARCADIA_DEPLOY_PATH doit être un chemin absolu."
+              exit 1
+              ;;
+          esac
+
+      # ─────────────────────────────────────────────────────────────────────
+      - name: Configurer la clé SSH et known_hosts
+        shell: bash
+        run: |
+          set -euo pipefail
+          install -m 700 -d "$HOME/.ssh"
+
+          # La clé n'est jamais affichée : écrite directement, permissions 600.
+          printf '%s\n' "$VPS_SSH_KEY" > "$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+
+          if [ -n "${VPS_HOST_KEY:-}" ]; then
+            # Chemin recommandé : empreinte hôte épinglée dans un secret,
+            # vérifiée une fois depuis la console Hetzner. Immunise contre un
+            # détournement DNS au moment du déploiement.
+            printf '%s\n' "$VPS_HOST_KEY" > "$HOME/.ssh/known_hosts"
+            echo "Clé hôte épinglée depuis le secret ARCADIA_VPS_HOST_KEY."
+          else
+            # Repli : découverte à la volée (TOFU). Fonctionne, mais fait
+            # confiance au réseau lors du tout premier contact.
+            echo "::warning title=Clé hôte non épinglée::ARCADIA_VPS_HOST_KEY n'est pas défini, repli sur ssh-keyscan. Voir docs/ci-cd.md."
+            ssh-keyscan -p "$VPS_PORT" -H "$VPS_HOST" > "$HOME/.ssh/known_hosts.tmp"
+            if [ ! -s "$HOME/.ssh/known_hosts.tmp" ]; then
+              echo "::error title=Scan de clé hôte échoué::Impossible de récupérer la clé du serveur."
+              exit 1
+            fi
+            mv "$HOME/.ssh/known_hosts.tmp" "$HOME/.ssh/known_hosts"
+          fi
+
+          chmod 600 "$HOME/.ssh/known_hosts"
+
+      # ─────────────────────────────────────────────────────────────────────
+      - name: Préparer le script distant
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > remote-deploy.sh <<'REMOTE'
+          set -euo pipefail
+
+          DEPLOY_PATH="$1"
+          cd "$DEPLOY_PATH"
+
+          DC="docker compose -p arcadia --env-file .env.production -f docker-compose.production.yml"
+
+          # ── Contrôles avant toute modification ────────────────────────────
+          [ -f .env.production ] || { echo "ERREUR: .env.production absent sur le serveur"; exit 1; }
+          [ -f docker-compose.production.yml ] || { echo "ERREUR: docker-compose.production.yml absent"; exit 1; }
+
+          # Un worktree modifié à la main serait écrasé silencieusement par le
+          # reset. On refuse plutôt que de détruire un correctif en cours.
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "ERREUR: modifications locales non commitées sur le serveur."
+            git status --short
+            exit 1
+          fi
+
+          PREV_SHA="$(git rev-parse HEAD)"
+          echo "PREV_SHA=$PREV_SHA"
+
+          # ── Mise à jour du code ───────────────────────────────────────────
+          git fetch origin main
+          git reset --hard origin/main
+          echo "NEW_SHA=$(git rev-parse HEAD)"
+
+          rollback() {
+            echo "─── ROLLBACK vers $PREV_SHA ───"
+            git reset --hard "$PREV_SHA"
+            $DC up -d --build
+            echo "AVERTISSEMENT: le code est revenu en arrière, PAS le schéma de"
+            echo "base. Les migrations déjà appliquées ne sont jamais annulées"
+            echo "automatiquement. Vérifier la cohérence avant de redéployer."
+          }
+          trap 'rollback' ERR
+
+          # ── Construction de la nouvelle image ─────────────────────────────
+          $DC build arcadia-web
+
+          # ── Base disponible avant migration ───────────────────────────────
+          $DC up -d arcadia-postgres
+
+          # ── Migrations : migrate deploy UNIQUEMENT ────────────────────────
+          # -T : pas de TTY, obligatoire en contexte non interactif.
+          # Aucun seed : le catalogue réel ne doit jamais être écrasé.
+          $DC run --rm -T arcadia-web pnpm prisma migrate deploy
+
+          # ── Démarrage de la nouvelle version ──────────────────────────────
+          $DC up -d --build
+
+          trap - ERR
+          $DC ps
+          REMOTE
+
+          # Garde-fou : le script distant ne doit contenir aucune commande
+          # destructrice, même introduite par erreur lors d'une modification.
+          for forbidden in 'migrate dev' 'db push' 'db:seed' 'seed.ts' 'volume prune'; do
+            if grep -qF "$forbidden" remote-deploy.sh; then
+              echo "::error title=Commande interdite::Le script distant contient « $forbidden »."
+              exit 1
+            fi
+          done
+          echo "Script distant vérifié : aucune commande interdite."
+
+      # ─────────────────────────────────────────────────────────────────────
+      - name: Déployer sur le VPS
+        id: deploy
+        shell: bash
+        run: |
+          set -euo pipefail
+          ssh -i "$HOME/.ssh/deploy_key" \
+              -o StrictHostKeyChecking=yes \
+              -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
+              -o BatchMode=yes \
+              -p "$VPS_PORT" \
+              "$VPS_USER@$VPS_HOST" \
+              'bash -s' -- "$DEPLOY_PATH" < remote-deploy.sh | tee deploy.log
+
+          # Mémorisé pour un éventuel rollback déclenché par le smoke test.
+          PREV_SHA="$(grep -m1 '^PREV_SHA=' deploy.log | cut -d= -f2)"
+          echo "prev_sha=$PREV_SHA" >> "$GITHUB_OUTPUT"
+
+      # ─────────────────────────────────────────────────────────────────────
+      - name: Smoke test public
+        id: smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Exécuté depuis le runner, via l'internet public : valide d'un coup
+          # le DNS Cloudflare, le certificat Let's Encrypt, le routage Caddy et
+          # l'application. Aucun -k : un certificat invalide doit faire échouer.
+
+          ok=0
+          for attempt in $(seq 1 20); do
+            if curl -sS -o /dev/null --max-time 10 "$SMOKE_BASE_URL/"; then
+              ok=1; break
+            fi
+            echo "tentative $attempt/20 — l'application ne répond pas encore, nouvel essai dans 5 s"
+            sleep 5
+          done
+          [ "$ok" -eq 1 ] || { echo "::error title=Smoke test::$SMOKE_BASE_URL ne répond pas."; exit 1; }
+
+          echo "── 1. Page d'accueil : 200 + formulaire de code classe ──"
+          code="$(curl -sS -o home.html -w '%{http_code}' --max-time 10 "$SMOKE_BASE_URL/")"
+          [ "$code" = "200" ] || { echo "::error::/ a répondu $code (attendu 200)"; exit 1; }
+          grep -q "Entre ton code classe" home.html \
+            || { echo "::error::Le formulaire de code classe est absent de la page d'accueil."; exit 1; }
+
+          echo "── 2. URL élève /classe : redirection vers / sans session ──"
+          # Comportement imposé par src/proxy.ts : c'est ce qui rend l'URL du QR
+          # code utilisable toute l'année, connecté ou non.
+          code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "$SMOKE_BASE_URL/classe")"
+          case "$code" in
+            200|307|308) echo "  /classe -> $code (attendu)";;
+            *) echo "::error::/classe a répondu $code (attendu 200, 307 ou 308)"; exit 1;;
+          esac
+
+          echo "── 3. Administration protégée ──"
+          code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "$SMOKE_BASE_URL/admin")"
+          case "$code" in
+            307|308) echo "  /admin -> $code (redirection vers la connexion)";;
+            *) echo "::error::/admin a répondu $code — l'administration doit rediriger vers /admin/login"; exit 1;;
+          esac
+
+          echo "── 4. En-têtes de sécurité et TLS ──"
+          curl -sSI --max-time 10 "$SMOKE_BASE_URL/" > headers.txt
+          grep -qi '^strict-transport-security:' headers.txt \
+            || { echo "::error::En-tête Strict-Transport-Security absent — vérifier arcadia.caddy."; exit 1; }
+
+          echo "Smoke test réussi."
+
+      # ─────────────────────────────────────────────────────────────────────
+      - name: Rollback si le smoke test a échoué
+        if: failure() && steps.deploy.outcome == 'success' && steps.smoke.outcome == 'failure'
+        shell: bash
+        env:
+          PREV_SHA: ${{ steps.deploy.outputs.prev_sha }}
+        run: |
+          set -euo pipefail
+          [ -n "${PREV_SHA:-}" ] || { echo "::error::Commit précédent inconnu, rollback impossible."; exit 1; }
+
+          echo "::warning title=Rollback::Smoke test en échec, retour au commit $PREV_SHA."
+
+          ssh -i "$HOME/.ssh/deploy_key" \
+              -o StrictHostKeyChecking=yes \
+              -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
+              -o BatchMode=yes \
+              -p "$VPS_PORT" \
+              "$VPS_USER@$VPS_HOST" \
+              "cd $DEPLOY_PATH \
+               && git reset --hard $PREV_SHA \
+               && docker compose -p arcadia --env-file .env.production -f docker-compose.production.yml up -d --build"
+
+          echo "::warning title=Schéma non restauré::Le code est revenu à $PREV_SHA, mais les migrations déjà appliquées ne sont PAS annulées. Vérifier la cohérence base/code avant de redéployer."
+          exit 1
+
+      # ─────────────────────────────────────────────────────────────────────
+      - name: Nettoyer les identifiants
+        if: always()
+        shell: bash
+        run: rm -f "$HOME/.ssh/deploy_key" remote-deploy.sh deploy.log

@@ -8,14 +8,14 @@ type BrandMarkProps = {
 
 export function BrandMark({ context }: BrandMarkProps) {
   return (
-    <Link className={styles.brand} href="/" aria-label="PSE Interactif, accueil">
+    <Link className={styles.brand} href="/" aria-label="ArcadiA, accueil">
       <span className={styles.symbol} aria-hidden="true">
         <span />
         <span />
         <span />
       </span>
       <span>
-        <strong>PSE Interactif</strong>
+        <strong>ArcadiA</strong>
         <small>{context}</small>
       </span>
     </Link>

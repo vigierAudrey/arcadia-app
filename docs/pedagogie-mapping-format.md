@@ -1,9 +1,9 @@
-# Format du mapping pédagogique (cours → catalogue)
+# Format du mapping pédagogique (sources → catalogue)
 
 Ce document définit uniquement le **format** de correspondance entre les documents de
 `cours-source/` et la hiérarchie du catalogue pédagogique (Formation → Niveau → Classe →
-Enseignement → Séquence → Séance). Voir la règle d'autorité complète et les états dans
-[`pedagogie-agents.md`](pedagogie-agents.md) (§8-9).
+TeachingArea → thème/module référentiel → notion/capacité). Voir la règle d'autorité complète et les états dans
+[`pedagogie-agents.md`](pedagogie-agents.md) (§9-10).
 
 **Aucun mapping réel n'a été généré à partir de ce format.** Il ne couvre, à ce stade,
 aucun des 4121 fichiers de `cours-source/` — voir « Ce qui n'est pas fait » en fin de
@@ -45,8 +45,8 @@ type PedagogyMappingEntry = {
   niveau: string;
   classe: string;              // nom de la Classroom dans le catalogue applicatif
   enseignement: string;        // nom de la TeachingArea
-  sequence?: string;           // titre de la LearningSequence, si connu à ce niveau
-  seance?: string;             // titre du Lesson, si connu à ce niveau
+  sequence?: string;           // thème/module, stocké temporairement dans LearningSequence
+  seance?: string;             // notion/capacité, stockée temporairement dans Lesson
   sources: MappingSource[];
   conformiteReferentiel: "CONFIRME" | "A_VERIFIER";
   etat: MappingState;

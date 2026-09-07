@@ -60,6 +60,8 @@ export async function getStudentCatalog(classroomId: string) {
                       id: true,
                       title: true,
                       type: true,
+                      instructions: true,
+                      payload: true,
                       position: true,
                     },
                   },

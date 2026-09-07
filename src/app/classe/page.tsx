@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { connection } from "next/server";
 
@@ -56,61 +57,30 @@ export default async function ClassPage() {
           </p>
         ) : null}
 
-        {classroom.teachingAreas.map((area) => (
-          <section
-            className={styles.teachingArea}
-            key={area.id}
-            aria-labelledby={`teaching-${area.id}`}
-          >
-            <h2 id={`teaching-${area.id}`}>{area.name}</h2>
-
-            {area.learningSequences.length === 0 ? (
-              <p className={styles.emptyState}>
-                Aucune mission ouverte pour cet enseignement.
-              </p>
-            ) : (
-              <ol className={styles.missionList}>
-                {area.learningSequences.map((sequence, sequenceIndex) => (
-                  <li className={styles.mission} key={sequence.id}>
-                    <span className={styles.missionNumber}>
-                      {String(sequenceIndex + 1).padStart(2, "0")}
-                    </span>
-                    <div className={styles.missionCopy}>
-                      <strong>{sequence.title}</strong>
-                      {sequence.description ? (
-                        <p>{sequence.description}</p>
-                      ) : null}
-                    </div>
-
-                    {sequence.lessons.length > 0 ? (
-                      <ol
-                        className={styles.stepList}
-                        aria-label={`Étapes de la mission ${sequence.title}`}
-                      >
-                        {sequence.lessons.map((lesson, lessonIndex) => (
-                          <li key={lesson.id}>
-                            <span>
-                              Étape {String(lessonIndex + 1).padStart(2, "0")}
-                            </span>
-                            <strong>{lesson.title}</strong>
-                            <small>
-                              {lesson.activities.length} activité
-                              {lesson.activities.length > 1 ? "s" : ""}
-                            </small>
-                          </li>
-                        ))}
-                      </ol>
-                    ) : (
-                      <p className={styles.emptyState}>
-                        Aucune étape publiée pour cette mission.
-                      </p>
-                    )}
-                  </li>
-                ))}
-              </ol>
-            )}
-          </section>
-        ))}
+        <section className={styles.teachingArea} aria-labelledby="area-menu-title">
+          <div className={styles.sectionHeading}>
+            <p className={styles.eyebrow} id="area-menu-title">Choisis ton enseignement</p>
+            <span className={styles.sectionHint}>Un espace par matière</span>
+          </div>
+          <div className={styles.areaGrid}>
+            {classroom.teachingAreas.map((area) => (
+              <Link
+                className={styles.areaCard}
+                href={`/classe/enseignement/${area.id}`}
+                key={area.id}
+              >
+                <span className={styles.areaCardIndex}>
+                  {String(area.position + 1).padStart(2, "0")}
+                </span>
+                <span className={styles.areaCardCopy}>
+                  <strong>{area.name}</strong>
+                  <small>{area.learningSequences.length} module(s) disponible(s)</small>
+                </span>
+                <span className={styles.areaCardArrow} aria-hidden="true">→</span>
+              </Link>
+            ))}
+          </div>
+        </section>
       </main>
     </div>
   );

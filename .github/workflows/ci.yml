@@ -1,0 +1,132 @@
+# .github/workflows/ci.yml — Intégration continue ArcadiA
+#
+# Cette CI est le garde-fou du déploiement : le workflow « Deploy » ne se
+# déclenche QUE si elle est verte sur `main` (voir deploy.yml et docs/ci-cd.md).
+#
+# Deux particularités du projet, qui expliquent la forme de ce fichier :
+#
+#   1. `src/generated/prisma` est dans .gitignore. `pnpm db:generate` doit donc
+#      tourner avant TOUTE commande qui compile ou exécute le code applicatif —
+#      lint, build et tests compris.
+#
+#   2. `prisma.config.ts` résout `env("DATABASE_URL")` au chargement. Même le
+#      job qui ne touche pas à la base doit donc disposer d'une URL. Le job
+#      « quality » en utilise une factice et injoignable ; aucune connexion
+#      n'est ouverte, toutes les routes du projet sont dynamiques.
+#
+#   3. Les tests d'intégration lisent de vraies données (« CAP », « T AGAA »,
+#      « PSE »…). Ils exigent une base MIGRÉE PUIS SEEDÉE. Le seed est légitime
+#      ici : la base est un conteneur jetable, recréé à chaque exécution.
+#      Il reste formellement interdit en production (voir deploy.yml).
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+  PNPM_VERSION: '10.28.2'
+
+jobs:
+  # ───────────────────────────────────────────────────────────────────────────
+  # Qualité statique : lint + build de production (le build inclut le typecheck)
+  # ───────────────────────────────────────────────────────────────────────────
+  quality:
+    name: Lint et build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      # URL factice : port 1, jamais joignable. Satisfait la validation zod de
+      # src/server/db/prisma.ts et prisma.config.ts, sans aucune connexion.
+      DATABASE_URL: postgresql://build:build@127.0.0.1:1/build
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Installer les dépendances
+        run: pnpm install --frozen-lockfile
+
+      - name: Générer le client Prisma
+        run: pnpm db:generate
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build de production
+        run: pnpm build
+
+  # ───────────────────────────────────────────────────────────────────────────
+  # Tests : base PostgreSQL jetable, migrée et seedée
+  # ───────────────────────────────────────────────────────────────────────────
+  test:
+    name: Tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        # Même version majeure qu'en production (docker-compose.production.yml).
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: arcadia_ci
+          POSTGRES_USER: arcadia_ci
+          # Base jetable, détruite à la fin du job, jamais exposée hors du
+          # runner : cette valeur n'est pas un secret et ne doit pas en devenir un.
+          POSTGRES_PASSWORD: ci-throwaway
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U arcadia_ci -d arcadia_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql://arcadia_ci:ci-throwaway@127.0.0.1:5432/arcadia_ci?schema=public
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Installer les dépendances
+        run: pnpm install --frozen-lockfile
+
+      - name: Générer le client Prisma
+        run: pnpm db:generate
+
+      - name: Appliquer les migrations
+        # `migrate deploy` — jamais `migrate dev`, y compris en CI : on valide
+        # exactement le chemin de migration qui sera joué en production.
+        run: pnpm exec prisma migrate deploy
+
+      - name: Seeder la base jetable
+        # Légitime UNIQUEMENT ici : conteneur éphémère du runner.
+        run: pnpm db:seed
+
+      - name: Tests
+        run: pnpm test

@@ -15,11 +15,6 @@ export type ClassAccessActionState = {
   code?: string;
 };
 
-export const initialClassAccessActionState: ClassAccessActionState = {
-  status: "idle",
-  message: "",
-};
-
 const classroomIdSchema = z.uuid();
 
 export async function rotateClassAccessCodeAction(

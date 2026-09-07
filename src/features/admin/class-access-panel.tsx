@@ -4,9 +4,9 @@ import { useActionState } from "react";
 
 import {
   disableClassAccessCodeAction,
-  initialClassAccessActionState,
   rotateClassAccessCodeAction,
 } from "@/app/admin/class-access-actions";
+import type { ClassAccessActionState } from "@/app/admin/class-access-actions";
 
 import styles from "@/app/admin/page.module.css";
 
@@ -14,6 +14,11 @@ type ClassAccessPanelProps = {
   classroomId: string;
   className: string;
   status: "none" | "active" | "disabled";
+};
+
+const initialClassAccessActionState: ClassAccessActionState = {
+  status: "idle",
+  message: "",
 };
 
 const statusLabels: Record<ClassAccessPanelProps["status"], string> = {

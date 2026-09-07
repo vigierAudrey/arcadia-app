@@ -1,4 +1,4 @@
-# Base documentaire pédagogique — PSE Interactif
+# Base documentaire pédagogique — ArcadiA
 
 Ce document décrit l'accès à la base documentaire de référence (cours, référentiels,
 progressions) utilisée pour générer tout contenu pédagogique dans ce projet.

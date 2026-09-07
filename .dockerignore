@@ -1,0 +1,38 @@
+# .dockerignore — contexte de build Docker d'ArcadiA
+#
+# CRITIQUE : ce fichier empêche les secrets et les données pédagogiques
+# personnelles d'entrer dans l'image. Ne jamais retirer les lignes .env*
+# ni cours-source.
+
+# ── Secrets — NE JAMAIS RETIRER ────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+!.env.production.example
+
+# ── Base documentaire personnelle (lien symbolique local, hors dépôt) ──────
+cours-source
+.cours-index/
+
+# ── Dépendances et artefacts reconstruits dans l'image ─────────────────────
+node_modules
+.next
+out
+build
+src/generated
+
+# ── Git et outillage local ─────────────────────────────────────────────────
+.git
+.gitignore
+.claude
+.vscode
+*.tsbuildinfo
+next-env.d.ts
+
+# ── Fichiers inutiles au runtime ───────────────────────────────────────────
+tests
+docs
+compose.dev.yaml
+README.md
+AGENTS.md
+CLAUDE.md

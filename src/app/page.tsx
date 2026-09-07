@@ -14,7 +14,7 @@ import { ClassCodeForm } from "./class-code-form";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "PSE Interactif",
+  title: "ArcadiA",
   description:
     "Accède aux activités de ta classe avec le code fourni par ton enseignant·e.",
 };
@@ -84,7 +84,7 @@ export default async function Home() {
       </main>
 
       <footer className={styles.footer}>
-        <p>PSE Interactif // Apprendre, tester, recommencer.</p>
+        <p>ArcadiA // Apprendre, tester, recommencer.</p>
         <Link href="/admin">Accès enseignante ↗</Link>
       </footer>
     </div>

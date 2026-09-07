@@ -27,7 +27,7 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Administration",
-  description: "Administration du catalogue pédagogique de PSE Interactif.",
+  description: "Administration du catalogue pédagogique d’ArcadiA.",
   robots: { index: false, follow: false },
 };
 

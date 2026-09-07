@@ -3,10 +3,10 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  applicationName: "PSE Interactif",
+  applicationName: "ArcadiA",
   title: {
-    default: "PSE Interactif",
-    template: "%s · PSE Interactif",
+    default: "ArcadiA",
+    template: "%s · ArcadiA",
   },
   description:
     "Une plateforme pédagogique simple pour accéder aux cours et activités de sa classe.",

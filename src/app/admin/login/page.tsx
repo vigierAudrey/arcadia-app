@@ -15,7 +15,7 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Connexion administration",
-  description: "Accès sécurisé à l’administration de PSE Interactif.",
+  description: "Accès sécurisé à l’administration d’ArcadiA.",
   robots: { index: false, follow: false },
 };
 

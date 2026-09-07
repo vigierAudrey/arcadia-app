@@ -1,5 +1,5 @@
 {
-  "name": "pse-interactif",
+  "name": "arcadia",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -15,6 +15,7 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
     "admin:create": "tsx scripts/create-admin.ts",
+    "admin:reset": "tsx scripts/reset-admin.ts",
     "cours:index": "tsx scripts/cours-index/index.ts",
     "cours:search": "tsx scripts/cours-index/search.ts"
   },
