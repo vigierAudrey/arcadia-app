@@ -29,12 +29,22 @@ pour de vrai. Une fois en confiance, `appliquer` directement.
 | 1 AERO / PSE | `C3. Les acteurs de prévention` | 3 séances, 21 activités | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
 | T AERO / PSE | `C7. Le suivi de la santé au travail` | 3 séances, 17 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
 
-**Volontairement absente du registre : la séquence `C1. Les différents contrats de travail`
-de T AGAA**, présente dans le fichier de démonstration depuis les débuts du projet. Deux
-raisons de ne pas la mettre en ligne telle quelle : elle n'a aucune fiche de traçabilité
-(règle §7 de [`pedagogie-agents.md`](pedagogie-agents.md)), et ses consignes emploient des
-verbes hors liste officielle (« Lis », « Choisis », « Sélectionne » au lieu de « Repérer »,
-« Identifier », « Classer »). À reprendre avant de l'ajouter au registre.
+| T AGAA / PSE | `C1. Les différents contrats de travail` | 3 séances, 18 activités | [`mapping-pedagogique-t-agaa.md`](mapping-pedagogique-t-agaa.md) |
+
+## Corriger un texte déjà en ligne
+
+L'import n'ayant pas le droit de modifier une ligne existante, corriger un texte déjà
+publié demande une **autorisation nominative** : une entrée dans
+[`prisma/content/corrections.ts`](../prisma/content/corrections.ts), avec le champ visé, la
+valeur attendue avant modification (`from`) et la nouvelle (`to`).
+
+La correction n'est appliquée que si le texte en ligne vaut **exactement** `from`. S'il
+vaut déjà la nouvelle valeur, il est signalé comme déjà corrigé. S'il vaut autre chose —
+parce que vous l'avez retouché depuis `/admin` — il est **laissé tel quel** et signalé `!`
+dans le rapport : une retouche faite à la main n'est jamais écrasée.
+
+Le rapport distingue donc quatre cas : `+` créé, `~` corrigé, `=` déjà en l'état,
+`!` refusé.
 
 ## Ce qui ne peut pas arriver
 

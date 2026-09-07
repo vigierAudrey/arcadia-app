@@ -24,6 +24,7 @@ import {
 import { parseActivityPayload } from "../src/features/activities/activity-payload";
 import { prisma } from "../src/server/db/prisma";
 import { contentImports, type ContentImport } from "../prisma/content/index";
+import { contentCorrections, type ContentCorrection } from "../prisma/content/corrections";
 
 const apply = process.argv.includes("--apply");
 
@@ -37,6 +38,19 @@ function willCreate(indent: number, label: string) {
 
 function alreadyThere(indent: number, label: string) {
   lines.push(`${" ".repeat(indent)}= ${label} — déjà en ligne, laissé tel quel`);
+}
+
+let corrections = 0;
+let refusals = 0;
+
+function willCorrect(label: string) {
+  corrections += 1;
+  lines.push(`  ~ ${label}`);
+}
+
+function refused(label: string) {
+  refusals += 1;
+  lines.push(`  ! ${label}`);
 }
 
 /** Interrompt l'import avec un message lisible, sans trace technique. */
@@ -258,6 +272,127 @@ async function importSequence(
   }
 }
 
+/**
+ * Applique une correction nominative sur une ligne déjà en ligne.
+ *
+ * Rien n'est écrit si la valeur en base ne correspond pas exactement à
+ * `from` : une retouche faite depuis /admin n'est jamais écrasée, elle est
+ * signalée. C'est la seule écriture de ce script qui modifie une ligne
+ * existante, et elle exige une entrée explicite dans prisma/content/corrections.ts.
+ */
+async function applyCorrection(
+  transaction: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
+  correction: ContentCorrection,
+) {
+  const where = `${correction.classroom} / ${correction.teachingArea} / ${correction.sequence}`;
+  const target = correction.activity
+    ? `activité « ${correction.activity} »`
+    : correction.lesson
+      ? `séance « ${correction.lesson} »`
+      : `séquence « ${correction.sequence} »`;
+  const label = `${target} — ${correction.field}`;
+
+  const sequence = await transaction.learningSequence.findFirst({
+    where: {
+      title: correction.sequence,
+      archivedAt: null,
+      teachingArea: {
+        name: correction.teachingArea,
+        archivedAt: null,
+        classroom: {
+          name: correction.classroom,
+          archivedAt: null,
+          level: {
+            name: correction.level,
+            archivedAt: null,
+            program: { name: correction.program, archivedAt: null },
+          },
+        },
+      },
+    },
+    select: { id: true, description: true, title: true },
+  });
+
+  if (!sequence) {
+    refused(`${label} : séquence introuvable sous ${where} — rien corrigé`);
+    return;
+  }
+
+  let current: string | null;
+  let write: (value: string) => Promise<unknown>;
+
+  if (correction.lesson) {
+    const lesson = await transaction.lesson.findFirst({
+      where: { sequenceId: sequence.id, title: correction.lesson, archivedAt: null },
+      select: { id: true, title: true, description: true },
+    });
+
+    if (!lesson) {
+      refused(`${label} : séance « ${correction.lesson} » introuvable — rien corrigé`);
+      return;
+    }
+
+    if (correction.activity) {
+      const activity = await transaction.activity.findFirst({
+        where: { lessonId: lesson.id, title: correction.activity, archivedAt: null },
+        select: { id: true, title: true, instructions: true },
+      });
+
+      if (!activity) {
+        refused(`${label} : activité « ${correction.activity} » introuvable — rien corrigé`);
+        return;
+      }
+
+      current =
+        correction.field === "instructions"
+          ? activity.instructions
+          : correction.field === "title"
+            ? activity.title
+            : null;
+      write = (value) =>
+        transaction.activity.update({
+          where: { id: activity.id },
+          data: { [correction.field]: value },
+          select: { id: true },
+        });
+    } else {
+      current = correction.field === "title" ? lesson.title : lesson.description;
+      write = (value) =>
+        transaction.lesson.update({
+          where: { id: lesson.id },
+          data: { [correction.field]: value },
+          select: { id: true },
+        });
+    }
+  } else {
+    current = correction.field === "title" ? sequence.title : sequence.description;
+    write = (value) =>
+      transaction.learningSequence.update({
+        where: { id: sequence.id },
+        data: { [correction.field]: value },
+        select: { id: true },
+      });
+  }
+
+  if (current === correction.to) {
+    alreadyThere(2, `${label} — déjà corrigé`);
+    return;
+  }
+
+  if (current !== correction.from) {
+    refused(
+      `${label} : le texte en ligne ne correspond pas à celui attendu, il a probablement été retouché depuis /admin — laissé tel quel`,
+    );
+    return;
+  }
+
+  willCorrect(`${label} → « ${correction.to.slice(0, 80)}${correction.to.length > 80 ? "…" : ""} »`);
+
+  if (apply) {
+    await write(correction.to);
+  }
+}
+
 function names(entries: readonly { name: string }[]): string {
   return entries.map((entry) => entry.name).join(", ") || "aucun";
 }
@@ -282,6 +417,17 @@ async function main() {
 
   await prisma.$transaction(
     async (transaction) => {
+      // Les corrections d'abord : un titre corrigé doit être en place avant que
+      // la passe de création ne cherche ce qui manque, sinon elle créerait un
+      // doublon portant le nouveau titre.
+      if (contentCorrections.length > 0) {
+        lines.push("\nCorrections de contenus déjà en ligne");
+
+        for (const correction of contentCorrections) {
+          await applyCorrection(transaction, correction);
+        }
+      }
+
       for (const entry of contentImports) {
         await importSequence(transaction, entry);
       }
@@ -292,16 +438,18 @@ async function main() {
 
 main()
   .then(async () => {
+    const suffix = `${corrections} correction(s)${refusals > 0 ? `, ${refusals} refusée(s)` : ""}`;
+
     console.info(
       apply
-        ? `Contenus mis en ligne — ${creations} élément(s) créé(s), le reste était déjà là.`
-        : `SIMULATION — aucune écriture. ${creations} élément(s) seraient créés.`,
+        ? `Contenus mis en ligne — ${creations} élément(s) créé(s), ${suffix}, le reste était déjà là.`
+        : `SIMULATION — aucune écriture. ${creations} élément(s) seraient créés, ${suffix}.`,
     );
     console.info(lines.join("\n"));
     console.info(
       apply
-        ? "\nLégende : + créé, = déjà présent et laissé tel quel."
-        : "\nLégende : + serait créé, = déjà présent et laissé tel quel.\nRelancer avec --apply pour écrire.",
+        ? "\nLégende : + créé, ~ corrigé, = déjà en l'état, ! refusé (texte inattendu, laissé tel quel)."
+        : "\nLégende : + serait créé, ~ serait corrigé, = déjà en l'état, ! refusé (texte inattendu, laissé tel quel).\nRelancer avec --apply pour écrire.",
     );
 
     await prisma.$disconnect();
