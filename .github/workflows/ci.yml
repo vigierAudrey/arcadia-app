@@ -1,7 +1,9 @@
 # .github/workflows/ci.yml — Intégration continue ArcadiA
 #
-# Cette CI est le garde-fou du déploiement : le workflow « Deploy » ne se
-# déclenche QUE si elle est verte sur `main` (voir deploy.yml et docs/ci-cd.md).
+# Cette CI est automatique : elle tourne sur chaque push `main` et chaque pull
+# request. Elle ne déclenche AUCUN déploiement — `deploy.yml` est strictement
+# manuel (`workflow_dispatch`). Vérifier que cette CI est verte avant de lancer
+# un déploiement à la main reste une discipline (voir docs/ci-cd.md).
 #
 # Deux particularités du projet, qui expliquent la forme de ce fichier :
 #

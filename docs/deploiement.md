@@ -425,10 +425,12 @@ Repris de la doctrine Blob, applicables tels quels :
 
 ## Ensuite : automatiser les mises à jour
 
-Cette procédure est la **première mise en ligne**, manuelle. Les déploiements
-suivants passent par GitHub Actions : CI verte → approbation → SSH → migrations
-→ smoke test → rollback si besoin. Mise en place et exploitation dans
-[`ci-cd.md`](ci-cd.md).
+Cette procédure est la **première mise en ligne**, entièrement manuelle depuis
+le serveur. Les déploiements suivants passent par GitHub Actions, mais restent
+déclenchés à la main : `Actions -> Deploy -> Run workflow` → (approbation si
+des required reviewers sont configurés) → SSH → migrations → smoke test →
+rollback si besoin. Une CI verte ne déclenche jamais de déploiement toute
+seule. Mise en place et exploitation dans [`ci-cd.md`](ci-cd.md).
 
 ---
 

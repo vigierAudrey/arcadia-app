@@ -1,7 +1,12 @@
 # CI/CD ArcadiA — GitHub Actions vers le VPS Hetzner
 
-Déploiement automatisé de `main` vers `https://arcadia.blobsurf.com`, calqué sur
-la stratégie éprouvée du projet Blob.
+Déploiement de `main` vers `https://arcadia.blobsurf.com`, calqué sur la
+stratégie éprouvée du projet Blob.
+
+> **La CI est automatique, le déploiement ne l'est pas.** `ci.yml` tourne seul à
+> chaque push sur `main` et à chaque pull request. `deploy.yml` ne part **que**
+> sur clic humain dans `Actions -> Deploy -> Run workflow`. Voir
+> [§ Pourquoi le déploiement est manuel](#pourquoi-le-déploiement-est-manuel).
 
 | | Valeur |
 |---|---|
@@ -17,12 +22,17 @@ la stratégie éprouvée du projet Blob.
 ## Le flux
 
 ```text
-push sur main
-   -> workflow « CI »            (.github/workflows/ci.yml)
+push sur main / pull request
+   -> workflow « CI »            (.github/workflows/ci.yml)     [AUTOMATIQUE]
       - lint, build, tests sur base jetable
-   -> workflow « Deploy »        (.github/workflows/deploy.yml)
-      - déclenché UNIQUEMENT si la CI est verte sur main
-   -> ⏸  ATTENTE D'APPROBATION   (environment arcadia-production)
+      - s'arrête là : la CI ne déclenche AUCUN déploiement
+
+   ══ frontière manuelle ═══════════════════════════════════════════════════
+
+Actions -> Deploy -> Run workflow   (branche main, raison saisie)
+   -> workflow « Deploy »        (.github/workflows/deploy.yml)  [MANUEL]
+      - refuse toute branche autre que main
+   -> ⏸  ATTENTE D'APPROBATION   (si required reviewers configurés)
    -> SSH vers le VPS (clé dédiée, StrictHostKeyChecking=yes)
    -> git fetch origin main && git reset --hard origin/main
    -> docker compose build arcadia-web
@@ -33,8 +43,35 @@ push sur main
    -> si échec : rollback sur le commit précédent
 ```
 
-Rien ne part en production sans **deux feux verts** : la CI, puis une
-approbation humaine.
+Rien ne part en production sans **décision humaine explicite** : une CI verte
+ne déclenche rien du tout, il faut lancer le workflow à la main.
+
+---
+
+## Pourquoi le déploiement est manuel
+
+`deploy.yml` se déclenchait initialement sur `workflow_run`, dès que la CI
+passait au vert sur `main`. Le tout premier push du dépôt a donc lancé un
+déploiement que personne n'avait demandé (run `34095005546`).
+
+Il n'a fait aucun dégât : `/home/audrey/arcadia-app` n'existait pas encore sur
+le VPS, le script distant s'est arrêté sur son `cd` — avant `git reset --hard`,
+avant `docker compose`, avant toute migration. Mais le garde-fou censé
+l'arrêter, l'approbation d'environment, n'était pas actif : **les required
+reviewers ne sont pas disponibles sur les dépôts privés** des offres Free.
+L'environment existait donc sans aucune règle, et GitHub a laissé passer.
+
+D'où la règle actuelle, inscrite dans le workflow lui-même :
+
+- `deploy.yml` n'a plus qu'un seul déclencheur, `workflow_dispatch` ;
+- il n'y a plus ni `push`, ni `workflow_run`, ni `schedule` ;
+- une étape `Vérifier la branche déployée` refuse toute branche autre que
+  `main`, puisque le menu « Run workflow » laisse choisir n'importe laquelle ;
+- l'environment `arcadia-production` est conservé : dès que des required
+  reviewers y sont configurés, ils s'ajoutent au déclenchement manuel.
+
+**N'ajoutez jamais de déclencheur automatique à ce workflow.** Il fait un
+`git reset --hard` et joue les migrations sur la base de production réelle.
 
 ---
 
@@ -155,19 +192,49 @@ déploiement** et investiguer.
 
 ---
 
-## Créer l'environnement protégé
+## Dépôt public et environnement protégé
 
-C'est le garde-fou qui impose l'approbation humaine. **Sans lui, GitHub crée
-l'environment sans règle et le déploiement part tout seul.**
+### Pourquoi le dépôt est public
 
-1. `Settings -> Environments -> New environment`
-2. Nom exact : **`arcadia-production`**
-3. Cocher **Required reviewers** et t'ajouter (au moins une personne)
-4. Optionnel mais conseillé : `Deployment branches` → `Selected branches` →
-   `main`, pour qu'aucune autre branche ne puisse déployer
+Sur un dépôt **privé**, chaque minute de GitHub Actions est décomptée du quota
+mensuel du compte (2 000 minutes/mois en offre Free), et un build Next.js
+complet en consomme vite. Sur un dépôt **public**, les runners standard
+`ubuntu-*` sont **gratuits et sans quota**. La CI peut donc tourner sur chaque
+push et chaque pull request sans surveiller un compteur.
 
-Une fois en place, chaque déploiement apparaît en attente dans l'onglet
-`Actions`, avec un bouton **Review deployments** pour approuver ou rejeter.
+Le passage en public a une seconde conséquence, utile ici : **les protections
+d'environment (required reviewers) deviennent disponibles**, alors qu'elles
+sont réservées aux offres payantes sur les dépôts privés. C'est exactement la
+protection qui manquait au moment du déploiement non voulu.
+
+Ce que « public » implique, à garder en tête :
+
+- le code **et tout l'historique Git** deviennent lisibles par n'importe qui ;
+- les **secrets Actions restent secrets** : ils ne sont pas exposés par le
+  passage en public, et GitHub ne les fournit pas aux workflows déclenchés par
+  une pull request venant d'un fork ;
+- `deploy.yml` étant en `workflow_dispatch` seul, **personne d'autre que les
+  personnes ayant les droits d'écriture sur le dépôt ne peut le lancer** — une
+  pull request extérieure ne peut pas déclencher de déploiement ;
+- en revanche, n'importe qui peut ouvrir une pull request qui fera tourner la
+  CI. C'est sans risque (aucun secret) et sans coût (runners gratuits).
+
+### Configurer les required reviewers
+
+À faire **une fois le dépôt public**, si GitHub propose bien l'option :
+
+1. `Settings -> Environments -> arcadia-production` (l'environment existe déjà)
+2. Cocher **Required reviewers** et t'ajouter (au moins une personne)
+3. Conseillé : `Deployment branches` → `Selected branches` → `main`
+4. Enregistrer avec **Save protection rules**
+
+Une fois en place, chaque déploiement — même lancé à la main — apparaît en
+attente dans l'onglet `Actions`, avec un bouton **Review deployments** pour
+approuver ou rejeter.
+
+Cette étape est un **confort supplémentaire, pas un prérequis** : le
+déclenchement manuel exclusif suffit déjà à empêcher tout déploiement
+automatique. Si l'option n'apparaît pas, le workflow reste sûr.
 
 ---
 
@@ -195,7 +262,8 @@ Puis, spécifiquement pour la CI/CD :
 - [ ] L'utilisateur `audrey` peut lancer `docker compose` sans `sudo`
       (`docker ps` doit répondre)
 - [ ] Les 5 secrets obligatoires sont renseignés
-- [ ] L'environment `arcadia-production` existe avec un reviewer requis
+- [ ] L'environment `arcadia-production` existe ; required reviewers configurés
+      si le dépôt est public (facultatif, le workflow est déjà manuel)
 
 > **`ARCADIA_VPS_USER`** : `audrey` est l'utilisateur qui exploite Blob (cron,
 > `docker compose`). Confirmer qu'il s'agit bien du même compte avant de le
@@ -209,13 +277,20 @@ Puis, spécifiquement pour la CI/CD :
 
 1. Travailler sur une branche, ouvrir une pull request → la CI tourne dessus.
 2. Fusionner dans `main`.
-3. La CI retourne sur `main`. Si elle est rouge, **rien ne se déploie**.
-4. Le workflow `Deploy` passe en attente : `Actions -> Deploy -> Review deployments`.
-5. Approuver. Le déploiement se déroule et se termine par le smoke test.
-6. Vérifier `https://arcadia.blobsurf.com/classe` depuis un téléphone.
+3. La CI retourne sur `main`. **Rien ne se déploie**, quel que soit son résultat.
+4. Vérifier que la CI est verte : `Actions -> CI -> dernier run`. Ne jamais
+   déployer sur une CI rouge — plus rien ne l'interdit techniquement, c'est
+   devenu une discipline.
+5. Lancer le déploiement : `Actions -> Deploy -> Run workflow`
+   → branche **`main`** → saisir une raison → **Run workflow**.
+6. Si des required reviewers sont configurés, approuver via
+   **Review deployments**.
+7. Le déploiement se déroule et se termine par le smoke test.
+8. Vérifier `https://arcadia.blobsurf.com/classe` depuis un téléphone.
 
-**Redéploiement manuel** (après un incident, sans nouveau commit) :
-`Actions -> Deploy -> Run workflow`, avec une raison. L'approbation reste exigée.
+C'est la **même procédure** pour une première mise en ligne, une mise à jour
+après merge, ou un redéploiement après incident sans nouveau commit : le
+workflow n'a qu'un seul mode de déclenchement.
 
 ---
 
@@ -272,8 +347,8 @@ distant (build, migration, démarrage).
 | `prisma db push` | idem |
 | `pnpm db:seed` en production | idem — écraserait le catalogue réel |
 | `docker volume prune` | idem — détruirait `arcadia-pgdata` et les certificats de Blob |
-| Déploiement hors `main` | Filtre `branches: [main]` + `Deployment branches` sur l'environment |
-| Déploiement sans CI verte | Condition `workflow_run.conclusion == 'success'` |
+| Déploiement hors `main` | Étape `Vérifier la branche déployée` (échec si `GITHUB_REF_NAME != main`) + `Deployment branches` sur l'environment |
+| Déploiement automatique non voulu | `deploy.yml` n'a qu'un déclencheur : `workflow_dispatch`. Aucun `push`, `workflow_run` ni `schedule` |
 | Secrets dans les logs | Aucun `set -x`, aucun `echo` de secret ; la clé privée est écrite en `600` puis supprimée à la fin, même en cas d'échec |
 | Écrasement d'un correctif serveur | Le script refuse un worktree modifié |
 

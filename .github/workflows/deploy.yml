@@ -1,10 +1,23 @@
 # .github/workflows/deploy.yml — Déploiement ArcadiA vers le VPS Hetzner
 #
+# ⚠️ CE WORKFLOW EST STRICTEMENT MANUEL. Il n'existe AUCUN déclencheur
+# automatique : ni `push`, ni `workflow_run` après une CI verte. Un
+# déploiement ne part que si un humain clique sur
+# Actions -> Deploy -> Run workflow.
+#
+# Historique de cette décision : le workflow se déclenchait auparavant sur
+# `workflow_run` dès que la CI passait au vert sur `main`. Le premier push du
+# dépôt a donc lancé un déploiement non voulu (run 34095005546). Il a échoué
+# sans dommage — le répertoire de déploiement n'existait pas encore sur le
+# VPS, et le script s'est arrêté sur son `cd` avant tout `git reset` ou toute
+# migration. Ce garde-fou remplace la protection d'environment, qui n'était
+# pas disponible sur ce dépôt privé.
+#
 # Stratégie reprise de Blob (docs/ops/deploy-vps.md), adaptée à ArcadiA :
 #
-#   push main -> workflow « CI »
-#             -> ce workflow, UNIQUEMENT si la CI est verte sur main
-#             -> ATTENTE D'APPROBATION sur l'environment `arcadia-production`
+#   déclenchement manuel sur la branche main
+#             -> ATTENTE D'APPROBATION si des required reviewers sont
+#                configurés sur l'environment `arcadia-production`
 #             -> SSH vers le VPS (clé dédiée, StrictHostKeyChecking=yes)
 #             -> git fetch + git reset --hard origin/main
 #             -> docker compose build
@@ -24,15 +37,16 @@
 
 name: Deploy
 
+# Déclenchement manuel EXCLUSIVEMENT.
+#
+# N'ajoutez ici ni `push`, ni `workflow_run`, ni `schedule` : ce workflow
+# fait un `git reset --hard` et joue les migrations sur la base de
+# production. Il ne doit jamais partir sans décision humaine explicite.
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types: [completed]
-    branches: [main]
   workflow_dispatch:
     inputs:
       reason:
-        description: 'Raison du déclenchement manuel (ex: redéploiement après incident)'
+        description: 'Raison du déclenchement manuel (ex: première mise en ligne, redéploiement après incident)'
         required: false
         default: 'redéploiement manuel'
 
@@ -51,19 +65,15 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
 
-    # GARDE-FOU PRINCIPAL : le job reste en attente jusqu'à l'approbation d'un
-    # reviewer requis. Cette protection doit être configurée dans
-    # Settings -> Environments -> arcadia-production -> Required reviewers.
-    # Sans elle, GitHub crée l'environment sans règle et le déploiement part seul.
+    # Second garde-fou, en plus du déclenchement manuel : si des required
+    # reviewers sont configurés dans Settings -> Environments ->
+    # arcadia-production, le job reste en attente jusqu'à approbation.
+    # Cette protection n'était pas disponible tant que le dépôt était privé ;
+    # elle le devient une fois le dépôt public (voir docs/ci-cd.md).
+    # Sans elle, le déclenchement manuel reste seul à faire barrage.
     environment:
       name: arcadia-production
       url: https://arcadia.blobsurf.com
-
-    # Ne déploie que depuis une CI verte sur main, ou sur déclenchement manuel.
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.workflow_run.conclusion == 'success' &&
-       github.event.workflow_run.head_branch == 'main')
 
     env:
       VPS_HOST: ${{ secrets.ARCADIA_VPS_HOST }}
@@ -75,6 +85,25 @@ jobs:
       SMOKE_BASE_URL: https://arcadia.blobsurf.com
 
     steps:
+      # ─────────────────────────────────────────────────────────────────────
+      - name: Vérifier la branche déployée
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # « Run workflow » laisse choisir n'importe quelle branche dans le
+          # menu déroulant. Seule `main` est déployable : le script distant
+          # fait de toute façon `git reset --hard origin/main`, déployer
+          # depuis une autre branche mettrait le VPS et le workflow en
+          # désaccord silencieux.
+          if [ "${GITHUB_REF_NAME}" != "main" ]; then
+            echo "::error title=Branche interdite::Déploiement demandé depuis « ${GITHUB_REF_NAME} ». Seule la branche main est déployable."
+            exit 1
+          fi
+
+          echo "Déploiement manuel demandé par ${GITHUB_ACTOR} depuis main."
+          echo "Raison : ${{ inputs.reason }}"
+
       # ─────────────────────────────────────────────────────────────────────
       - name: Vérifier les secrets de déploiement
         shell: bash
