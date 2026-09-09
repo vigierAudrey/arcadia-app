@@ -2,6 +2,8 @@ import { TeachingAreaKind } from "../../src/generated/prisma/enums";
 
 import type { InitialLearningSequence } from "./catalog-types";
 import { pse1AeroC3Sequence } from "./pse-1aero-c3";
+import { pse2AeroC1Sequence } from "./pse-2aero-c1";
+import { pse2CielC1Sequence } from "./pse-2ciel-c1";
 import { pseTAeroC7Sequence } from "./pse-taero-c7";
 import { pseTAgaaC1Sequence } from "./pse-tagaa-c1";
 
@@ -28,6 +30,22 @@ export type ContentImport = {
  * l'existant — voir scripts/import-contenus.ts.
  */
 export const contentImports: readonly ContentImport[] = [
+  {
+    program: "BAC PRO",
+    level: "Seconde",
+    classroom: "2 AERO",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse2AeroC1Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Seconde",
+    classroom: "2 CIEL",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse2CielC1Sequence,
+  },
   {
     program: "BAC PRO",
     level: "Première",

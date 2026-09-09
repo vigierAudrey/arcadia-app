@@ -7,6 +7,8 @@ import {
 import { prisma } from "../src/server/db/prisma";
 import type { InitialProgram } from "./content/catalog-types";
 import { pse1AeroC3Sequence } from "./content/pse-1aero-c3";
+import { pse2AeroC1Sequence } from "./content/pse-2aero-c1";
+import { pse2CielC1Sequence } from "./content/pse-2ciel-c1";
 import { pseTAgaaC1Sequence } from "./content/pse-tagaa-c1";
 import { pseTAeroC7Sequence } from "./content/pse-taero-c7";
 
@@ -42,8 +44,30 @@ const initialCatalog: readonly InitialProgram[] = [
       {
         name: "Seconde",
         classrooms: [
-          { name: "2 AERO", teachingAreas: [] },
-          { name: "2 CIEL", teachingAreas: [] },
+          {
+            name: "2 AERO",
+            teachingAreas: [
+              {
+                name: "PSE",
+                kind: TeachingAreaKind.SUBJECT,
+                learningSequences: [
+                  pse2AeroC1Sequence,
+                ],
+              },
+            ],
+          },
+          {
+            name: "2 CIEL",
+            teachingAreas: [
+              {
+                name: "PSE",
+                kind: TeachingAreaKind.SUBJECT,
+                learningSequences: [
+                  pse2CielC1Sequence,
+                ],
+              },
+            ],
+          },
         ],
       },
       {

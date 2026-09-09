@@ -26,9 +26,10 @@ pour de vrai. Une fois en confiance, `appliquer` directement.
 
 | Classe / enseignement | Séquence | Contenu | Traçabilité |
 |---|---|---|---|
+| 2 AERO / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 19 activités | [`mapping-pedagogique-2-aero.md`](mapping-pedagogique-2-aero.md) |
+| 2 CIEL / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 19 activités | [`mapping-pedagogique-2-ciel.md`](mapping-pedagogique-2-ciel.md) |
 | 1 AERO / PSE | `C3. Les acteurs de prévention` | 3 séances, 21 activités | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
 | T AERO / PSE | `C7. Le suivi de la santé au travail` | 3 séances, 17 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
-
 | T AGAA / PSE | `C1. Les différents contrats de travail` | 3 séances, 18 activités | [`mapping-pedagogique-t-agaa.md`](mapping-pedagogique-t-agaa.md) |
 
 ## Corriger un texte déjà en ligne
