@@ -6,6 +6,7 @@ import {
 } from "../src/generated/prisma/enums";
 import { prisma } from "../src/server/db/prisma";
 import type { InitialProgram } from "./content/catalog-types";
+import { bloc2TAagaCt3Sequence } from "./content/bloc2-taaga-ct3";
 import { pse1AeroC3Sequence } from "./content/pse-1aero-c3";
 import { pse1TciC3Sequence } from "./content/pse-1tci-c3";
 import { pse2AeroC1Sequence } from "./content/pse-2aero-c1";
@@ -33,7 +34,13 @@ const initialCatalog: readonly InitialProgram[] = [
                   pseTAagaC1Sequence,
                 ],
               },
-              { name: "Bloc 2", kind: TeachingAreaKind.BLOCK },
+              {
+                name: "Bloc 2",
+                kind: TeachingAreaKind.BLOCK,
+                learningSequences: [
+                  bloc2TAagaCt3Sequence,
+                ],
+              },
             ],
           },
         ],
