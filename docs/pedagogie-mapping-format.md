@@ -91,7 +91,7 @@ type PedagogyMappingEntry = {
   {
     "formation": "CAP AAGA",
     "niveau": "Tle",
-    "classe": "T AGAA",
+    "classe": "T AAGA",
     "enseignement": "Bloc 2",
     "sequence": "Séquence 4",
     "seance": "S4 séance 1 — Appareil locomoteur",
@@ -117,7 +117,7 @@ type PedagogyMappingEntry = {
 ```
 
 Ces deux entrées illustrent le format pour deux `TeachingArea` différents d'une même
-famille de classe (`2 AERO` en PSE, `T AGAA` en Bloc 2) : le champ `enseignement`
+famille de classe (`2 AERO` en PSE, `T AAGA` en Bloc 2) : le champ `enseignement`
 distingue explicitement les deux, et leurs `sources[].referenceRelative` pointent vers
 des dossiers `cours-source/` totalement séparés — jamais de confusion entre les
 programmes/référentiels des différents enseignements d'une même classe, même quand ils

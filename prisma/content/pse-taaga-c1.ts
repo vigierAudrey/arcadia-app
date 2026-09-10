@@ -1,8 +1,8 @@
 import type { InitialLearningSequence } from "./catalog-types";
 
-// Séquence PSE de T AGAA — module C1 « Les différents contrats de travail »
+// Séquence PSE de T AAGA — module C1 « Les différents contrats de travail »
 // du programme de PSE en CAP.
-// Traçabilité complète des sources : docs/mapping-pedagogique-t-agaa.md
+// Traçabilité complète des sources : docs/mapping-pedagogique-t-aaga.md
 //
 // Ce module est la source unique de ce contenu : il alimente à la fois le seed
 // de développement (prisma/seed.ts) et l'import ciblé, additif et sans
@@ -10,7 +10,7 @@ import type { InitialLearningSequence } from "./catalog-types";
 // 2026-09-07, rédigées avec des verbes hors liste officielle, sont reprises ici
 // dans leur version corrigée ; la correction des lignes déjà en base passe par
 // prisma/content/corrections.ts.
-export const pseTAgaaC1Sequence: InitialLearningSequence = {
+export const pseTAagaC1Sequence: InitialLearningSequence = {
   title: "C1. Les différents contrats de travail",
   description:
     "Module C1 du programme de PSE en CAP (thématique C). Objectif : faire travailler les élèves sur les compétences C1, C4, C5 et C6 du référentiel à travers les exercices réalisés. Situation fil rouge de la classe : l’EHPAD Les Glycines. La position indique uniquement l’ordre d’affichage.",

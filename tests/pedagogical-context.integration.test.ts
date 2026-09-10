@@ -21,7 +21,7 @@ import {
 } from "../src/server/pedagogie/mutations";
 import { prisma } from "../src/server/db/prisma";
 
-// A same-shaped fixture as the real "T AGAA" class (PSE + Maths appliquées +
+// A same-shaped fixture as the real "T AAGA" class (PSE + Maths appliquées +
 // Bloc 2 on one Classroom), built in its own Program/Level so it never
 // touches real catalog data. The TeachingArea names are fixture values
 // representing our real case — createPedagogicalSourceReference itself must
@@ -39,11 +39,11 @@ let bloc2LessonId: string;
 let pseActivityId: string;
 
 before(async () => {
-  const program = await createProgram(`T-AGAA-LIKE TEST ${suffix}`);
+  const program = await createProgram(`T-AAGA-LIKE TEST ${suffix}`);
   programId = program.id;
   const level = await createLevel(programId, "Terminale test");
   levelId = level.id;
-  const classroom = await createClassroom(levelId, "T AGAA TEST");
+  const classroom = await createClassroom(levelId, "T AAGA TEST");
   classroomId = classroom.id;
 
   const pseArea = await createTeachingArea(classroomId, "PSE", TeachingAreaKind.SUBJECT);
@@ -114,12 +114,12 @@ after(async () => {
   await prisma.$disconnect();
 });
 
-test("getTeachingContextForLesson resolves the real TeachingArea for each enseignement of T AGAA", async () => {
+test("getTeachingContextForLesson resolves the real TeachingArea for each enseignement of T AAGA", async () => {
   const pseContext = await getTeachingContextForLesson(pseLessonId);
   assert.equal(pseContext?.teachingAreaId, pseTeachingAreaId);
   assert.equal(pseContext?.teachingAreaName, "PSE");
   assert.equal(pseContext?.classroomId, classroomId);
-  assert.equal(pseContext?.classroomName, "T AGAA TEST");
+  assert.equal(pseContext?.classroomName, "T AAGA TEST");
 
   const mathsContext = await getTeachingContextForLesson(mathsLessonId);
   assert.equal(mathsContext?.teachingAreaId, mathsTeachingAreaId);

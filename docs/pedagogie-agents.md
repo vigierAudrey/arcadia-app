@@ -3,7 +3,7 @@
 Cette règle est prioritaire pour toute analyse ou génération de contenu pédagogique
 (cours, séquence, situation professionnelle, QCM, vrai/faux, cartes mémoire, exercice
 interactif, mini-jeu pédagogique, correction, activité d'évaluation) : PSE, CAP, Bac Pro,
-Maths appliquées, Bloc 2 AGAA, ou tout autre enseignement présent dans la base
+Maths appliquées, Bloc 2 AAGA, ou tout autre enseignement présent dans la base
 documentaire.
 
 ## 1. Rechercher soi-même le référentiel dans les dossiers
@@ -121,7 +121,7 @@ PSE : leurs programmes officiels sont distincts, même quand leur architecture s
 ressemble (voir le constat du test du 2026-08-16 dans base-documentaire.md).
 
 **Une même Classroom peut porter plusieurs TeachingArea indépendants.** Exemple réel :
-la classe T AGAA porte à la fois PSE, Maths appliquées et Bloc 2 — trois TeachingArea
+la classe T AAGA porte à la fois PSE, Maths appliquées et Bloc 2 — trois TeachingArea
 distincts, chacun avec sa propre progression, ses propres séquences/séances, son propre
 référentiel et ses propres règles de conformité. Le système ne doit jamais supposer
 qu'un TeachingArea donné d'une Classroom est « le » TeachingArea PSE, ni traiter les

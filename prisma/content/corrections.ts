@@ -28,10 +28,10 @@ export type ContentCorrection = {
   reason: string;
 };
 
-const TAGAA = {
+const TAAGA = {
   program: "CAP",
   level: "Terminale",
-  classroom: "T AGAA",
+  classroom: "T AAGA",
   teachingArea: "PSE",
   sequence: "C1. Les différents contrats de travail",
 } as const;
@@ -47,7 +47,7 @@ function verbe(
   to: string,
 ): ContentCorrection {
   return {
-    ...TAGAA,
+    ...TAAGA,
     lesson,
     activity,
     field: "instructions",
@@ -98,7 +98,7 @@ export const contentCorrections: readonly ContentCorrection[] = [
 
   // ── Séance 3 : titre au verbe officiel, et séance jusqu'ici vide ────────────
   {
-    ...TAGAA,
+    ...TAAGA,
     lesson: "Lire les informations essentielles d'un contrat de travail",
     field: "title",
     from: "Lire les informations essentielles d'un contrat de travail",
@@ -107,7 +107,7 @@ export const contentCorrections: readonly ContentCorrection[] = [
       "« Lire » ne figure pas dans la liste officielle des verbes de consigne ; « Repérer » y correspond (examiner avec précision, puis lister). Cette séance était affichée aux élèves sans aucune activité : l'import lui en ajoute quatre.",
   },
   {
-    ...TAGAA,
+    ...TAAGA,
     lesson: "Repérer les informations essentielles d’un contrat de travail",
     field: "description",
     from: null,
@@ -117,11 +117,43 @@ export const contentCorrections: readonly ContentCorrection[] = [
 
   // ── Séquence : note pédagogique de préparation ──────────────────────────────
   {
-    ...TAGAA,
+    ...TAAGA,
     field: "description",
     from: "Module/thème référentiel ; la position indique uniquement l'ordre d'affichage.",
     to: "Module C1 du programme de PSE en CAP (thématique C). Objectif : faire travailler les élèves sur les compétences C1, C4, C5 et C6 du référentiel à travers les exercices réalisés. Situation fil rouge de la classe : l’EHPAD Les Glycines. La position indique uniquement l’ordre d’affichage.",
     reason:
       "Description générique, sans rattachement au référentiel ni note pédagogique de préparation (§9 de docs/pedagogie-agents.md).",
+  },
+];
+
+/**
+ * Renommages de classes déjà en ligne.
+ *
+ * Une classe est créée depuis /admin : ce script ne la crée jamais et n'en
+ * renomme une que sur déclaration explicite ici. Même garde-fou que les
+ * corrections de texte : le renommage n'a lieu que si la classe s'appelle
+ * EXACTEMENT `from`. Si elle s'appelle déjà `to`, c'est signalé comme déjà
+ * fait. Si les deux noms existent en base, rien n'est touché : fusionner deux
+ * classes n'est pas le rôle de ce script.
+ *
+ * Le nom d'une classe est indépendant du code d'accès des élèves : renommer
+ * une classe ne change pas le code distribué et ne détache aucun contenu.
+ */
+export type ClassroomRename = {
+  program: string;
+  level: string;
+  from: string;
+  to: string;
+  reason: string;
+};
+
+export const classroomRenames: readonly ClassroomRename[] = [
+  {
+    program: "CAP",
+    level: "Terminale",
+    from: "T AGAA",
+    to: "T AAGA",
+    reason:
+      "Inversion de lettres dans le sigle du diplôme : le référentiel officiel est le CAP AAGA — Agent Accompagnant au Grand Âge.",
   },
 ];

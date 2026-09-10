@@ -24,7 +24,12 @@ import {
 import { parseActivityPayload } from "../src/features/activities/activity-payload";
 import { prisma } from "../src/server/db/prisma";
 import { contentImports, type ContentImport } from "../prisma/content/index";
-import { contentCorrections, type ContentCorrection } from "../prisma/content/corrections";
+import {
+  classroomRenames,
+  contentCorrections,
+  type ClassroomRename,
+  type ContentCorrection,
+} from "../prisma/content/corrections";
 
 const apply = process.argv.includes("--apply");
 
@@ -65,6 +70,32 @@ function planRename(parentId: string, from: string, to: string) {
 /** Titre sous lequel la ligne existe encore en base, renommage non écrit compris. */
 function currentTitle(parentId: string, title: string): string {
   return plannedRenames.get(renameKey(parentId, title)) ?? title;
+}
+
+/**
+ * Renommages de classes prévus mais pas encore écrits (mode simulation).
+ *
+ * Même raison que pour les séances : sans cette mémoire, la simulation
+ * chercherait la classe sous son nouveau nom, ne la trouverait pas et
+ * s'interromprait — alors qu'en mode --apply le renommage a lieu d'abord.
+ * Clé : [programme, niveau, nouveau nom] ; valeur : nom encore en base.
+ */
+const plannedClassroomRenames = new Map<string, string>();
+
+function classroomKey(program: string, level: string, name: string): string {
+  return JSON.stringify([program, level, name]);
+}
+
+function planClassroomRename(rename: ClassroomRename) {
+  plannedClassroomRenames.set(
+    classroomKey(rename.program, rename.level, rename.to),
+    rename.from,
+  );
+}
+
+/** Nom sous lequel la classe existe encore en base, renommage non écrit compris. */
+function currentClassroomName(program: string, level: string, name: string): string {
+  return plannedClassroomRenames.get(classroomKey(program, level, name)) ?? name;
 }
 
 function willCorrect(label: string) {
@@ -115,7 +146,11 @@ async function importSequence(
   }
 
   const classroom = await transaction.classroom.findFirst({
-    where: { levelId: level.id, name: entry.classroom, archivedAt: null },
+    where: {
+      levelId: level.id,
+      name: currentClassroomName(entry.program, entry.level, entry.classroom),
+      archivedAt: null,
+    },
     select: { id: true },
   });
 
@@ -297,6 +332,77 @@ async function importSequence(
 }
 
 /**
+ * Renomme une classe déjà en ligne, sur déclaration explicite.
+ *
+ * Le nom d'une classe n'est pas un contenu pédagogique : il est saisi depuis
+ * /admin. Ce renommage est donc, comme les corrections de texte, une écriture
+ * autorisée nominativement et vérifiée avant d'être faite.
+ */
+async function applyClassroomRename(
+  transaction: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
+  rename: ClassroomRename,
+) {
+  const label = `classe « ${rename.from} » → « ${rename.to} »`;
+
+  const level = await transaction.level.findFirst({
+    where: {
+      name: rename.level,
+      archivedAt: null,
+      program: { name: rename.program, archivedAt: null },
+    },
+    select: { id: true },
+  });
+
+  if (!level) {
+    refused(
+      `${label} : niveau « ${rename.program} / ${rename.level} » introuvable — rien renommé`,
+    );
+    return;
+  }
+
+  const classrooms = await transaction.classroom.findMany({
+    where: { levelId: level.id, name: { in: [rename.from, rename.to] } },
+    select: { id: true, name: true },
+  });
+
+  const before = classrooms.find((classroom) => classroom.name === rename.from);
+  const after = classrooms.find((classroom) => classroom.name === rename.to);
+
+  if (before && after) {
+    refused(
+      `${label} : les deux noms existent déjà sous ${rename.program} / ${rename.level} — laissé tel quel, fusionner deux classes se fait depuis /admin`,
+    );
+    return;
+  }
+
+  if (!before) {
+    if (after) {
+      lines.push(`  = ${label} — déjà renommée`);
+      return;
+    }
+
+    refused(
+      `${label} : aucune classe de ce nom sous ${rename.program} / ${rename.level} — rien renommé`,
+    );
+    return;
+  }
+
+  willCorrect(`${label}`);
+
+  if (!apply) {
+    planClassroomRename(rename);
+  }
+
+  if (apply) {
+    await transaction.classroom.update({
+      where: { id: before.id },
+      data: { name: rename.to },
+      select: { id: true },
+    });
+  }
+}
+
+/**
  * Applique une correction nominative sur une ligne déjà en ligne.
  *
  * Rien n'est écrit si la valeur en base ne correspond pas exactement à
@@ -324,7 +430,11 @@ async function applyCorrection(
         name: correction.teachingArea,
         archivedAt: null,
         classroom: {
-          name: correction.classroom,
+          name: currentClassroomName(
+            correction.program,
+            correction.level,
+            correction.classroom,
+          ),
           archivedAt: null,
           level: {
             name: correction.level,
@@ -459,7 +569,19 @@ async function main() {
 
   await prisma.$transaction(
     async (transaction) => {
-      // Les corrections d'abord : un titre corrigé doit être en place avant que
+      // Les renommages de classes en tout premier : les corrections comme la
+      // passe de création désignent leur cible par le nom de la classe, qui
+      // doit donc porter son nom définitif avant qu'elles ne cherchent quoi
+      // que ce soit.
+      if (classroomRenames.length > 0) {
+        lines.push("\nRenommages de classes déjà en ligne");
+
+        for (const rename of classroomRenames) {
+          await applyClassroomRename(transaction, rename);
+        }
+      }
+
+      // Les corrections ensuite : un titre corrigé doit être en place avant que
       // la passe de création ne cherche ce qui manque, sinon elle créerait un
       // doublon portant le nouveau titre.
       if (contentCorrections.length > 0) {

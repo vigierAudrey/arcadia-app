@@ -29,8 +29,10 @@ pour de vrai. Une fois en confiance, `appliquer` directement.
 | 2 AERO / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 19 activités | [`mapping-pedagogique-2-aero.md`](mapping-pedagogique-2-aero.md) |
 | 2 CIEL / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 19 activités | [`mapping-pedagogique-2-ciel.md`](mapping-pedagogique-2-ciel.md) |
 | 1 AERO / PSE | `C3. Les acteurs de prévention` | 3 séances, 21 activités | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
+| 1 TCI / PSE | `C3. Les acteurs de prévention` | 3 séances, 18 activités | [`mapping-pedagogique-1-tci.md`](mapping-pedagogique-1-tci.md) |
 | T AERO / PSE | `C7. Le suivi de la santé au travail` | 3 séances, 17 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
-| T AGAA / PSE | `C1. Les différents contrats de travail` | 3 séances, 18 activités | [`mapping-pedagogique-t-agaa.md`](mapping-pedagogique-t-agaa.md) |
+| T TCI / PSE | `C7. Le suivi de la santé au travail` | 4 séances, 26 activités | [`mapping-pedagogique-t-tci.md`](mapping-pedagogique-t-tci.md) |
+| T AAGA / PSE | `C1. Les différents contrats de travail` | 3 séances, 18 activités | [`mapping-pedagogique-t-aaga.md`](mapping-pedagogique-t-aaga.md) |
 
 ## Corriger un texte déjà en ligne
 
@@ -63,6 +65,21 @@ qui applique une règle unique : **créer ce qui manque, ne jamais toucher au re
 
 Si un contenu doit être *corrigé* après coup, cela se fait depuis `/admin` — le script,
 lui, n'écrasera jamais votre correction lors d'un déploiement suivant.
+
+## Renommer une classe déjà en ligne
+
+Une classe est créée depuis `/admin` ; l'import ne la crée jamais et ne la renomme que sur
+déclaration explicite dans `classroomRenames`
+([`prisma/content/corrections.ts`](../prisma/content/corrections.ts)), avec l'ancien nom, le
+nouveau et la raison.
+
+Le garde-fou est le même que pour les textes : le renommage n'a lieu que si la classe porte
+**exactement** l'ancien nom. Si elle porte déjà le nouveau, c'est signalé « déjà renommée ».
+Si les deux noms existent en base, rien n'est touché et c'est signalé `!` : fusionner deux
+classes se fait depuis `/admin`.
+
+Renommer une classe ne change **pas** le code d'accès distribué aux élèves et ne détache
+aucun contenu : le nom et le code sont deux informations distinctes.
 
 ## Et `pnpm db:seed`, alors ?
 

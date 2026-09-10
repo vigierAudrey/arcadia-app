@@ -1,6 +1,6 @@
-# Mapping pédagogique — T AGAA / PSE / Module C1
+# Mapping pédagogique — T AAGA / PSE / Module C1
 
-Traçabilité des contenus T AGAA en PSE, au format défini par
+Traçabilité des contenus T AAGA en PSE, au format défini par
 [`pedagogie-mapping-format.md`](pedagogie-mapping-format.md) et selon la règle d'autorité de
 [`pedagogie-agents.md`](pedagogie-agents.md) (§7 et §10).
 
@@ -14,7 +14,7 @@ sans fiche. Cette fiche est donc une **régularisation a posteriori**, établie 
 |---|---|
 | Formation | CAP Agent accompagnant au grand âge (AAGA) |
 | Niveau | Terminale |
-| Classe | `T AGAA` |
+| Classe | `T AAGA` |
 | Enseignement/bloc | **PSE** — et non le Bloc 2, qui est un TeachingArea distinct de la même classe |
 | Référentiel officiel identifié | Programme de PSE en CAP — « Annexe : Prévention-santé-environnement — Classes préparant au certificat d'aptitude professionnelle », © Ministère de l'Éducation nationale et de la Jeunesse, 32 p. |
 | Chemin exact du référentiel | `CAP/REFERENTIEL_CAP_PSE/spe641annexe1105406pdf-85401.pdf` |
@@ -71,7 +71,7 @@ la séance 1. Un glisser-déposer dans `/admin` suffit à la remonter.
   {
     "formation": "CAP AAGA",
     "niveau": "Terminale",
-    "classe": "T AGAA",
+    "classe": "T AAGA",
     "enseignement": "PSE",
     "sequence": "C1. Les différents contrats de travail",
     "sources": [
@@ -116,7 +116,7 @@ la séance 1. Un glisser-déposer dans `/admin` suffit à la remonter.
 
 ## Emplacement du contenu
 
-`prisma/content/pse-tagaa-c1.ts`, inscrit au registre `prisma/content/index.ts`. Les
+`prisma/content/pse-taaga-c1.ts`, inscrit au registre `prisma/content/index.ts`. Les
 corrections des lignes déjà en ligne sont déclarées nominativement dans
 `prisma/content/corrections.ts` — voir
 [`mettre-des-exercices-en-ligne.md`](mettre-des-exercices-en-ligne.md).

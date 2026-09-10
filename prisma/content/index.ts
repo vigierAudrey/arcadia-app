@@ -2,10 +2,12 @@ import { TeachingAreaKind } from "../../src/generated/prisma/enums";
 
 import type { InitialLearningSequence } from "./catalog-types";
 import { pse1AeroC3Sequence } from "./pse-1aero-c3";
+import { pse1TciC3Sequence } from "./pse-1tci-c3";
 import { pse2AeroC1Sequence } from "./pse-2aero-c1";
 import { pse2CielC1Sequence } from "./pse-2ciel-c1";
 import { pseTAeroC7Sequence } from "./pse-taero-c7";
-import { pseTAgaaC1Sequence } from "./pse-tagaa-c1";
+import { pseTAagaC1Sequence } from "./pse-taaga-c1";
+import { pseTTciC7Sequence } from "./pse-ttci-c7";
 
 /**
  * Où se placer dans le catalogue : les quatre noms doivent correspondre
@@ -56,6 +58,14 @@ export const contentImports: readonly ContentImport[] = [
   },
   {
     program: "BAC PRO",
+    level: "Première",
+    classroom: "1 TCI",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse1TciC3Sequence,
+  },
+  {
+    program: "BAC PRO",
     level: "Terminale",
     classroom: "T AERO",
     teachingArea: "PSE",
@@ -63,11 +73,19 @@ export const contentImports: readonly ContentImport[] = [
     sequence: pseTAeroC7Sequence,
   },
   {
-    program: "CAP",
+    program: "BAC PRO",
     level: "Terminale",
-    classroom: "T AGAA",
+    classroom: "T TCI",
     teachingArea: "PSE",
     teachingAreaKind: TeachingAreaKind.SUBJECT,
-    sequence: pseTAgaaC1Sequence,
+    sequence: pseTTciC7Sequence,
+  },
+  {
+    program: "CAP",
+    level: "Terminale",
+    classroom: "T AAGA",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pseTAagaC1Sequence,
   },
 ];

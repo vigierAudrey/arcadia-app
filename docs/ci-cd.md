@@ -109,7 +109,7 @@ Deux subtilités du projet qui expliquent la forme de ces jobs :
   et injoignable (`127.0.0.1:1`) — aucune connexion n'est ouverte.
 
 Le **seed est exécuté en CI**, et c'est normal : les tests d'intégration
-vérifient de vraies données (« CAP », « T AGAA », « PSE »…) sur une base
+vérifient de vraies données (« CAP », « T AAGA », « PSE »…) sur une base
 éphémère détruite à la fin du job. Il reste **formellement interdit en
 production**, où il écraserait le catalogue réel par des démonstrations.
 

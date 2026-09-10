@@ -7,10 +7,12 @@ import {
 import { prisma } from "../src/server/db/prisma";
 import type { InitialProgram } from "./content/catalog-types";
 import { pse1AeroC3Sequence } from "./content/pse-1aero-c3";
+import { pse1TciC3Sequence } from "./content/pse-1tci-c3";
 import { pse2AeroC1Sequence } from "./content/pse-2aero-c1";
 import { pse2CielC1Sequence } from "./content/pse-2ciel-c1";
-import { pseTAgaaC1Sequence } from "./content/pse-tagaa-c1";
+import { pseTAagaC1Sequence } from "./content/pse-taaga-c1";
 import { pseTAeroC7Sequence } from "./content/pse-taero-c7";
+import { pseTTciC7Sequence } from "./content/pse-ttci-c7";
 
 // Données d'initialisation uniquement : elles ne sont jamais importées par l'application.
 const initialCatalog: readonly InitialProgram[] = [
@@ -21,14 +23,14 @@ const initialCatalog: readonly InitialProgram[] = [
         name: "Terminale",
         classrooms: [
           {
-            name: "T AGAA",
+            name: "T AAGA",
             teachingAreas: [
               { name: "Maths appliquées", kind: TeachingAreaKind.SUBJECT },
               {
                 name: "PSE",
                 kind: TeachingAreaKind.SUBJECT,
                 learningSequences: [
-                  pseTAgaaC1Sequence,
+                  pseTAagaC1Sequence,
                 ],
               },
               { name: "Bloc 2", kind: TeachingAreaKind.BLOCK },
@@ -85,7 +87,18 @@ const initialCatalog: readonly InitialProgram[] = [
               },
             ],
           },
-          { name: "1 TCI", teachingAreas: [] },
+          {
+            name: "1 TCI",
+            teachingAreas: [
+              {
+                name: "PSE",
+                kind: TeachingAreaKind.SUBJECT,
+                learningSequences: [
+                  pse1TciC3Sequence,
+                ],
+              },
+            ],
+          },
         ],
       },
       {
@@ -103,7 +116,18 @@ const initialCatalog: readonly InitialProgram[] = [
               },
             ],
           },
-          { name: "T TCI", teachingAreas: [] },
+          {
+            name: "T TCI",
+            teachingAreas: [
+              {
+                name: "PSE",
+                kind: TeachingAreaKind.SUBJECT,
+                learningSequences: [
+                  pseTTciC7Sequence,
+                ],
+              },
+            ],
+          },
         ],
       },
     ],

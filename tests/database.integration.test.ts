@@ -16,7 +16,7 @@ test("loads the initial pedagogical hierarchy from PostgreSQL", async () => {
   assert.deepEqual(cap.levels.map((level) => level.name), ["Terminale"]);
   assert.deepEqual(
     cap.levels[0]?.classrooms.map((classroom) => classroom.name),
-    ["T AGAA"],
+    ["T AAGA"],
   );
   assert.deepEqual(
     cap.levels[0]?.classrooms[0]?.teachingAreas.map(
