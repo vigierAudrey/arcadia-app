@@ -84,7 +84,7 @@ dossier, projet Compose, réseau, volume, base, secrets, logs et sauvegardes.
 | [`.github/workflows/`](.github/workflows/) | CI (lint, build, tests) et déploiement continu |
 | [`docs/ci-cd.md`](docs/ci-cd.md) | Secrets, clé SSH, environnement protégé, procédure de déploiement |
 
-URL publique prévue : `https://arcadia.blobsurf.com`.
+URL publique : `https://arcadia.blobsurf.com`.
 URL stable pour les élèves, utilisable en QR code :
 `https://arcadia.blobsurf.com/classe`.
 
@@ -94,6 +94,11 @@ Deux pièges propres à ce projet, détaillés dans les fichiers concernés :
   avant `pnpm build` sur toute machine fraîchement clonée ;
 - `prisma.config.ts` exige `DATABASE_URL` dès la génération du client, y compris
   au moment du build.
+
+## Contenus pédagogiques
+
+Les règles d'écriture des exercices, la traçabilité des sources et la procédure de mise
+en ligne des contenus ont leur propre sommaire : [`docs/README.md`](docs/README.md).
 
 ## Périmètre différé
 

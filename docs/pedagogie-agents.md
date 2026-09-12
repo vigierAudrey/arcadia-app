@@ -217,10 +217,15 @@ Un BONUS ne devient jamais automatiquement un attendu obligatoire.
 
 Quand une séquence, une séance ou un ensemble d'exercices vise explicitement à faire
 travailler les élèves sur des compétences du référentiel, consigner cette intention
-dans la description de la séquence ou de la séance, ou dans le commentaire associé à
-une référence pédagogique si la note porte sur une source précise.
+dans le commentaire associé à la référence pédagogique, jamais dans la description de
+la séquence ou de la séance.
 
-Formulation recommandée, si besoin :
+**Ces deux champs sont lus par les élèves** (voir la section 11) : y écrire une note de
+préparation met sous leurs yeux un texte qui ne leur est pas destiné. C'est exactement
+ce qui s'est produit sur les huit séquences en ligne, corrigées le 2026-09-12 via
+`prisma/content/corrections.ts`.
+
+Formulation recommandée pour le commentaire interne, si besoin :
 
 `Objectif : faire travailler les élèves sur les compétences C1 à C6 du référentiel à
 travers les exercices réalisés.`
@@ -287,6 +292,42 @@ Une correspondance entre un document de `cours-source/` et un élément du catal
 correspondance encore à l'état `PROPOSE`.** Seul l'état `VALIDE` autorise une
 génération CORE. Une correspondance `PROPOSE` peut, au mieux, nourrir une proposition de
 BONUS explicitement présentée comme telle — jamais un contenu obligatoire.
+
+## 11. Textes lus par les élèves
+
+La plateforme s'adresse à des élèves de CAP et de Bac Pro. Certains champs leur sont
+affichés directement, d'autres restent internes. La frontière n'est pas négociable.
+
+**Champs affichés aux élèves** — description de séquence, description de séance, titre
+de séance, titre d'activité, consigne d'activité, contenu d'une fiche « À retenir » :
+
+- s'adresser à l'élève, au tutoiement, par ce qu'il va savoir faire : « Tu vas
+  apprendre à… », « Tu vas comprendre pourquoi… » ;
+- une à deux phrases pour une description de séquence, une phrase pour une séance ;
+- ancrer dans la situation fil rouge de la classe quand elle existe, par son nom
+  concret (l'atelier CDE, AéroMaintenance Atlantique, les Glycines) ;
+- employer les verbes d'action de la section 9, un seul par consigne.
+
+**Jamais dans ces champs** : le mot « référentiel », un numéro de module (`C1`, `C7`,
+`CT3` hors du titre officiel de la séquence), un numéro de compétence (`C1 à C6`), une
+référence d'arrêté ou de bulletin officiel, une note de préparation ou d'objectif
+pédagogique, une mention de `position` ou d'ordre d'affichage, un nom technique du
+modèle (`LearningSequence`, `Lesson`, `Activity`, `TeachingArea`), un chemin de
+fichier, un état de mapping (`PROPOSE`, `VALIDE`, `A_REVOIR`), une classification
+CORE / BONUS autre que l'étiquette « Pour aller plus loin ».
+
+**Champs internes**, où ces informations ont leur place : les métadonnées de
+traçabilité de la section 7, le commentaire d'une référence pédagogique, les documents
+`docs/mapping-pedagogique-*.md`, les commentaires de code des modules
+`prisma/content/`.
+
+Avant toute mise en ligne d'un contenu, relire les champs affichés en se demandant
+si un élève de seconde professionnelle comprend la phrase sans explication. Si la
+réponse est non, le texte n'est pas prêt.
+
+Un texte déjà en ligne ne se corrige jamais par écrasement : il passe par une entrée
+de `prisma/content/corrections.ts`, qui n'écrit que si la valeur en base est exactement
+celle attendue et laisse donc intacte toute retouche faite depuis l'administration.
 
 ---
 

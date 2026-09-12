@@ -10,8 +10,10 @@ sur `https://arcadia.blobsurf.com` ?**
    Chaque séquence devient un fichier dans `prisma/content/`, plus une ligne dans
    `prisma/content/index.ts`.
 2. **On enregistre le travail** (commit + push sur GitHub).
-3. **Vous cliquez sur le bouton Deploy** dans GitHub : `Actions -> Deploy -> Run workflow`.
-   Le formulaire demande quoi faire des exercices :
+3. **On demande la mise en ligne.** Il n'y a rien à cliquer dans GitHub : dites
+   simplement « mets les exercices en ligne » et l'IA déclenche le déploiement,
+   l'approuve, lit le journal et rend compte (voir la compétence
+   `.claude/skills/mettre-en-ligne/`). Trois modes existent pour les exercices :
 
    | Choix | Ce qui se passe |
    |---|---|
@@ -19,8 +21,8 @@ sur `https://arcadia.blobsurf.com` ?**
    | `appliquer` | La simulation s'affiche, puis les exercices manquants sont réellement ajoutés. |
    | `ignorer` | Les exercices ne sont pas touchés du tout (déploiement de code seul). |
 
-En pratique : un premier clic en `simulation` pour regarder, un second en `appliquer`
-pour de vrai. Une fois en confiance, `appliquer` directement.
+En pratique : une première passe en `simulation` pour regarder, une seconde en
+`appliquer` pour de vrai. Pour un lot déjà vérifié, `appliquer` directement.
 
 ## Ce qui part en ligne aujourd'hui
 
@@ -30,8 +32,8 @@ pour de vrai. Une fois en confiance, `appliquer` directement.
 | 2 CIEL / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 19 activités | [`mapping-pedagogique-2-ciel.md`](mapping-pedagogique-2-ciel.md) |
 | 1 AERO / PSE | `C3. Les acteurs de prévention` | 3 séances, 21 activités | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
 | 1 TCI / PSE | `C3. Les acteurs de prévention` | 3 séances, 18 activités | [`mapping-pedagogique-1-tci.md`](mapping-pedagogique-1-tci.md) |
-| T AERO / PSE | `C7. Le suivi de la santé au travail` | 3 séances, 17 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
-| T TCI / PSE | `C7. Le suivi de la santé au travail` | 4 séances, 26 activités | [`mapping-pedagogique-t-tci.md`](mapping-pedagogique-t-tci.md) |
+| T AERO / PSE | `C7. Le suivi de la santé au travail` | 4 séances, 21 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
+| T TCI / PSE | `C7. Le suivi de la santé au travail` | 5 séances, 30 activités | [`mapping-pedagogique-t-tci.md`](mapping-pedagogique-t-tci.md) |
 | T AAGA / PSE | `C1. Les différents contrats de travail` | 3 séances, 18 activités | [`mapping-pedagogique-t-aaga.md`](mapping-pedagogique-t-aaga.md) |
 | T AAGA / Bloc 2 | `CT3. Cadre d’intervention, autonomie et ressources` | 7 séances, 39 activités | [`mapping-pedagogique-t-aaga-bloc2.md`](mapping-pedagogique-t-aaga-bloc2.md) |
 
@@ -105,7 +107,7 @@ exercice n'est donc jamais écrit deux fois.
 3. Une fiche de traçabilité dans `docs/mapping-pedagogique-<classe>.md` (règle §7 de
    [`pedagogie-agents.md`](pedagogie-agents.md)).
 
-## Vérifier avant de cliquer
+## Vérifier avant la mise en ligne
 
 ```bash
 pnpm lint

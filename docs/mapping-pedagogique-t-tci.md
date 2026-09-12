@@ -117,6 +117,25 @@ dans chaque cours, pour son propre secteur — elle n'a pas été transposée d'
 ]
 ```
 
+## Séance de rappel ajoutée hors module C7 (§6 — révision inter-années)
+
+La séance « Rappel : distinguer danger, situation dangereuse, événement déclencheur et
+dommage » et ses quatre activités **ne relèvent pas du module C7**. Elles rappellent des
+notions introduites plus tôt dans le cursus, ce que la §6 de
+[`pedagogie-agents.md`](pedagogie-agents.md) autorise explicitement au titre de la révision
+et de la consolidation.
+
+| Champ | Valeur |
+|---|---|
+| Référentiel officiel identifié | Programme de PSE, seconde professionnelle — `spe632annexe1103982pdf-85404.pdf` ; et classe de première — arrêté du 3 avril 2019, annexe 1 |
+| Chemin exact | `BACPRO/BACPRO PSE REFERENTIEL/REFERENTIELBACPRO/spe632annexe1103982pdf-85404.pdf` et `…/spe005_annexe1_1239665.pdf` |
+| Partie utilisée | **Module C2 — Les notions de base en prévention des risques professionnels** (seconde), objectif « Établir une relation entre le(s) danger(s) et le(s) dommage(s) potentiel(s) dans une situation dangereuse », notions « Danger », « Situation dangereuse », « Dommage potentiel ». La notion « Événement déclencheur » est nommée dans l'annexe 1 au **module C5 — L'analyse des risques professionnels** (première), objectif « Identifier les éléments d'apparition d'un dommage dans une activité de travail ». |
+| Conformité constatée | **OUI en tant que rappel** — les quatre notions sont retrouvées dans les référentiels cités. Ce contenu ne complète ni ne modifie les attendus du module C7. |
+| État de la correspondance | `A_REVOIR` — non validé par l'enseignante (§10) |
+
+Aucun cours de `cours-source/` n'a été rattaché à cette séance : elle a été rédigée à
+partir du référentiel et de la situation fil rouge déjà utilisée dans la séquence.
+
 ## Emplacement du contenu
 
 Le contenu de cette séquence vit dans [`prisma/content/pse-ttci-c7.ts`](../prisma/content/pse-ttci-c7.ts)
