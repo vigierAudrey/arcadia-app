@@ -3,8 +3,8 @@
   min-height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 85% 12%, rgb(242 56 197 / 13%), transparent 24rem),
-    radial-gradient(circle at 12% 30%, rgb(53 234 223 / 10%), transparent 28rem),
+    radial-gradient(circle at 85% 12%, rgb(var(--ch-magenta) / 13%), transparent 24rem),
+    radial-gradient(circle at 12% 30%, rgb(var(--ch-cyan-mid) / 10%), transparent 28rem),
     var(--night-950);
 }
 
@@ -25,12 +25,20 @@
   border-bottom: 1px solid var(--line-soft);
 }
 
+.headerTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
 .leaveButton {
   min-height: 2.5rem;
-  border: 1px solid rgb(255 113 134 / 58%);
+  border: 1px solid rgb(var(--ch-red) / 58%);
   border-radius: 0;
   padding: 0.55rem 0.9rem;
-  background: rgb(255 113 134 / 8%);
+  background: rgb(var(--ch-red) / 8%);
   color: var(--red-400);
   cursor: pointer;
   font-family: var(--font-pixel);
@@ -146,7 +154,7 @@
 .areaCard:hover,
 .areaCard:focus-visible {
   border-color: var(--cyan-300);
-  background: rgb(117 255 245 / 8%);
+  background: rgb(var(--ch-cyan) / 8%);
   transform: translateX(4px);
 }
 
@@ -317,8 +325,8 @@ details[open] > .groupSummary::after {
 }
 
 .stepList li {
-  border-left: 2px solid rgb(117 255 245 / 45%);
-  background: rgb(5 6 21 / 50%);
+  border-left: 2px solid rgb(var(--ch-cyan) / 45%);
+  background: rgb(var(--ch-deep) / 50%);
 }
 
 .stepSummary {

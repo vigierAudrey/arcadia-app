@@ -1,0 +1,154 @@
+.comfort {
+  position: relative;
+}
+
+.comfortToggle {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  padding: 0.5rem 0.7rem;
+  background: rgb(var(--ch-cyan) / 8%);
+  color: var(--cyan-300);
+  cursor: pointer;
+  font-family: var(--font-pixel);
+  font-size: 0.62rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.comfortToggleIcon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.comfortPanel {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  z-index: 30;
+  display: grid;
+  gap: 0.8rem;
+  width: min(19rem, calc(100vw - 2rem));
+  padding: 0.9rem;
+  border: 1px solid var(--line-strong);
+  background: var(--night-900);
+  box-shadow: 5px 5px 0 rgb(var(--ch-deep) / 65%);
+}
+
+.comfortGroup {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.comfortLegend {
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.comfortOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.comfortOption {
+  min-height: 2.6rem;
+  flex: 1 1 5rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  padding: 0.5rem 0.6rem;
+  background: rgb(var(--ch-deep) / 55%);
+  color: var(--text-300);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.comfortOption:hover,
+.comfortOption:focus-visible {
+  border-color: var(--cyan-300);
+  color: var(--text-100);
+}
+
+.comfortOptionActive {
+  border-color: var(--cyan-300);
+  background: rgb(var(--ch-cyan) / 16%);
+  color: var(--text-100);
+  font-weight: 700;
+}
+
+.comfortOptionActive::before {
+  content: "✓ ";
+  color: var(--cyan-300);
+}
+
+.comfortHint {
+  margin: 0;
+  color: var(--text-500);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+.speakButton {
+  display: inline-flex;
+  min-height: 2.4rem;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--cyan-400);
+  border-radius: 0;
+  padding: 0.4rem 0.6rem;
+  background: rgb(var(--ch-cyan) / 10%);
+  color: var(--cyan-300);
+  cursor: pointer;
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.speakButton:hover,
+.speakButton:focus-visible {
+  background: rgb(var(--ch-cyan) / 20%);
+  color: var(--text-100);
+}
+
+.speakButtonActive {
+  border-color: var(--yellow-300);
+  background: rgb(var(--ch-magenta) / 13%);
+  color: var(--yellow-300);
+}
+
+/* Sur téléphone, la barre reste une simple pastille « Aa » dans l'en-tête. */
+@media (max-width: 30rem) {
+  .comfortToggleLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .comfortToggle {
+    gap: 0;
+    padding: 0.45rem 0.55rem;
+  }
+
+  .comfortPanel {
+    width: min(19rem, calc(100vw - 1.5rem));
+  }
+}

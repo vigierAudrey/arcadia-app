@@ -35,7 +35,7 @@
   background: var(--night-1000);
   box-shadow:
     3px 3px 0 var(--magenta-500),
-    0 0 1rem rgb(53 234 223 / 20%);
+    0 0 1rem rgb(var(--ch-cyan-mid) / 20%);
 }
 
 .symbol span {

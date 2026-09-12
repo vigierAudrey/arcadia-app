@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { connection } from "next/server";
 
 import { BrandMark } from "@/components/brand-mark";
+import { ReadingComfortBar } from "@/features/accessibility/reading-comfort-bar";
 import { getStudentCatalog } from "@/server/catalog/student-queries";
 import { requireClassSessionPage } from "@/server/class-auth/require-class-session";
 
@@ -34,11 +35,14 @@ export default async function ClassPage() {
     <div className={styles.pageShell}>
       <header className={styles.header}>
         <BrandMark context="Espace élève" />
-        <form action={leaveClassAction}>
-          <button className={styles.leaveButton} type="submit">
-            Quitter
-          </button>
-        </form>
+        <div className={styles.headerTools}>
+          <ReadingComfortBar />
+          <form action={leaveClassAction}>
+            <button className={styles.leaveButton} type="submit">
+              Quitter
+            </button>
+          </form>
+        </div>
       </header>
 
       <main className={styles.main}>

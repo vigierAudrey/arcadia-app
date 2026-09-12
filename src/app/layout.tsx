@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 
+import { readingComfortInitScript } from "@/features/accessibility/preferences";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,7 +22,14 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body>
+        {/*
+          Réglages de confort de lecture appliqués avant le premier affichage,
+          pour éviter que la page apparaisse en petit ou en sombre puis change.
+        */}
+        <script dangerouslySetInnerHTML={{ __html: readingComfortInitScript }} />
+        {children}
+      </body>
     </html>
   );
 }

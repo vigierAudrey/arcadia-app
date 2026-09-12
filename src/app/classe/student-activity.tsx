@@ -11,6 +11,8 @@ import {
   type TrueFalsePayload,
 } from "@/features/activities/activity-payload";
 
+import { SpeakButton } from "@/features/accessibility/speak-button";
+
 import styles from "./student-activity.module.css";
 
 type StudentActivityProps = {
@@ -74,6 +76,49 @@ export function StudentActivityGroup({
   );
 }
 
+const choiceLetters = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+/**
+ * Texte lu à voix haute : titre, consigne, puis l'énoncé complet de l'activité,
+ * y compris les réponses proposées pour que l'élève puisse choisir sans les lire.
+ */
+function buildSpeechText(
+  activity: StudentActivityProps["activity"],
+  payload: ReturnType<typeof parseActivityPayload>,
+): string {
+  const parts = [activity.title, activity.instructions];
+
+  if (activity.type === "content") {
+    parts.push((payload as ContentPayload).body);
+  } else if (activity.type === "qcm") {
+    const qcm = payload as QcmPayload;
+    parts.push(qcm.question);
+    qcm.choices.forEach((choice, index) => {
+      parts.push(`Réponse ${choiceLetters[index] ?? index + 1} : ${choice.label}.`);
+    });
+  } else if (activity.type === "true_false") {
+    parts.push((payload as TrueFalsePayload).statement);
+    parts.push("Réponds par vrai ou par faux.");
+  } else if (activity.type === "sorting") {
+    const sorting = payload as SortingPayload;
+    parts.push(sorting.prompt);
+    parts.push(
+      `Catégories : ${sorting.categories.map((category) => category.label).join(", ")}.`,
+    );
+    sorting.items.forEach((item, index) => {
+      parts.push(`Élément ${index + 1} : ${item.label}.`);
+    });
+  } else {
+    const matching = payload as MatchingPayload;
+    parts.push(matching.prompt);
+    matching.pairs.forEach((pair, index) => {
+      parts.push(`Élément ${index + 1} : ${pair.left}.`);
+    });
+  }
+
+  return parts.filter(Boolean).join(" ");
+}
+
 export function StudentActivity({ activity }: StudentActivityProps) {
   let payload: ReturnType<typeof parseActivityPayload>;
 
@@ -100,6 +145,9 @@ export function StudentActivity({ activity }: StudentActivityProps) {
           {activityTypeLabels[activity.type as keyof typeof activityTypeLabels] ?? "Défi"}
         </span>
         <h3>{activity.title}</h3>
+        <span className={styles.activitySpeak}>
+          <SpeakButton about={activity.title} text={buildSpeechText(activity, payload)} />
+        </span>
       </div>
       <p className={styles.instructions}>{activity.instructions}</p>
       {activity.type === "content" ? (

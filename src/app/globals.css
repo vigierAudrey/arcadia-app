@@ -16,8 +16,14 @@
   --yellow-400: #ffd447;
   --green-400: #75f0a7;
   --red-400: #ff7186;
-  --line-soft: rgb(117 255 245 / 17%);
-  --line-strong: rgb(117 255 245 / 44%);
+  --ch-deep: 5 6 21;
+  --ch-cyan: 117 255 245;
+  --ch-cyan-mid: 53 234 223;
+  --ch-magenta: 242 56 197;
+  --ch-green: 93 255 157;
+  --ch-red: 255 113 134;
+  --line-soft: rgb(var(--ch-cyan) / 17%);
+  --line-strong: rgb(var(--ch-cyan) / 44%);
   --panel: rgb(14 18 48 / 92%);
   --font-display: "Arial Black", "Segoe UI Black", Impact, ui-sans-serif,
     sans-serif;
@@ -28,6 +34,54 @@
   --pixel-shadow: 5px 5px 0 var(--night-1000);
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
+  color-scheme: dark;
+}
+
+/*
+  Confort de lecture (élèves).
+  Les deux réglages sont posés par l'élève sur <html> :
+  data-lecture-taille agrandit toute la page, data-lecture-theme éclaircit les couleurs.
+  Sans réglage, l'affichage reste le thème sombre d'origine.
+*/
+:root[data-lecture-taille="grand"] {
+  font-size: 125%;
+}
+
+:root[data-lecture-taille="tres-grand"] {
+  font-size: 155%;
+}
+
+:root[data-lecture-theme="clair"] {
+  /* En mode clair, cette teinte sert d'ombre portée et de fond au logo :
+     elle doit rester claire pour que les barres colorées du logo se voient. */
+  --night-1000: #dde3f6;
+  --night-950: #f3f5fd;
+  --night-900: #ffffff;
+  --night-850: #ffffff;
+  --night-800: #e7ebf9;
+  --text-100: #10142e;
+  --text-300: #1d2450;
+  --text-500: #3b4370;
+  --cyan-300: #0b6b7a;
+  --cyan-400: #0a7a8b;
+  --cyan-500: #085f6d;
+  --magenta-400: #a81485;
+  --magenta-500: #8d0f6f;
+  --yellow-300: #8a5300;
+  --yellow-400: #a06400;
+  --green-400: #0e7038;
+  --red-400: #b3172e;
+  --ch-deep: 210 218 240;
+  --ch-cyan: 11 107 122;
+  --ch-cyan-mid: 10 122 139;
+  --ch-magenta: 168 20 133;
+  --ch-green: 14 112 56;
+  --ch-red: 179 23 46;
+  --line-soft: rgb(var(--ch-cyan) / 30%);
+  --line-strong: rgb(var(--ch-cyan) / 58%);
+  --panel: rgb(255 255 255 / 96%);
+  --pixel-shadow: 5px 5px 0 rgb(var(--ch-cyan) / 35%);
+  color-scheme: light;
 }
 
 * {
