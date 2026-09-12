@@ -17,6 +17,9 @@
 }
 
 .header {
+  /* Au-dessus du contenu : sinon le panneau « Confort » passe dessous
+     et les réglages deviennent impossibles à cliquer. */
+  z-index: 2;
   display: flex;
   min-height: 5.5rem;
   align-items: center;
