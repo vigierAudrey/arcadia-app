@@ -38,6 +38,8 @@ const TAAGA = {
 
 const LECON_CONTRATS = "Identifier les différents contrats de travail";
 const LECON_DROITS = "Repérer les droits et obligations liés au contrat de travail";
+const DESCRIPTION_ELEVE =
+  "Description visible côté élèves : formulation courte, concrète, sans mention de référentiel ni note d'administration.";
 
 /** Consigne réécrite avec un verbe de la liste officielle, un seul par consigne. */
 function verbe(
@@ -119,10 +121,86 @@ export const contentCorrections: readonly ContentCorrection[] = [
   {
     ...TAAGA,
     field: "description",
-    from: "Module/thème référentiel ; la position indique uniquement l'ordre d'affichage.",
-    to: "Module C1 du programme de PSE en CAP (thématique C). Objectif : faire travailler les élèves sur les compétences C1, C4, C5 et C6 du référentiel à travers les exercices réalisés. Situation fil rouge de la classe : l’EHPAD Les Glycines. La position indique uniquement l’ordre d’affichage.",
-    reason:
-      "Description générique, sans rattachement au référentiel ni note pédagogique de préparation (§9 de docs/pedagogie-agents.md).",
+    from: "Module C1 du programme de PSE en CAP (thématique C). Objectif : faire travailler les élèves sur les compétences C1, C4, C5 et C6 du référentiel à travers les exercices réalisés. Situation fil rouge de la classe : l’EHPAD Les Glycines. La position indique uniquement l’ordre d’affichage.",
+    to: "Tu vas apprendre à reconnaître les principaux contrats de travail et à repérer les droits et obligations utiles avant de signer.",
+    reason: DESCRIPTION_ELEVE,
+  },
+  {
+    program: "BAC PRO",
+    level: "Seconde",
+    classroom: "2 AERO",
+    teachingArea: "PSE",
+    sequence: "C1. Les enjeux de la santé et sécurité au travail",
+    field: "description",
+    from: "Module C1 du programme de PSE de seconde professionnelle. Objectif : faire travailler les élèves sur les compétences C1, C3 et C6 à partir de situations du fil rouge AéroMaintenance Atlantique (AMA). La séquence couvre les enjeux humains, sociaux et économiques de la santé-sécurité au travail, la différence accident du travail / maladie professionnelle, le cadre réglementaire, les obligations de l'employeur et du salarié, ainsi que les dispositions spécifiques aux jeunes travailleurs et aux nouveaux embauchés. La position indique uniquement l'ordre d'affichage.",
+    to: "Tu vas comprendre pourquoi la santé-sécurité au travail protège les personnes, l'équipe et l'entreprise, à partir de situations chez AéroMaintenance Atlantique (AMA).",
+    reason: DESCRIPTION_ELEVE,
+  },
+  {
+    program: "BAC PRO",
+    level: "Seconde",
+    classroom: "2 CIEL",
+    teachingArea: "PSE",
+    sequence: "C1. Les enjeux de la santé et sécurité au travail",
+    field: "description",
+    from: "Module C1 du programme de PSE de seconde professionnelle. Objectif : faire travailler les élèves sur les compétences C1, C3 et C6 à partir de situations du fil rouge CIEL Réseaux & Systèmes (CRS). La séquence couvre les enjeux humains, sociaux et économiques de la santé-sécurité au travail, la différence accident du travail / maladie professionnelle, le cadre réglementaire, les obligations de l'employeur et du salarié, ainsi que les dispositions spécifiques aux jeunes travailleurs et aux nouveaux embauchés. La position indique uniquement l'ordre d'affichage.",
+    to: "Tu vas comprendre pourquoi la santé-sécurité au travail protège les personnes, l'équipe et l'entreprise, à partir de situations chez CIEL Réseaux & Systèmes (CRS).",
+    reason: DESCRIPTION_ELEVE,
+  },
+  {
+    program: "BAC PRO",
+    level: "Première",
+    classroom: "1 AERO",
+    teachingArea: "PSE",
+    sequence: "C3. Les acteurs de prévention",
+    field: "description",
+    from: "Module C3 du programme de PSE de première professionnelle (annexe 1 « Prévention-santé-environnement — Classe de première professionnelle »). Objectif : faire travailler les élèves sur les compétences C1, C3 et C6 du référentiel à travers les exercices réalisés. Situation fil rouge de la classe : l’atelier de maintenance AéroMaintenance Atlantique (AMA). La position indique uniquement l’ordre d’affichage.",
+    to: "Tu vas apprendre qui agit pour prévenir les risques au travail, dans l’entreprise et autour d’elle, à partir de situations de l’atelier AMA.",
+    reason: DESCRIPTION_ELEVE,
+  },
+  {
+    program: "BAC PRO",
+    level: "Première",
+    classroom: "1 TCI",
+    teachingArea: "PSE",
+    sequence: "C3. Les acteurs de prévention",
+    field: "description",
+    from: "Module C3 du programme de PSE de première professionnelle. Objectif : faire travailler les élèves sur les compétences C1, C3 et C6 du référentiel à travers les exercices réalisés. Situation fil rouge de la classe : l'atelier de chaudronnerie Chaudronnerie de l'Estuaire (CDE). La position indique uniquement l'ordre d'affichage.",
+    to: "Tu vas apprendre qui agit pour prévenir les risques au travail, dans l’entreprise et autour d’elle, à partir de situations de l’atelier CDE.",
+    reason: DESCRIPTION_ELEVE,
+  },
+  {
+    program: "BAC PRO",
+    level: "Terminale",
+    classroom: "T AERO",
+    teachingArea: "PSE",
+    sequence: "C7. Le suivi de la santé au travail",
+    field: "description",
+    from: "Module C7 du programme de PSE de terminale professionnelle (arrêté du 3 avril 2019, annexe 2). Objectif : faire travailler les élèves sur les compétences C1, C3 et C6 du référentiel à travers les exercices réalisés. La position indique uniquement l’ordre d’affichage.",
+    to: "Tu vas comprendre comment le suivi de santé au travail protège les salariés, comment l’organisme réagit face aux microbes et pourquoi certaines vaccinations peuvent être utiles dans un hangar aéronautique.",
+    reason: DESCRIPTION_ELEVE,
+  },
+  {
+    program: "BAC PRO",
+    level: "Terminale",
+    classroom: "T TCI",
+    teachingArea: "PSE",
+    sequence: "C7. Le suivi de la santé au travail",
+    field: "description",
+    from: "Module C7 du programme de PSE de terminale professionnelle (arrêté du 3 avril 2019, annexe 2). Objectif : faire travailler les élèves sur les compétences C1, C3 et C6 du référentiel à travers les exercices réalisés. Situation fil rouge de la classe : l'atelier de chaudronnerie Chaudronnerie de l'Estuaire (CDE). La position indique uniquement l'ordre d'affichage.",
+    to: "Tu vas comprendre comment le suivi de santé au travail protège les salariés, comment l'organisme réagit face aux microbes et pourquoi certaines vaccinations peuvent être utiles dans l'atelier CDE.",
+    reason: DESCRIPTION_ELEVE,
+  },
+  {
+    program: "CAP",
+    level: "Terminale",
+    classroom: "T AAGA",
+    teachingArea: "Bloc 2",
+    sequence: "CT3. Cadre d’intervention, autonomie et ressources",
+    field: "description",
+    from: "Module CT3 du référentiel du CAP Agent accompagnant au grand âge, bloc n°2 « Promotion de l’autonomie de la personne dans son espace privé » (arrêté du 6 février 2023). Objectif : faire travailler les élèves sur les compétences CT3.1, CT3.2 et CT3.3 à travers les exercices réalisés. Situation fil rouge de la classe : l’EHPAD Les Glycines. La position indique uniquement l’ordre d’affichage.",
+    to: "Tu vas apprendre à choisir une information fiable, à comprendre le rôle de chaque structure et à adapter ton accompagnement aux besoins d’une personne âgée.",
+    reason: DESCRIPTION_ELEVE,
   },
 ];
 

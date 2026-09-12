@@ -9,7 +9,7 @@ import type { InitialLearningSequence } from "./catalog-types";
 export const pse1AeroC3Sequence: InitialLearningSequence = {
   title: "C3. Les acteurs de prévention",
   description:
-    "Module C3 du programme de PSE de première professionnelle (annexe 1 « Prévention-santé-environnement — Classe de première professionnelle »). Objectif : faire travailler les élèves sur les compétences C1, C3 et C6 du référentiel à travers les exercices réalisés. Situation fil rouge de la classe : l’atelier de maintenance AéroMaintenance Atlantique (AMA). La position indique uniquement l’ordre d’affichage.",
+    "Tu vas apprendre qui agit pour prévenir les risques au travail, dans l’entreprise et autour d’elle, à partir de situations de l’atelier AMA.",
   lessons: [
     {
       title: "Identifier les rôles des acteurs internes de prévention",

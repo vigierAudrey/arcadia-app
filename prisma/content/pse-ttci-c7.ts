@@ -9,7 +9,7 @@ import type { InitialLearningSequence } from "./catalog-types";
 export const pseTTciC7Sequence: InitialLearningSequence = {
   title: "C7. Le suivi de la santé au travail",
   description:
-    "Module C7 du programme de PSE de terminale professionnelle (arrêté du 3 avril 2019, annexe 2). Objectif : faire travailler les élèves sur les compétences C1, C3 et C6 du référentiel à travers les exercices réalisés. Situation fil rouge de la classe : l'atelier de chaudronnerie Chaudronnerie de l'Estuaire (CDE). La position indique uniquement l'ordre d'affichage.",
+    "Tu vas comprendre comment le suivi de santé au travail protège les salariés, comment l'organisme réagit face aux microbes et pourquoi certaines vaccinations peuvent être utiles dans l'atelier CDE.",
   lessons: [
     {
       title:
@@ -456,7 +456,7 @@ export const pseTTciC7Sequence: InitialLearningSequence = {
             ],
             correctChoiceIds: ["plaie"],
             explanation:
-              "Le tétanos s’attrape par une plaie souillée. Les coupures sur tôle sont fréquentes en atelier, ce qui rend ce rappel utile — sans qu’un texte propre au métier l’impose.",
+              "Le tétanos s’attrape par une plaie souillée. Les coupures sur tôle sont fréquentes en atelier, ce qui rend ce rappel utile, même sans obligation propre au métier.",
           },
         },
         {
@@ -508,7 +508,7 @@ export const pseTTciC7Sequence: InitialLearningSequence = {
               },
             ],
             explanation:
-              "La protection individuelle protège la seule personne exposée. L’effet collectif d’une vaccination suppose une maladie transmissible d’une personne à une autre — ce qui n’est pas le cas du tétanos.",
+              "La protection individuelle protège la seule personne exposée. L’effet collectif d’une vaccination suppose une maladie transmissible d’une personne à une autre, ce qui n’est pas le cas du tétanos.",
           },
         },
         {
@@ -796,6 +796,87 @@ export const pseTTciC7Sequence: InitialLearningSequence = {
             ],
             explanation:
               "Les trois séances du module C7 s’enchaînent : le suivi organise la prévention, les défenses expliquent la réaction du corps, la vaccination prépare la mémoire immunitaire.",
+          },
+        },
+      ],
+    },
+    {
+      title:
+        "Rappel : distinguer danger, situation dangereuse, événement déclencheur et dommage",
+      description:
+        "Replacer les étapes du processus d’apparition du dommage à partir de situations simples de l’atelier CDE.",
+      activities: [
+        {
+          title: "À retenir : le PAD en quatre étapes",
+          type: "content",
+          instructions:
+            "Repérer les quatre éléments du processus d’apparition du dommage.",
+          payload: {
+            body: "Le processus d’apparition du dommage aide à comprendre comment une blessure ou une atteinte à la santé peut arriver.\n\n1. Le danger est ce qui peut provoquer un dommage : une arête vive, un produit irritant, une machine en mouvement.\n\n2. La situation dangereuse existe quand une personne est exposée au danger : la main de Karim est proche d’une tôle à arêtes vives.\n\n3. L’événement déclencheur fait basculer la situation : la tôle glisse, la main dérape, la machine se met en mouvement.\n\n4. Le dommage est l’atteinte possible à la santé : coupure, brûlure, douleur, intoxication.\n\nOrdre à retenir : danger, situation dangereuse, événement déclencheur, dommage.",
+          },
+        },
+        {
+          title: "Jeu : reconstruire le PAD de Karim",
+          type: "sorting",
+          instructions:
+            "Classer chaque carte dans l’étape du processus qui lui correspond.",
+          payload: {
+            prompt:
+              "Karim manipule une tôle près de la cisaille. Classe chaque élément.",
+            categories: [
+              { id: "danger", label: "Danger" },
+              { id: "situation", label: "Situation dangereuse" },
+              { id: "evenement", label: "Événement déclencheur" },
+              { id: "dommage", label: "Dommage" },
+            ],
+            items: [
+              { id: "arete", label: "Arête vive de la tôle", categoryId: "danger" },
+              { id: "cisaille", label: "Lame de cisaille accessible", categoryId: "danger" },
+              { id: "main_proche", label: "Main proche du bord coupant", categoryId: "situation" },
+              { id: "sans_gant", label: "Main exposée pendant la manipulation", categoryId: "situation" },
+              { id: "glissement", label: "La tôle glisse brusquement", categoryId: "evenement" },
+              { id: "derapage", label: "La main dérape sur le bord", categoryId: "evenement" },
+              { id: "coupure", label: "Coupure à la main", categoryId: "dommage" },
+              { id: "plaie", label: "Plaie pouvant s’infecter", categoryId: "dommage" },
+            ],
+            explanation:
+              "Le danger existe avant l’accident. La situation dangereuse expose une personne. L’événement déclencheur provoque le passage vers le dommage.",
+          },
+        },
+        {
+          title: "Jeu : relier les notions du PAD",
+          type: "matching",
+          instructions:
+            "Définir chaque élément du PAD en le reliant à son sens exact.",
+          payload: {
+            prompt: "Relie chaque notion à sa définition.",
+            pairs: [
+              { id: "danger", left: "Danger", right: "Élément capable de provoquer un dommage" },
+              { id: "situation", left: "Situation dangereuse", right: "Situation où une personne est exposée au danger" },
+              { id: "evenement", left: "Événement déclencheur", right: "Fait qui fait basculer la situation" },
+              { id: "dommage", left: "Dommage", right: "Atteinte possible à la santé" },
+            ],
+            explanation:
+              "Ces quatre mots ne désignent pas la même chose. Les distinguer aide à analyser une situation de travail sans tout mélanger.",
+          },
+        },
+        {
+          title: "Défi : ne pas confondre danger et dommage",
+          type: "qcm",
+          instructions:
+            "Identifier le dommage dans une situation de chaudronnerie.",
+          payload: {
+            question:
+              "Karim tient une tôle à arêtes vives. La tôle glisse et il se coupe la main. Quel élément correspond au dommage ?",
+            choices: [
+              { id: "arete", label: "L’arête vive de la tôle" },
+              { id: "main", label: "La main proche de la tôle" },
+              { id: "glisse", label: "La tôle qui glisse" },
+              { id: "coupure", label: "La coupure à la main" },
+            ],
+            correctChoiceIds: ["coupure"],
+            explanation:
+              "Le dommage est l’atteinte à la santé. Ici, c’est la coupure à la main.",
           },
         },
       ],

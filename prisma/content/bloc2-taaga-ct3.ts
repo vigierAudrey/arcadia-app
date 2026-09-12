@@ -11,7 +11,7 @@ import type { InitialLearningSequence } from "./catalog-types";
 export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
   title: "CT3. Cadre d’intervention, autonomie et ressources",
   description:
-    "Module CT3 du référentiel du CAP Agent accompagnant au grand âge, bloc n°2 « Promotion de l’autonomie de la personne dans son espace privé » (arrêté du 6 février 2023). Objectif : faire travailler les élèves sur les compétences CT3.1, CT3.2 et CT3.3 à travers les exercices réalisés. Situation fil rouge de la classe : l’EHPAD Les Glycines. La position indique uniquement l’ordre d’affichage.",
+    "Tu vas apprendre à choisir une information fiable, à comprendre le rôle de chaque structure et à adapter ton accompagnement aux besoins d’une personne âgée.",
   lessons: [
     {
       title: "Identifier une structure d’accueil et vérifier la fiabilité d’une information",

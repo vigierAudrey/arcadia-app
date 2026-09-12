@@ -14,6 +14,10 @@ test("all published content imports have valid activity payloads", () => {
     assert.ok(entry.teachingArea.trim());
     assert.ok(entry.sequence.title.trim());
     assert.ok(entry.sequence.description.trim());
+    assert.equal(entry.sequence.description.includes("—"), false);
+    assert.equal(entry.sequence.description.includes("–"), false);
+    assert.equal(/référentiel/i.test(entry.sequence.description), false);
+    assert.equal(/position indique/i.test(entry.sequence.description), false);
 
     for (const lesson of entry.sequence.lessons) {
       assert.ok(lesson.title.trim());

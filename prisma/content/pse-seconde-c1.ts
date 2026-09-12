@@ -39,7 +39,7 @@ export function buildPseSecondeC1Sequence(context: Context): InitialLearningSequ
   return {
     title: "C1. Les enjeux de la santé et sécurité au travail",
     description:
-      `Module C1 du programme de PSE de seconde professionnelle. Objectif : faire travailler les élèves sur les compétences C1, C3 et C6 à partir de situations du fil rouge ${context.place}. La séquence couvre les enjeux humains, sociaux et économiques de la santé-sécurité au travail, la différence accident du travail / maladie professionnelle, le cadre réglementaire, les obligations de l'employeur et du salarié, ainsi que les dispositions spécifiques aux jeunes travailleurs et aux nouveaux embauchés. La position indique uniquement l'ordre d'affichage.`,
+      `Tu vas comprendre pourquoi la santé-sécurité au travail protège les personnes, l'équipe et l'entreprise, à partir de situations chez ${context.place}.`,
     lessons: [
       {
         title: "Identifier les enjeux de la santé-sécurité au travail",

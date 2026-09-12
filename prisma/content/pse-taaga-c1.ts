@@ -13,7 +13,7 @@ import type { InitialLearningSequence } from "./catalog-types";
 export const pseTAagaC1Sequence: InitialLearningSequence = {
   title: "C1. Les différents contrats de travail",
   description:
-    "Module C1 du programme de PSE en CAP (thématique C). Objectif : faire travailler les élèves sur les compétences C1, C4, C5 et C6 du référentiel à travers les exercices réalisés. Situation fil rouge de la classe : l’EHPAD Les Glycines. La position indique uniquement l’ordre d’affichage.",
+    "Tu vas apprendre à reconnaître les principaux contrats de travail et à repérer les droits et obligations utiles avant de signer.",
   lessons: [
     {
       title: "Identifier les différents contrats de travail",

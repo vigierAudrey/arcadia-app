@@ -9,7 +9,7 @@ import type { InitialLearningSequence } from "./catalog-types";
 export const pseTAeroC7Sequence: InitialLearningSequence = {
   title: "C7. Le suivi de la santé au travail",
   description:
-    "Module C7 du programme de PSE de terminale professionnelle (arrêté du 3 avril 2019, annexe 2). Objectif : faire travailler les élèves sur les compétences C1, C3 et C6 du référentiel à travers les exercices réalisés. La position indique uniquement l’ordre d’affichage.",
+    "Tu vas comprendre comment le suivi de santé au travail protège les salariés, comment l’organisme réagit face aux microbes et pourquoi certaines vaccinations peuvent être utiles dans un hangar aéronautique.",
   lessons: [
     {
       title: "Identifier les modalités de suivi individuel médical des salariés",
@@ -288,6 +288,87 @@ export const pseTAeroC7Sequence: InitialLearningSequence = {
               { id: "transmissible", left: "Maladie transmissible", right: "Maladie qui peut passer d’une personne à une autre" },
             ],
             explanation: "Ces notions sont celles du programme pour ce module : elles doivent être employées avec leur sens exact dans une réponse rédigée.",
+          },
+        },
+      ],
+    },
+    {
+      title:
+        "Rappel : distinguer danger, situation dangereuse, événement déclencheur et dommage",
+      description:
+        "Replacer les étapes du processus d’apparition du dommage à partir de situations simples du hangar.",
+      activities: [
+        {
+          title: "À retenir : le PAD en quatre étapes",
+          type: "content",
+          instructions:
+            "Repérer les quatre éléments du processus d’apparition du dommage.",
+          payload: {
+            body: "Le processus d’apparition du dommage aide à comprendre comment une blessure ou une atteinte à la santé peut arriver.\n\n1. Le danger est ce qui peut provoquer un dommage : un foret en rotation, un bord de tôle, un produit irritant.\n\n2. La situation dangereuse existe quand une personne est exposée au danger : la main de Théo reste proche de la zone de perçage.\n\n3. L’événement déclencheur fait basculer la situation : le panneau bouge, la main dérape, l’outil accroche.\n\n4. Le dommage est l’atteinte possible à la santé : coupure, brûlure, douleur, intoxication.\n\nOrdre à retenir : danger, situation dangereuse, événement déclencheur, dommage.",
+          },
+        },
+        {
+          title: "Jeu : reconstruire le PAD de Théo",
+          type: "sorting",
+          instructions:
+            "Classer chaque carte dans l’étape du processus qui lui correspond.",
+          payload: {
+            prompt:
+              "Théo perce un panneau mal immobilisé. Classe chaque élément.",
+            categories: [
+              { id: "danger", label: "Danger" },
+              { id: "situation", label: "Situation dangereuse" },
+              { id: "evenement", label: "Événement déclencheur" },
+              { id: "dommage", label: "Dommage" },
+            ],
+            items: [
+              { id: "foret", label: "Foret en rotation", categoryId: "danger" },
+              { id: "bord", label: "Bord de tôle coupant", categoryId: "danger" },
+              { id: "main_proche", label: "Main proche de la zone de perçage", categoryId: "situation" },
+              { id: "panneau_tenu", label: "Panneau tenu pendant l’opération", categoryId: "situation" },
+              { id: "panneau_bouge", label: "Le panneau bouge brusquement", categoryId: "evenement" },
+              { id: "main_derape", label: "La main dérape vers le foret", categoryId: "evenement" },
+              { id: "coupure", label: "Coupure à la main", categoryId: "dommage" },
+              { id: "douleur", label: "Douleur et plaie", categoryId: "dommage" },
+            ],
+            explanation:
+              "Le danger existe avant l’accident. La situation dangereuse expose une personne. L’événement déclencheur provoque le passage vers le dommage.",
+          },
+        },
+        {
+          title: "Jeu : relier les notions du PAD",
+          type: "matching",
+          instructions:
+            "Définir chaque élément du PAD en le reliant à son sens exact.",
+          payload: {
+            prompt: "Relie chaque notion à sa définition.",
+            pairs: [
+              { id: "danger", left: "Danger", right: "Élément capable de provoquer un dommage" },
+              { id: "situation", left: "Situation dangereuse", right: "Situation où une personne est exposée au danger" },
+              { id: "evenement", left: "Événement déclencheur", right: "Fait qui fait basculer la situation" },
+              { id: "dommage", left: "Dommage", right: "Atteinte possible à la santé" },
+            ],
+            explanation:
+              "Ces quatre mots ne désignent pas la même chose. Les distinguer aide à analyser une situation de travail sans tout mélanger.",
+          },
+        },
+        {
+          title: "Défi : ne pas confondre danger et dommage",
+          type: "qcm",
+          instructions:
+            "Identifier le dommage dans une situation du hangar.",
+          payload: {
+            question:
+              "Théo perce un panneau mal immobilisé. Le panneau bouge et sa main dérape vers le foret. Quel élément correspond au dommage ?",
+            choices: [
+              { id: "foret", label: "Le foret en rotation" },
+              { id: "main", label: "La main proche de la zone de perçage" },
+              { id: "bouge", label: "Le panneau qui bouge" },
+              { id: "coupure", label: "La coupure à la main" },
+            ],
+            correctChoiceIds: ["coupure"],
+            explanation:
+              "Le dommage est l’atteinte à la santé. Ici, c’est la coupure à la main.",
           },
         },
       ],
