@@ -324,9 +324,13 @@ jobs:
           # le DNS Cloudflare, le certificat Let's Encrypt, le routage Caddy et
           # l'application. Aucun -k : un certificat invalide doit faire échouer.
 
+          # Attendre une vraie page, pas seulement une réponse : juste après le
+          # redémarrage, Caddy répond 502 tant que l'application n'écoute pas
+          # encore. Sans -f, curl considérait ce 502 comme un succès et le test
+          # échouait aussitôt sur une application simplement pas encore prête.
           ok=0
           for attempt in $(seq 1 20); do
-            if curl -sS -o /dev/null --max-time 10 "$SMOKE_BASE_URL/"; then
+            if curl -fsS -o /dev/null --max-time 10 "$SMOKE_BASE_URL/"; then
               ok=1; break
             fi
             echo "tentative $attempt/20 — l'application ne répond pas encore, nouvel essai dans 5 s"
