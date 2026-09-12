@@ -13,6 +13,8 @@ const eslintConfig = defineConfig([
     "build/**",
     "src/generated/prisma/**",
     "next-env.d.ts",
+    // Moteur du mini-jeu repris de Chromium : code tiers, non reformaté.
+    "public/jeux/**",
   ]),
 ]);
 

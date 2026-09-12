@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import {
   parseActivityPayload,
@@ -12,6 +12,7 @@ import {
 } from "@/features/activities/activity-payload";
 
 import { SpeakButton } from "@/features/accessibility/speak-button";
+import { SauteMicrobeReward } from "@/features/jeu/saute-microbe";
 
 import styles from "./student-activity.module.css";
 
@@ -22,7 +23,20 @@ type StudentActivityProps = {
     instructions: string;
     payload: unknown;
   };
+  /** Appelé une seule fois, au tout premier « Vérifier » de l'élève. */
+  onFirstTry?: (isPerfect: boolean) => void;
 };
+
+/** Signale le résultat du premier essai, et lui seul. */
+function useFirstTryReport(onFirstTry?: (isPerfect: boolean) => void) {
+  const [reported, setReported] = useState(false);
+
+  return (isPerfect: boolean) => {
+    if (reported) return;
+    setReported(true);
+    onFirstTry?.(isPerfect);
+  };
+}
 
 type StudentActivityItem = StudentActivityProps["activity"] & { id: string };
 
@@ -34,11 +48,26 @@ const activityTypeLabels = {
   matching: "Jeu",
 } as const;
 
+/** Nom du bloc, tel qu'il apparaît dans le message de récompense. */
+const rewardBlockLabels = {
+  qcm: "tout le quiz",
+  true_false: "tous les vrai ou faux",
+  game: "tous les jeux",
+} as const;
+
 export function StudentActivityGroup({
   activities,
 }: {
   activities: StudentActivityItem[];
 }) {
+  // Résultat du premier essai de chaque activité : la partie ne se gagne qu'ainsi.
+  const [firstTryResults, setFirstTryResults] = useState<Record<string, boolean>>({});
+  const reportFirstTry = useCallback((activityId: string, isPerfect: boolean) => {
+    setFirstTryResults((current) =>
+      activityId in current ? current : { ...current, [activityId]: isPerfect },
+    );
+  }, []);
+
   const groups: Array<{
     type: "content" | "qcm" | "true_false" | "game";
     activities: StudentActivityItem[];
@@ -55,23 +84,38 @@ export function StudentActivityGroup({
 
   return (
     <div className={styles.activityGroups}>
-      {groups.map((group) => (
-        <details
-          className={styles.activityGroup}
-          key={group.type}
-          open={group.type === "content"}
-        >
-          <summary className={styles.groupSummary}>
-            <span>{group.type === "game" ? "Jeux" : activityTypeLabels[group.type]}</span>
-            <small>{group.activities.length} activité(s)</small>
-          </summary>
-          <div className={styles.activityList}>
-            {group.activities.map((activity) => (
-              <StudentActivity activity={activity} key={activity.id} />
-            ))}
-          </div>
-        </details>
-      ))}
+      {groups.map((group) => {
+        const answered = group.activities.filter((activity) => activity.id in firstTryResults);
+        const isRewarded =
+          group.type !== "content" &&
+          answered.length === group.activities.length &&
+          answered.every((activity) => firstTryResults[activity.id]);
+
+        return (
+          <details
+            className={styles.activityGroup}
+            key={group.type}
+            open={group.type === "content"}
+          >
+            <summary className={styles.groupSummary}>
+              <span>{group.type === "game" ? "Jeux" : activityTypeLabels[group.type]}</span>
+              <small>{group.activities.length} activité(s)</small>
+            </summary>
+            <div className={styles.activityList}>
+              {group.activities.map((activity) => (
+                <StudentActivity
+                  activity={activity}
+                  key={activity.id}
+                  onFirstTry={(isPerfect) => reportFirstTry(activity.id, isPerfect)}
+                />
+              ))}
+            </div>
+            {isRewarded && group.type !== "content" ? (
+              <SauteMicrobeReward blockLabel={rewardBlockLabels[group.type]} />
+            ) : null}
+          </details>
+        );
+      })}
     </div>
   );
 }
@@ -119,7 +163,7 @@ function buildSpeechText(
   return parts.filter(Boolean).join(" ");
 }
 
-export function StudentActivity({ activity }: StudentActivityProps) {
+export function StudentActivity({ activity, onFirstTry }: StudentActivityProps) {
   let payload: ReturnType<typeof parseActivityPayload>;
 
   try {
@@ -153,13 +197,13 @@ export function StudentActivity({ activity }: StudentActivityProps) {
       {activity.type === "content" ? (
         <ContentActivity body={contentPayload.body} />
       ) : activity.type === "qcm" ? (
-        <QcmActivity payload={qcmPayload} />
+        <QcmActivity onFirstTry={onFirstTry} payload={qcmPayload} />
       ) : activity.type === "true_false" ? (
-        <TrueFalseActivity payload={trueFalsePayload} />
+        <TrueFalseActivity onFirstTry={onFirstTry} payload={trueFalsePayload} />
       ) : activity.type === "sorting" ? (
-        <SortingActivity payload={sortingPayload} />
+        <SortingActivity onFirstTry={onFirstTry} payload={sortingPayload} />
       ) : (
-        <MatchingActivity payload={matchingPayload} />
+        <MatchingActivity onFirstTry={onFirstTry} payload={matchingPayload} />
       )}
     </article>
   );
@@ -176,12 +220,15 @@ function ContentActivity({ body }: { body: string }) {
 }
 
 function QcmActivity({
+  onFirstTry,
   payload,
 }: {
+  onFirstTry?: (isPerfect: boolean) => void;
   payload: QcmPayload;
 }) {
   const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
+  const reportFirstTry = useFirstTryReport(onFirstTry);
   const isCorrect = checked && payload.correctChoiceIds.includes(selectedChoice ?? "");
 
   return (
@@ -216,7 +263,10 @@ function QcmActivity({
         <button
           className={styles.checkButton}
           disabled={!selectedChoice}
-          onClick={() => setChecked(true)}
+          onClick={() => {
+            setChecked(true);
+            reportFirstTry(payload.correctChoiceIds.includes(selectedChoice ?? ""));
+          }}
           type="button"
         >
           Vérifier
@@ -235,11 +285,14 @@ function QcmActivity({
 }
 
 function TrueFalseActivity({
+  onFirstTry,
   payload,
 }: {
+  onFirstTry?: (isPerfect: boolean) => void;
   payload: TrueFalsePayload;
 }) {
   const [answer, setAnswer] = useState<boolean | null>(null);
+  const reportFirstTry = useFirstTryReport(onFirstTry);
   const checked = answer !== null;
   const isCorrect = answer === payload.correctAnswer;
 
@@ -252,7 +305,10 @@ function TrueFalseActivity({
             aria-pressed={answer === value}
             className={`${styles.choice} ${answer === value ? styles.choiceSelected : ""}`}
             key={String(value)}
-            onClick={() => setAnswer(value)}
+            onClick={() => {
+              setAnswer(value);
+              reportFirstTry(value === payload.correctAnswer);
+            }}
             type="button"
           >
             <span className={styles.choiceCursor} aria-hidden="true">▸</span>
@@ -272,10 +328,17 @@ function TrueFalseActivity({
   );
 }
 
-function SortingActivity({ payload }: { payload: SortingPayload }) {
+function SortingActivity({
+  onFirstTry,
+  payload,
+}: {
+  onFirstTry?: (isPerfect: boolean) => void;
+  payload: SortingPayload;
+}) {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<Record<string, string>>({});
   const [checked, setChecked] = useState(false);
+  const reportFirstTry = useFirstTryReport(onFirstTry);
   const assignedCount = Object.keys(assignments).length;
   const score = payload.items.reduce(
     (total, item) => total + (assignments[item.id] === item.categoryId ? 1 : 0),
@@ -332,7 +395,10 @@ function SortingActivity({ payload }: { payload: SortingPayload }) {
         <button
           className={styles.checkButton}
           disabled={assignedCount !== payload.items.length}
-          onClick={() => setChecked(true)}
+          onClick={() => {
+            setChecked(true);
+            reportFirstTry(score === payload.items.length);
+          }}
           type="button"
         >
           Vérifier
@@ -344,9 +410,16 @@ function SortingActivity({ payload }: { payload: SortingPayload }) {
   );
 }
 
-function MatchingActivity({ payload }: { payload: MatchingPayload }) {
+function MatchingActivity({
+  onFirstTry,
+  payload,
+}: {
+  onFirstTry?: (isPerfect: boolean) => void;
+  payload: MatchingPayload;
+}) {
   const [matches, setMatches] = useState<Record<string, string>>({});
   const [checked, setChecked] = useState(false);
+  const reportFirstTry = useFirstTryReport(onFirstTry);
   const score = payload.pairs.reduce(
     (total, pair) => total + (matches[pair.id] === pair.id ? 1 : 0),
     0,
@@ -393,7 +466,10 @@ function MatchingActivity({ payload }: { payload: MatchingPayload }) {
         <button
           className={styles.checkButton}
           disabled={Object.keys(matches).length !== payload.pairs.length}
-          onClick={() => setChecked(true)}
+          onClick={() => {
+            setChecked(true);
+            reportFirstTry(score === payload.pairs.length);
+          }}
           type="button"
         >
           Vérifier
