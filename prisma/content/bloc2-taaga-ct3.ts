@@ -16,7 +16,7 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
     {
       title: "Identifier une structure d’accueil et vérifier la fiabilité d’une information",
       description:
-        "Distinguer l’EHPAD, la résidence autonomie, l’USLD et l’accueil de jour, puis contrôler l’auteur, la date et l’organisme d’une information avant de la transmettre à une famille.",
+        "Distinguer l’EHPAD, l’établissement d’hébergement pour personnes âgées dépendantes, la résidence autonomie, l’USLD, unité de soins de longue durée, et l’accueil de jour, puis contrôler l’auteur, la date et l’organisme d’une information avant de la transmettre à une famille.",
       activities: [
         {
           title: "Décodage des consignes : les verbes du bloc 2",
@@ -46,7 +46,7 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
           instructions:
             "Repérer les quatre structures d’accueil présentées dans la fiche.",
           payload: {
-            body: "Une structure d’accueil accueille un public défini et remplit des missions précises.\n\nEHPAD : hébergement permanent et accompagnement de personnes dépendantes.\n\nRésidence autonomie : logement et services pour des personnes encore autonomes.\n\nUSLD, unité de soins de longue durée : soins médicaux importants et surveillance continue.\n\nAccueil de jour : accueil organisé pendant la journée, sans hébergement permanent.\n\nIndices à repérer : public accueilli, présence soignante, hébergement ou non, durée de l’accueil et degré d’autonomie.",
+            body: "Une structure d’accueil accueille un public défini et remplit des missions précises.\n\nEHPAD signifie établissement d’hébergement pour personnes âgées dépendantes : il propose un hébergement permanent et un accompagnement de personnes dépendantes.\n\nRésidence autonomie : logement et services pour des personnes encore autonomes.\n\nUSLD signifie unité de soins de longue durée : elle assure des soins médicaux importants et une surveillance continue.\n\nAccueil de jour : accueil organisé pendant la journée, sans hébergement permanent.\n\nIndices à repérer : public accueilli, présence soignante, hébergement ou non, durée de l’accueil et degré d’autonomie.",
           },
         },
         {
@@ -56,9 +56,9 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
           payload: {
             prompt: "Relie chaque structure d’accueil à ce qu’elle propose réellement.",
             pairs: [
-              { id: "ehpad", left: "EHPAD", right: "Hébergement permanent et accompagnement de personnes dépendantes" },
+              { id: "ehpad", left: "EHPAD", right: "Établissement d’hébergement pour personnes âgées dépendantes" },
               { id: "residence", left: "Résidence autonomie", right: "Logement et services pour des personnes encore autonomes" },
-              { id: "usld", left: "USLD", right: "Soins médicaux importants et surveillance continue" },
+              { id: "usld", left: "USLD", right: "Unité de soins de longue durée" },
               { id: "accueil_jour", left: "Accueil de jour", right: "Accueil en journée, sans hébergement permanent" },
             ],
             explanation:
@@ -151,7 +151,7 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
           type: "content",
           instructions: "Repérer les personnes et les lieux ressources présentés dans la fiche.",
           payload: {
-            body: "L’agent accompagnant au grand âge réalise les activités autorisées par sa fonction et transmet les demandes qui sortent de son champ.\n\nL’équipe des Glycines : direction, médecin coordonnateur, infirmier, aide-soignant, agent AAGA, animation, maintenance.\n\nLe relais dépend de la situation : un soin va à l’équipe soignante, une panne à la maintenance, un stock au responsable identifié.\n\nAvant d’agir sur un danger : repérer le danger, ne pas créer un second danger, sécuriser dans ses limites, alerter le relais et tracer selon le protocole.\n\nUne transmission décrit des faits observés, datés et adressés. Elle ne contient ni interprétation ni diagnostic.",
+            body: "L’agent accompagnant au grand âge réalise les activités autorisées par sa fonction et transmet les demandes qui sortent de son champ.\n\nAAGA signifie agent accompagnant au grand âge. Dans l’équipe des Glycines, l’agent AAGA travaille avec la direction, le médecin coordonnateur, l’infirmier, l’aide-soignant, l’animation et la maintenance.\n\nLe relais dépend de la situation : un soin va à l’équipe soignante, une panne à la maintenance, un stock au responsable identifié.\n\nAvant d’agir sur un danger : repérer le danger, ne pas créer un second danger, sécuriser dans ses limites, alerter le relais et tracer selon le protocole.\n\nUne transmission décrit des faits observés, datés et adressés. Elle ne contient ni interprétation ni diagnostic.",
           },
         },
         {
@@ -503,7 +503,7 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
           type: "content",
           instructions: "Repérer ce que l’agent peut faire et ce qu’il ne fait pas.",
           payload: {
-            body: "L’autonomie est la capacité de décider et d’agir dans sa vie quotidienne. Elle varie selon les actes et selon les moments.\n\nLa dépendance est le besoin d’aide pour réaliser certains actes.\n\nAGGIR est une grille utilisée par des professionnels pour apprécier l’autonomie. L’élève exploite des informations, il ne calcule pas seul un GIR.\n\nAider juste ce qu’il faut : laisser faire ce qui est possible, compléter seulement ce qui est nécessaire, encourager sans faire à la place.\n\nUn environnement peut faciliter ou limiter le déplacement. Un facilitateur aide la personne à agir, par exemple un bon éclairage. Un obstacle la gêne, par exemple un meuble dans le passage.",
+            body: "L’autonomie est la capacité de décider et d’agir dans sa vie quotidienne. Elle varie selon les actes et selon les moments.\n\nLa dépendance est le besoin d’aide pour réaliser certains actes.\n\nAGGIR signifie autonomie gérontologie groupes iso-ressources : c’est une grille utilisée par des professionnels pour apprécier l’autonomie. Le GIR, groupe iso-ressources, indique un niveau de perte d’autonomie. L’élève exploite des informations, il ne calcule pas seul un GIR.\n\nAider juste ce qu’il faut : laisser faire ce qui est possible, compléter seulement ce qui est nécessaire, encourager sans faire à la place.\n\nUn environnement peut faciliter ou limiter le déplacement. Un facilitateur aide la personne à agir, par exemple un bon éclairage. Un obstacle la gêne, par exemple un meuble dans le passage.",
           },
         },
         {
@@ -577,7 +577,7 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
             statement: "L’élève calcule seul le GIR d’un résident à partir de la grille AGGIR.",
             correctAnswer: false,
             explanation:
-              "Faux : AGGIR est utilisée par des professionnels. L’élève exploite des informations sur l’autonomie et respecte les consignes de l’équipe.",
+              "Faux : AGGIR, autonomie gérontologie groupes iso-ressources, est utilisée par des professionnels. L’élève exploite des informations sur l’autonomie et respecte les consignes de l’équipe.",
           },
         },
       ],
@@ -592,7 +592,7 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
           type: "content",
           instructions: "Repérer les quatre étapes attendues dans une réponse construite.",
           payload: {
-            body: "Face à une situation professionnelle, la réponse suit toujours les mêmes étapes.\n\n1. Repérer les faits utiles : qui, où, quand, ce qui est observé.\n\n2. Vérifier la source : auteur identifiable, date, organisme, information recoupée.\n\n3. Agir dans son rôle : ce que je peux faire, ce que je sécurise, ce que je ne fais pas seul.\n\n4. Transmettre : des faits précis, datés, adressés au bon professionnel, sans interprétation.\n\nCette méthode vaut pour l’accueil d’un résident comme pour l’analyse d’une activité en PFMP.",
+            body: "Face à une situation professionnelle, la réponse suit toujours les mêmes étapes.\n\n1. Repérer les faits utiles : qui, où, quand, ce qui est observé.\n\n2. Vérifier la source : auteur identifiable, date, organisme, information recoupée.\n\n3. Agir dans son rôle : ce que je peux faire, ce que je sécurise, ce que je ne fais pas seul.\n\n4. Transmettre : des faits précis, datés, adressés au bon professionnel, sans interprétation.\n\nCette méthode vaut pour l’accueil d’un résident comme pour l’analyse d’une activité en PFMP, période de formation en milieu professionnel.",
           },
         },
         {

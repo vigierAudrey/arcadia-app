@@ -20,5 +20,5 @@ export const pse2CielC1Sequence = buildPseSecondeC1Sequence({
   unknownTask:
     "un élève nouvel arrivant doit aider à installer une baie réseau alors qu'un câble électrique semble abîmé.",
   signalDanger:
-    "Pendant l'installation d'une baie réseau, un câble électrique semble abîmé. Que doit faire le salarié ou l'élève en PFMP ?",
+    "Pendant l'installation d'une baie réseau, un câble électrique semble abîmé. Que doit faire le salarié ou l'élève en PFMP, période de formation en milieu professionnel ?",
 });

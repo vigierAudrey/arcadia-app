@@ -10,7 +10,7 @@ export const pse1TciC3Sequence: InitialLearningSequence = {
     {
       title: "Identifier les rôles des acteurs internes de prévention",
       description:
-        "Distinguer le CSE, le salarié compétent, le SST et le service de prévention et de santé au travail à partir d'un incident d'ébavurage chez CDE.",
+        "Distinguer le CSE, comité social et économique, le salarié compétent, le SST, sauveteur secouriste du travail, et le SPST, service de prévention et de santé au travail, à partir d'un incident d'ébavurage chez CDE.",
       activities: [
         {
           title: "Décodage des consignes : les verbes de l'épreuve",
@@ -62,7 +62,7 @@ export const pse1TciC3Sequence: InitialLearningSequence = {
           instructions:
             "Repérer les quatre acteurs internes de prévention et leur mission.",
           payload: {
-            body: "Chez CDE, Karim se coupe légèrement pendant l'ébavurage d'une tôle. Un sauveteur secouriste du travail intervient. M. Berthier constate que ce type d'incident revient. Le salarié compétent observe le poste. Le CSE demande que le sujet soit discuté. Le service de prévention et de santé au travail conseille l'entreprise.\n\nLe comité social et économique (CSE) représente les salariés. Il contribue aux questions de santé et de sécurité, analyse des situations et formule des propositions.\n\nLe salarié compétent aide l'employeur dans les activités de protection et de prévention des risques professionnels.\n\nLe sauveteur secouriste du travail (SST) intervient face à un accident dans la limite de sa formation : il protège, examine, alerte et secourt selon la situation.\n\nLe service de prévention et de santé au travail (SPST) suit la santé des salariés et conseille le salarié comme l'employeur.\n\nLa prévention est une action collective : plusieurs acteurs peuvent coopérer sur une même situation.",
+            body: "Chez CDE, Karim se coupe légèrement pendant l'ébavurage d'une tôle. Un sauveteur secouriste du travail intervient. M. Berthier constate que ce type d'incident revient. Le salarié compétent observe le poste. Le CSE demande que le sujet soit discuté. Le SPST conseille l'entreprise.\n\nLe CSE signifie comité social et économique : il représente les salariés. Il contribue aux questions de santé et de sécurité, analyse des situations et formule des propositions.\n\nLe salarié compétent aide l'employeur dans les activités de protection et de prévention des risques professionnels.\n\nLe SST signifie sauveteur secouriste du travail : il intervient face à un accident dans la limite de sa formation. Il protège, examine, alerte et secourt selon la situation.\n\nLe SPST signifie service de prévention et de santé au travail : il suit la santé des salariés et conseille le salarié comme l'employeur.\n\nLa prévention est une action collective : plusieurs acteurs peuvent coopérer sur une même situation.",
           },
         },
         {
@@ -194,7 +194,7 @@ export const pse1TciC3Sequence: InitialLearningSequence = {
           instructions:
             "Repérer les deux organismes externes et leurs missions.",
           payload: {
-            body: "Chez CDE, plusieurs presque-accidents surviennent près de la cisaille. M. Berthier cherche un accompagnement pour améliorer la prévention. Des salariés s'interrogent aussi sur l'application de règles de sécurité.\n\nL'inspection du travail informe et conseille les salariés et l'employeur sur le droit du travail. Elle contrôle son application et peut intervenir dans le cadre de ses pouvoirs de contrôle.\n\nLa CARSAT accompagne les entreprises dans la prévention des risques professionnels : conseils, outils, actions et ressources adaptées.\n\nCes organismes externes ne remplacent pas les acteurs internes. Le bon interlocuteur dépend du problème rencontré.\n\nAvant un contact, il faut décrire des faits précis et formuler une demande claire, sans accusation ni rumeur.",
+            body: "Chez CDE, plusieurs presque-accidents surviennent près de la cisaille. M. Berthier cherche un accompagnement pour améliorer la prévention. Des salariés s'interrogent aussi sur l'application de règles de sécurité.\n\nL'inspection du travail informe et conseille les salariés et l'employeur sur le droit du travail. Elle contrôle son application et peut intervenir dans le cadre de ses pouvoirs de contrôle.\n\nLa CARSAT signifie caisse d'assurance retraite et de la santé au travail : elle accompagne les entreprises dans la prévention des risques professionnels avec des conseils, des outils, des actions et des ressources adaptées.\n\nCes organismes externes ne remplacent pas les acteurs internes. Le bon interlocuteur dépend du problème rencontré.\n\nAvant un contact, il faut décrire des faits précis et formuler une demande claire, sans accusation ni rumeur.",
           },
         },
         {
@@ -334,7 +334,7 @@ export const pse1TciC3Sequence: InitialLearningSequence = {
           type: "content",
           instructions: "Repérer les cinq points essentiels de la séquence.",
           payload: {
-            body: "Les acteurs internes agissent dans l'entreprise : CSE, salarié compétent, SST et SPST.\n\nLes organismes externes complètent l'action : inspection du travail et CARSAT.\n\nChaque acteur a une mission précise. Plusieurs acteurs peuvent coopérer sur une même situation.\n\nPour choisir un interlocuteur, je décris d'abord les faits, puis j'identifie le besoin : secours, conseil santé, organisation de la prévention, expression collective, droit du travail ou accompagnement.\n\nJe formule ensuite une demande claire, sans accusation ni rumeur.",
+            body: "Les acteurs internes agissent dans l'entreprise : CSE, comité social et économique ; salarié compétent ; SST, sauveteur secouriste du travail ; SPST, service de prévention et de santé au travail.\n\nLes organismes externes complètent l'action : inspection du travail et CARSAT, caisse d'assurance retraite et de la santé au travail.\n\nChaque acteur a une mission précise. Plusieurs acteurs peuvent coopérer sur une même situation.\n\nPour choisir un interlocuteur, je décris d'abord les faits, puis j'identifie le besoin : secours, conseil santé, organisation de la prévention, expression collective, droit du travail ou accompagnement.\n\nJe formule ensuite une demande claire, sans accusation ni rumeur.",
           },
         },
         {
@@ -477,6 +477,16 @@ export const pse1TciC3Sequence: InitialLearningSequence = {
                 right: "Rôle confié à une personne ou à un organisme",
               },
               { id: "cse", left: "CSE", right: "Comité social et économique" },
+              {
+                id: "sst",
+                left: "SST",
+                right: "Sauveteur secouriste du travail",
+              },
+              {
+                id: "spst",
+                left: "SPST",
+                right: "Service de prévention et de santé au travail",
+              },
               {
                 id: "carsat",
                 left: "CARSAT",

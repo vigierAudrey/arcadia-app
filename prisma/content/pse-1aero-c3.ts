@@ -42,7 +42,7 @@ export const pse1AeroC3Sequence: InitialLearningSequence = {
           instructions:
             "Repérer les quatre acteurs internes de la prévention présentés dans la fiche.",
           payload: {
-            body: "Chez AMA, Théo se coupe légèrement sur le bord d’un panneau après perçage. Un sauveteur secouriste du travail intervient. M. Ferrand remarque que ce type d’incident revient. Le salarié compétent étudie le poste. Le CSE demande que le sujet soit discuté. Le service de prévention et de santé au travail conseille l’entreprise.\n\nLe comité social et économique (CSE) représente les salariés. Il contribue aux questions de santé et de sécurité, analyse des situations avec les représentants du personnel et formule des propositions.\n\nLe salarié compétent aide l’employeur dans les activités de protection et de prévention des risques professionnels. Il repère un besoin d’amélioration d’un poste et participe à l’organisation des actions de prévention.\n\nLe sauveteur secouriste du travail (SST) intervient face à un accident dans la limite de sa formation. Il protège, examine, alerte et secourt selon la situation. Il ne remplace pas les secours spécialisés.\n\nLe service de prévention et de santé au travail (SPST) suit la santé des salariés. Il conseille les salariés comme l’employeur pour prévenir les risques professionnels et informe sur les effets possibles d’une exposition.\n\nLa prévention est une action collective : selon le problème rencontré, plusieurs de ces acteurs peuvent coopérer.",
+            body: "Chez AMA, Théo se coupe légèrement sur le bord d’un panneau après perçage. Un sauveteur secouriste du travail intervient. M. Ferrand remarque que ce type d’incident revient. Le salarié compétent étudie le poste. Le CSE demande que le sujet soit discuté. Le SPST conseille l’entreprise.\n\nLe CSE signifie comité social et économique : il représente les salariés. Il contribue aux questions de santé et de sécurité, analyse des situations avec les représentants du personnel et formule des propositions.\n\nLe salarié compétent aide l’employeur dans les activités de protection et de prévention des risques professionnels. Il repère un besoin d’amélioration d’un poste et participe à l’organisation des actions de prévention.\n\nLe SST signifie sauveteur secouriste du travail : il intervient face à un accident dans la limite de sa formation. Il protège, examine, alerte et secourt selon la situation. Il ne remplace pas les secours spécialisés.\n\nLe SPST signifie service de prévention et de santé au travail : il suit la santé des salariés. Il conseille les salariés comme l’employeur pour prévenir les risques professionnels et informe sur les effets possibles d’une exposition.\n\nLa prévention est une action collective : selon le problème rencontré, plusieurs de ces acteurs peuvent coopérer.",
           },
         },
         {
@@ -276,7 +276,7 @@ export const pse1AeroC3Sequence: InitialLearningSequence = {
           instructions:
             "Repérer les cinq points essentiels de la séquence.",
           payload: {
-            body: "Les acteurs internes agissent dans l’entreprise : le CSE, le salarié compétent, le sauveteur secouriste du travail et le service de prévention et de santé au travail.\n\nLes organismes externes complètent l’action : l’inspection du travail et la CARSAT.\n\nChaque acteur a une mission précise, et plusieurs acteurs peuvent coopérer sur une même situation.\n\nPour choisir un interlocuteur, je décris d’abord les faits, puis j’identifie le besoin.\n\nJe formule enfin une demande claire, sans accusation ni rumeur.",
+            body: "Les acteurs internes agissent dans l’entreprise : le CSE, comité social et économique ; le salarié compétent ; le SST, sauveteur secouriste du travail ; et le SPST, service de prévention et de santé au travail.\n\nLes organismes externes complètent l’action : l’inspection du travail et la CARSAT, caisse d’assurance retraite et de la santé au travail.\n\nChaque acteur a une mission précise, et plusieurs acteurs peuvent coopérer sur une même situation.\n\nPour choisir un interlocuteur, je décris d’abord les faits, puis j’identifie le besoin.\n\nJe formule enfin une demande claire, sans accusation ni rumeur.",
           },
         },
         {
@@ -346,6 +346,8 @@ export const pse1AeroC3Sequence: InitialLearningSequence = {
               { id: "organisme_externe", left: "Organisme externe", right: "Organisme extérieur qui conseille, accompagne ou contrôle" },
               { id: "mission", left: "Mission", right: "Rôle confié à une personne ou à un organisme" },
               { id: "cse", left: "CSE", right: "Comité social et économique" },
+              { id: "sst", left: "SST", right: "Sauveteur secouriste du travail" },
+              { id: "spst", left: "SPST", right: "Service de prévention et de santé au travail" },
               { id: "carsat", left: "CARSAT", right: "Caisse d’assurance retraite et de la santé au travail" },
             ],
             explanation: "Ces mots doivent être employés avec leur sens exact dans une réponse rédigée : c’est ce qui est attendu à l’épreuve.",

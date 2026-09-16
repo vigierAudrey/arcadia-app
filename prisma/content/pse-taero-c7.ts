@@ -37,12 +37,12 @@ export const pseTAeroC7Sequence: InitialLearningSequence = {
           },
         },
         {
-          title: "À retenir : VIP, EMA et suivi individuel renforcé",
+          title: "À retenir : la VIP, l’EMA et le suivi individuel renforcé",
           type: "content",
           instructions:
             "Repérer les trois modalités de suivi médical présentées dans la fiche.",
           payload: {
-            body: "Le suivi de santé au travail dépend du poste occupé et des risques réellement présents.\n\nLa visite d’information et de prévention (VIP) informe le salarié sur les risques de son poste et sur les moyens de prévention. Elle est réalisée par le service de prévention et de santé au travail.\n\nL’examen médical d’aptitude (EMA) concerne les postes présentant des risques particuliers. Il vérifie que le salarié peut occuper ce poste sans danger pour lui ni pour les autres.\n\nCertains postes exposés donnent lieu à un suivi individuel renforcé : les visites sont plus fréquentes et adaptées à l’exposition.\n\nAu hangar, Théo est exposé aux coupures sur tôles et rivets, ainsi qu’aux solvants et aux matériaux composites. Le service de prévention et de santé au travail conseille à la fois le salarié et l’employeur.",
+            body: "Le suivi de santé au travail dépend du poste occupé et des risques réellement présents.\n\nVIP signifie visite d’information et de prévention : elle informe le salarié sur les risques de son poste et sur les moyens de prévention. Elle est réalisée par le SPST, service de prévention et de santé au travail.\n\nEMA signifie examen médical d’aptitude : il concerne les postes présentant des risques particuliers. Il vérifie que le salarié peut occuper ce poste sans danger pour lui ni pour les autres.\n\nCertains postes exposés donnent lieu à un suivi individuel renforcé : les visites sont plus fréquentes et adaptées à l’exposition.\n\nAu hangar, Théo est exposé aux coupures sur tôles et rivets, ainsi qu’aux solvants et aux matériaux composites. Le SPST conseille à la fois le salarié et l’employeur.",
           },
         },
         {
@@ -299,12 +299,12 @@ export const pseTAeroC7Sequence: InitialLearningSequence = {
         "Replacer les étapes du processus d’apparition du dommage à partir de situations simples du hangar.",
       activities: [
         {
-          title: "À retenir : le PAD en quatre étapes",
+          title: "À retenir : le processus d’apparition du dommage",
           type: "content",
           instructions:
             "Repérer les quatre éléments du processus d’apparition du dommage.",
           payload: {
-            body: "Le processus d’apparition du dommage aide à comprendre comment une blessure ou une atteinte à la santé peut arriver.\n\n1. Le danger est ce qui peut provoquer un dommage : un foret en rotation, un bord de tôle, un produit irritant.\n\n2. La situation dangereuse existe quand une personne est exposée au danger : la main de Théo reste proche de la zone de perçage.\n\n3. L’événement déclencheur fait basculer la situation : le panneau bouge, la main dérape, l’outil accroche.\n\n4. Le dommage est l’atteinte possible à la santé : coupure, brûlure, douleur, intoxication.\n\nOrdre à retenir : danger, situation dangereuse, événement déclencheur, dommage.",
+            body: "Le processus d’apparition du dommage, parfois abrégé PAD, aide à comprendre comment une blessure ou une atteinte à la santé peut arriver.\n\n1. Le danger est ce qui peut provoquer un dommage : un foret en rotation, un bord de tôle, un produit irritant.\n\n2. La situation dangereuse existe quand une personne est exposée au danger : la main de Théo reste proche de la zone de perçage.\n\n3. L’événement déclencheur fait basculer la situation : le panneau bouge, la main dérape, l’outil accroche.\n\n4. Le dommage est l’atteinte possible à la santé : coupure, brûlure, douleur, intoxication.\n\nOrdre à retenir : danger, situation dangereuse, événement déclencheur, dommage.",
           },
         },
         {

@@ -69,12 +69,12 @@ export const pseTTciC7Sequence: InitialLearningSequence = {
           },
         },
         {
-          title: "À retenir : VIP, EMA et suivi individuel renforcé",
+          title: "À retenir : la VIP, l’EMA et le suivi individuel renforcé",
           type: "content",
           instructions:
             "Repérer les trois modalités de suivi médical présentées dans la fiche.",
           payload: {
-            body: "Élodie reçoit une convocation du service de prévention et de santé au travail avant de reprendre sa machine à commande numérique chez CDE.\n\nLe suivi de santé dépend du poste réellement occupé et des expositions, jamais du seul nom du métier.\n\nLa visite d’information et de prévention (VIP) informe le salarié sur les risques de son poste et sur les moyens de prévention. Elle fait le point sur sa situation.\n\nL’examen médical d’aptitude (EMA) est prévu pour certains postes présentant des risques particuliers. Il vérifie l’aptitude avant l’affectation à ce poste.\n\nUn suivi individuel renforcé s’applique lorsque l’exposition le justifie : les visites sont adaptées à cette exposition.\n\nLe service de prévention et de santé au travail (SPST) conseille le salarié et l’employeur, et participe à la prévention comme au suivi de santé.",
+            body: "Élodie reçoit une convocation du SPST, service de prévention et de santé au travail, avant de reprendre sa machine à commande numérique chez CDE.\n\nLe suivi de santé dépend du poste réellement occupé et des expositions, jamais du seul nom du métier.\n\nVIP signifie visite d’information et de prévention : elle informe le salarié sur les risques de son poste et sur les moyens de prévention. Elle fait le point sur sa situation.\n\nEMA signifie examen médical d’aptitude : il est prévu pour certains postes présentant des risques particuliers. Il vérifie l’aptitude avant l’affectation à ce poste.\n\nUn suivi individuel renforcé s’applique lorsque l’exposition le justifie : les visites sont adaptées à cette exposition.\n\nLe SPST conseille le salarié et l’employeur, et participe à la prévention comme au suivi de santé.",
           },
         },
         {
@@ -807,12 +807,12 @@ export const pseTTciC7Sequence: InitialLearningSequence = {
         "Replacer les étapes du processus d’apparition du dommage à partir de situations simples de l’atelier CDE.",
       activities: [
         {
-          title: "À retenir : le PAD en quatre étapes",
+          title: "À retenir : le processus d’apparition du dommage",
           type: "content",
           instructions:
             "Repérer les quatre éléments du processus d’apparition du dommage.",
           payload: {
-            body: "Le processus d’apparition du dommage aide à comprendre comment une blessure ou une atteinte à la santé peut arriver.\n\n1. Le danger est ce qui peut provoquer un dommage : une arête vive, un produit irritant, une machine en mouvement.\n\n2. La situation dangereuse existe quand une personne est exposée au danger : la main de Karim est proche d’une tôle à arêtes vives.\n\n3. L’événement déclencheur fait basculer la situation : la tôle glisse, la main dérape, la machine se met en mouvement.\n\n4. Le dommage est l’atteinte possible à la santé : coupure, brûlure, douleur, intoxication.\n\nOrdre à retenir : danger, situation dangereuse, événement déclencheur, dommage.",
+            body: "Le processus d’apparition du dommage, parfois abrégé PAD, aide à comprendre comment une blessure ou une atteinte à la santé peut arriver.\n\n1. Le danger est ce qui peut provoquer un dommage : une arête vive, un produit irritant, une machine en mouvement.\n\n2. La situation dangereuse existe quand une personne est exposée au danger : la main de Karim est proche d’une tôle à arêtes vives.\n\n3. L’événement déclencheur fait basculer la situation : la tôle glisse, la main dérape, la machine se met en mouvement.\n\n4. Le dommage est l’atteinte possible à la santé : coupure, brûlure, douleur, intoxication.\n\nOrdre à retenir : danger, situation dangereuse, événement déclencheur, dommage.",
           },
         },
         {

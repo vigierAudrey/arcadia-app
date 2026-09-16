@@ -58,6 +58,7 @@ let refusals = 0;
  * valeur : titre encore en base.
  */
 const plannedRenames = new Map<string, string>();
+const plannedActivityRenames = new Map<string, string>();
 
 function renameKey(parentId: string, title: string): string {
   return JSON.stringify([parentId, title]);
@@ -67,9 +68,17 @@ function planRename(parentId: string, from: string, to: string) {
   plannedRenames.set(renameKey(parentId, to), from);
 }
 
+function planActivityRename(parentId: string, from: string, to: string) {
+  plannedActivityRenames.set(renameKey(parentId, to), from);
+}
+
 /** Titre sous lequel la ligne existe encore en base, renommage non écrit compris. */
 function currentTitle(parentId: string, title: string): string {
   return plannedRenames.get(renameKey(parentId, title)) ?? title;
+}
+
+function currentActivityTitle(parentId: string, title: string): string {
+  return plannedActivityRenames.get(renameKey(parentId, title)) ?? title;
 }
 
 /**
@@ -296,9 +305,14 @@ async function importSequence(
       : 0;
 
     for (const initialActivity of initialLesson.activities ?? []) {
+      const activityTitles = [
+        currentActivityTitle(lessonId ?? "", initialActivity.title),
+        initialActivity.title,
+      ];
+
       const existingActivity = lessonId
         ? await transaction.activity.findFirst({
-            where: { lessonId, title: initialActivity.title },
+            where: { lessonId, title: { in: [...new Set(activityTitles)] } },
             select: { id: true },
           })
         : null;
@@ -480,9 +494,15 @@ async function applyCorrection(
     }
 
     if (correction.activity) {
+      const activityTitles = [currentActivityTitle(lesson.id, correction.activity)];
+
+      if (correction.field === "title" && !activityTitles.includes(correction.to)) {
+        activityTitles.push(correction.to);
+      }
+
       const activity = await transaction.activity.findFirst({
-        where: { lessonId: lesson.id, title: correction.activity, archivedAt: null },
-        select: { id: true, title: true, instructions: true },
+        where: { lessonId: lesson.id, title: { in: activityTitles }, archivedAt: null },
+        select: { id: true, title: true, instructions: true, payload: true },
       });
 
       if (!activity) {
@@ -495,13 +515,31 @@ async function applyCorrection(
           ? activity.instructions
           : correction.field === "title"
             ? activity.title
-            : null;
-      write = (value) =>
-        transaction.activity.update({
+            : correction.field.startsWith("payload.")
+              ? payloadField(asPlainJsonObject(activity.payload), correction.field)
+              : null;
+
+      if (correction.field === "title" && !apply) {
+        planActivityRename(lesson.id, activity.title, correction.to);
+      }
+
+      write = (value) => {
+        const data = correction.field.startsWith("payload.")
+          ? {
+              payload: withPayloadField(
+                asPlainJsonObject(activity.payload),
+                correction.field,
+                value,
+              ),
+            }
+          : { [correction.field]: value };
+
+        return transaction.activity.update({
           where: { id: activity.id },
-          data: { [correction.field]: value },
+          data: data as Parameters<typeof transaction.activity.update>[0]["data"],
           select: { id: true },
         });
+      };
     } else {
       current = correction.field === "title" ? lesson.title : lesson.description;
 
@@ -544,6 +582,38 @@ async function applyCorrection(
     await write(correction.to);
   }
 }
+
+function asPlainJsonObject(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : null;
+}
+
+function payloadField(payload: Record<string, unknown> | null, field: string): string | null {
+  if (!payload) {
+    return null;
+  }
+
+  const key = field.slice("payload.".length);
+  const value = payload[key];
+
+  return typeof value === "string" ? value : null;
+}
+
+function withPayloadField(
+  payload: Record<string, unknown> | null,
+  field: string,
+  value: string,
+): Record<string, unknown> {
+  if (!payload) {
+    throw new ImportError("Correction de payload invalide.");
+  }
+
+  const key = field.slice("payload.".length);
+
+  return { ...payload, [key]: value };
+}
+
 
 function names(entries: readonly { name: string }[]): string {
   return entries.map((entry) => entry.name).join(", ") || "aucun";

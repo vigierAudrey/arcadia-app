@@ -9,7 +9,7 @@ export const pse2AeroC1Sequence = buildPseSecondeC1Sequence({
   mentor: "M. Ferrand",
   learner: "Théo",
   peer: "Sarah",
-  introDocs: "la tenue, les EPI et le livret d'accueil sécurité",
+  introDocs: "la tenue, les EPI, équipements de protection individuelle, et le livret d'accueil sécurité",
   risks:
     "la manutention de pièces lourdes, le bruit, les projections, les produits chimiques, les postures contraignantes, les poussières de composites et le risque électrique",
   suddenIncident:
@@ -19,5 +19,5 @@ export const pse2AeroC1Sequence = buildPseSecondeC1Sequence({
   unknownTask:
     "un élève mineur doit utiliser un équipement qu'il ne connaît pas, sans tuteur présent.",
   signalDanger:
-    "Pendant une intervention, un protecteur est absent et l'élève ne connaît pas la consigne. Que doit faire le salarié ou l'élève en PFMP ?",
+    "Pendant une intervention, un protecteur est absent et l'élève ne connaît pas la consigne. Que doit faire le salarié ou l'élève en PFMP, période de formation en milieu professionnel ?",
 });
