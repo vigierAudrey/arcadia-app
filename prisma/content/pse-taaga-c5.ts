@@ -117,6 +117,22 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Jeu : les cinq familles de facteurs de risque",
+          type: "matching",
+          instructions: "Identifier le facteur de risque présent dans chaque situation de travail.",
+          payload: {
+            prompt: "Relie chaque situation aux Glycines au facteur de risque qu’elle contient.",
+            pairs: [
+              { id: "repete", left: "Accompagner douze transferts dans la même matinée", right: "Des gestes répétés" },
+              { id: "charge", left: "Soulever seul un résident de 80 kg", right: "Le port d’une charge lourde" },
+              { id: "intense", left: "Retenir brusquement Mme Rose qui perd l’équilibre", right: "Un effort intense et soudain" },
+              { id: "prolonge", left: "Maintenir un bras en l’air pendant toute la toilette", right: "Un effort prolongé" },
+              { id: "posture", left: "Refaire un lit bas en restant penché en avant", right: "Une posture contraignante" },
+            ],
+            explanation: "Cinq facteurs de risque reviennent dans le métier : gestes répétés, charges lourdes, efforts intenses, efforts prolongés, postures contraignantes. Une même situation peut en contenir plusieurs à la fois.",
+          },
+        },
+        {
           title: "Vrai ou faux : rester immobile fatigue moins",
           type: "true_false",
           instructions: "Expliquer si l’affirmation correspond à ce que tu sais du travail statique.",
@@ -168,7 +184,7 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           type: "content",
           instructions: "Repérer les trois parties du corps qui travaillent pendant un transfert.",
           payload: {
-            body: "Trois parties du corps travaillent ensemble quand tu aides Mme Rose à se lever.\n\nLe muscle se contracte et produit l’effort. L’articulation est la zone où deux os permettent le mouvement. Le tendon relie le muscle à l’os.\n\nLa fatigue musculaire, c’est la baisse de force après un effort répété ou une posture gardée longtemps. Ses signes : la douleur, la faiblesse, le tremblement, le geste qui devient moins précis.\n\nLa douleur est un signal d’alerte. Elle dit que le corps a atteint sa limite.\n\nUn TMS (TMS signifie trouble musculosquelettique) est une atteinte des muscles, des tendons ou des articulations, liée aux gestes et aux postures du travail.\n\nUn TMS s’installe petit à petit. Si le geste à risque se répète, la douleur revient de plus en plus tôt et peut devenir durable : on parle alors de trouble chronique.\n\nUn TMS peut aussi provoquer un accident du travail : un geste imprécis, et le transfert dérape.\n\nLes conséquences dépassent le corps : arrêt de travail, difficulté à accompagner les résidents, accompagnement moins sûr, parfois adaptation du poste.\n\nJ’agis tôt : je signale la douleur à ma tutrice, j’adapte mon geste, j’utilise une aide.",
+            body: "Trois parties du corps travaillent ensemble quand tu aides Mme Rose à se lever.\n\nLe muscle se contracte et produit l’effort. L’articulation est la zone où deux os permettent le mouvement. Le tendon relie le muscle à l’os.\n\nLa fatigue musculaire, c’est la baisse de force après un effort répété ou une posture gardée longtemps. Ses signes : la douleur, la faiblesse, le tremblement, le geste qui devient moins précis.\n\nLa douleur est un signal d’alerte. Elle dit que le corps a atteint sa limite.\n\nUn TMS (TMS signifie trouble musculosquelettique) est une atteinte des muscles, des tendons ou des articulations, liée aux gestes et aux postures du travail.\n\nUn TMS s’installe petit à petit. Si le geste à risque se répète, la douleur revient de plus en plus tôt et peut devenir durable : on parle alors de trouble chronique.\n\nL’activité physique du métier peut aussi provoquer un accident du travail, c’est-à-dire une atteinte brutale, pendant le travail : un lumbago, le bas du dos qui se bloque d’un coup en soulevant ; une chute en glissant sur un sol mouillé en poussant un fauteuil ; une épaule tirée violemment en retenant un résident qui perd l’équilibre ; un choc contre un lit ou une table roulante dans une chambre encombrée ; des doigts coincés en pliant un fauteuil ou une barrière de lit.\n\nDeux atteintes à ne pas confondre. L’accident est immédiat : il arrive d’un coup, et on sait tout de suite qu’on s’est fait mal. Le TMS est chronique : il s’installe lentement, sur des semaines ou des mois, et on s’en aperçoit tard.\n\nLes deux se renforcent : un corps fatigué fait des gestes moins précis, et un geste moins précis fait déraper le transfert.\n\nLes conséquences dépassent le corps : arrêt de travail, difficulté à accompagner les résidents, accompagnement moins sûr, parfois adaptation du poste.\n\nJ’agis tôt : je signale la douleur à ma tutrice, j’adapte mon geste, j’utilise une aide.",
           },
         },
         {
@@ -249,6 +265,43 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Défi 07 : le dos bloqué de Karim",
+          type: "qcm",
+          instructions: "Identifier le type d’atteinte subie par Karim.",
+          payload: {
+            question: "Karim remonte seul M. André dans son lit. En soulevant, son bas du dos se bloque d’un coup et il ne peut plus se redresser. De quelle atteinte s’agit-il ?",
+            choices: [
+              { id: "accident", label: "Un accident du travail, une atteinte immédiate" },
+              { id: "tms", label: "Un TMS, une atteinte qui s’installe lentement" },
+              { id: "fatigue", label: "Une simple fatigue de fin de service" },
+            ],
+            correctChoiceIds: ["accident"],
+            explanation: "La douleur arrive d’un coup, pendant le geste : c’est un accident du travail, ici un lumbago. Un TMS, lui, s’installe sur des semaines.",
+          },
+        },
+        {
+          title: "Jeu : tout de suite ou petit à petit",
+          type: "sorting",
+          instructions: "Classer chaque atteinte selon le moment où elle apparaît.",
+          payload: {
+            prompt: "Classe chaque atteinte : elle arrive d’un coup, ou elle s’installe petit à petit.",
+            categories: [
+              { id: "immediate", label: "Atteinte immédiate" },
+              { id: "chronique", label: "Atteinte qui s’installe" },
+            ],
+            items: [
+              { id: "lumbago", label: "Le bas du dos se bloque d’un coup en soulevant", categoryId: "immediate" },
+              { id: "chute", label: "Une chute en glissant sur un sol mouillé", categoryId: "immediate" },
+              { id: "doigts", label: "Des doigts coincés en pliant un fauteuil", categoryId: "immediate" },
+              { id: "choc", label: "Un choc contre la table roulante dans une chambre encombrée", categoryId: "immediate" },
+              { id: "epaule", label: "Une douleur d’épaule qui revient depuis trois mois", categoryId: "chronique" },
+              { id: "poignet", label: "Un poignet qui gêne un peu plus chaque semaine", categoryId: "chronique" },
+              { id: "lombalgie", label: "Un mal de dos installé après deux ans de transferts", categoryId: "chronique" },
+            ],
+            explanation: "Une atteinte immédiate se voit tout de suite : c’est l’accident du travail. Une atteinte chronique s’installe lentement : c’est le TMS. La prévention ne se prépare pas de la même façon dans les deux cas.",
+          },
+        },
+        {
           title: "Jeu : les conséquences d’un trouble musculosquelettique",
           type: "sorting",
           instructions: "Classer chaque élément selon ce qu’il représente dans la situation.",
@@ -284,11 +337,11 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           type: "content",
           instructions: "Repérer les cinq principes qui protègent le corps pendant un transfert.",
           payload: {
-            body: "Un bon geste se prépare avant de bouger la personne.\n\nLes cinq principes pour protéger mon dos :\n\n1. Je dégage l’espace et je rapproche le matériel avant de commencer.\n2. Je me place près de la personne ou de la charge.\n3. Je garde le dos droit et je plie les jambes.\n4. J’écarte les pieds pour être stable, et j’évite de tourner le tronc.\n5. Je fais glisser plutôt que soulever quand c’est possible.\n\nJ’explique toujours à la personne ce que je vais faire, et je me coordonne avec mon binôme.\n\nL’ergonomie, c’est adapter le travail à la personne pour protéger sa santé. L’économie d’effort, c’est la manière de faire qui limite la fatigue et protège le corps.\n\nLes aides à la manutention font le travail que mon dos ne doit pas faire. Le drap de glisse sert à repositionner une personne dans son lit. Le verticalisateur accompagne une mise debout quand la personne peut encore participer. Le lève-personne assure un transfert complet en sécurité quand la personne ne peut pas se lever.\n\nCertaines protections sont collectives : elles protègent toute l’équipe, comme le matériel d’aide mis à disposition par l’établissement, un espace de travail dégagé, ou une organisation qui permet de travailler à deux.\n\nD’autres sont individuelles : appliquer les principes d’économie d’effort, utiliser l’aide adaptée, signaler une douleur.\n\nUtiliser le matériel prend un peu de temps, mais ce temps évite une douleur durable. Protéger mon corps protège aussi le résident.",
+            body: "Un bon geste se prépare avant de bouger la personne.\n\nLes cinq principes pour protéger mon dos :\n\n1. Je dégage l’espace et je rapproche le matériel avant de commencer.\n2. Je me place près de la personne ou de la charge.\n3. Je garde le dos droit et je plie les jambes.\n4. J’écarte les pieds pour être stable, et j’évite de tourner le tronc.\n5. Je fais glisser plutôt que soulever quand c’est possible.\n\nJ’explique toujours à la personne ce que je vais faire, et je me coordonne avec mon binôme.\n\nL’ergonomie, c’est adapter le travail à la personne pour protéger sa santé. L’économie d’effort, c’est la manière de faire qui limite la fatigue et protège le corps.\n\nLes aides à la manutention font le travail que mon dos ne doit pas faire. Le drap de glisse sert à repositionner une personne dans son lit. Le verticalisateur accompagne une mise debout quand la personne peut encore participer. Le lève-personne assure un transfert complet en sécurité quand la personne ne peut pas se lever.\n\nLe lit à hauteur variable est l’aide la plus simple et la plus oubliée : je le remonte à hauteur de mes hanches avant de commencer, et je le rabaisse ensuite pour la sécurité du résident.\n\nCertaines protections sont collectives : elles protègent toute l’équipe parce qu’elles changent le travail lui-même. Le matériel d’aide mis à disposition par l’établissement, des lits à hauteur variable dans toutes les chambres, des chambres assez dégagées pour faire passer un lève-personne, une organisation qui permet d’être deux pour les transferts difficiles, une formation aux gestes et postures pour toute l’équipe.\n\nD’autres sont individuelles : elles dépendent de la personne qui fait le geste. Appliquer les principes d’économie d’effort, utiliser l’aide adaptée, porter des chaussures de travail fermées qui tiennent le pied et ne glissent pas, signaler une douleur.\n\nL’ordre compte : on cherche d’abord une protection collective, parce qu’elle protège tout le monde sans rien demander à personne. La protection individuelle vient ensuite, en complément. Un lève-personne dans le service protège mieux que la bonne volonté de chaque agent.\n\nUtiliser le matériel prend un peu de temps, mais ce temps évite une douleur durable. Protéger mon corps protège aussi le résident.",
           },
         },
         {
-          title: "Défi 07 : avant de bouger la personne",
+          title: "Défi 08 : avant de bouger la personne",
           type: "qcm",
           instructions: "Indiquer ce que tu prépares avant le transfert de Mme Rose.",
           payload: {
@@ -303,7 +356,7 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
-          title: "Défi 08 : soulever ou faire glisser",
+          title: "Défi 09 : soulever ou faire glisser",
           type: "qcm",
           instructions: "Justifier le choix du geste le plus sûr pour remonter M. André dans son lit.",
           payload: {
@@ -346,11 +399,43 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
               { id: "espace", label: "Des chambres organisées pour laisser passer le matériel", categoryId: "collective" },
               { id: "binome", label: "Une organisation qui permet de travailler à deux", categoryId: "collective" },
               { id: "formation", label: "Une formation aux gestes et postures pour toute l’équipe", categoryId: "collective" },
+              { id: "lits", label: "Des lits à hauteur variable dans toutes les chambres", categoryId: "collective" },
+              { id: "chaussures", label: "Porter des chaussures de travail fermées qui ne glissent pas", categoryId: "individuelle" },
               { id: "economie", label: "Garder le dos droit et plier les jambes", categoryId: "individuelle" },
               { id: "utiliser", label: "Utiliser le drap de glisse au lieu de soulever", categoryId: "individuelle" },
               { id: "signaler", label: "Signaler sa douleur à l’épaule à sa tutrice", categoryId: "individuelle" },
             ],
             explanation: "Une protection collective agit sur le travail lui-même et protège toute l’équipe. Une protection individuelle dépend de la personne qui fait le geste. Les deux sont nécessaires.",
+          },
+        },
+        {
+          title: "Défi 10 : la hauteur du lit",
+          type: "qcm",
+          instructions: "Indiquer le réglage à faire avant de commencer la toilette au lit.",
+          payload: {
+            question: "Tu commences la toilette de M. André, dont le lit est en position basse. Que fais-tu avant de commencer ?",
+            choices: [
+              { id: "remonter", label: "Remonter le lit à hauteur de mes hanches" },
+              { id: "laisser", label: "Laisser le lit en bas et me pencher" },
+              { id: "genoux", label: "Me mettre à genoux à côté du lit" },
+            ],
+            correctChoiceIds: ["remonter"],
+            explanation: "Un lit trop bas oblige à travailler le dos rond pendant toute la toilette. Régler la hauteur prend dix secondes. Le lit se rabaisse ensuite, pour la sécurité de M. André.",
+          },
+        },
+        {
+          title: "Défi 11 : par quoi commencer",
+          type: "qcm",
+          instructions: "Justifier l’ordre dans lequel les protections sont recherchées.",
+          payload: {
+            question: "Les agents des Glycines ont mal au dos. Le service peut équiper les chambres d’un lève-personne, ou demander à chacun de faire attention à ses gestes. Par quoi faut-il commencer ?",
+            choices: [
+              { id: "collective", label: "Par le lève-personne, parce qu’il protège toute l’équipe" },
+              { id: "individuelle", label: "Par la bonne volonté de chacun, parce que c’est gratuit" },
+              { id: "rien", label: "Par rien, le mal de dos fait partie du métier" },
+            ],
+            correctChoiceIds: ["collective"],
+            explanation: "On cherche d’abord la protection collective : elle change le travail lui-même et protège tout le monde, même les nouveaux et même les jours de surcharge. Les gestes de chacun viennent en complément, jamais à la place.",
           },
         },
         {
@@ -364,7 +449,7 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
-          title: "Défi 09 : la situation du dos de l’agent",
+          title: "Défi 12 : la situation du dos de l’agent",
           type: "qcm",
           instructions: "Repérer les deux éléments qui rendent ce geste dangereux.",
           payload: {

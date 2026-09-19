@@ -24,7 +24,7 @@ la classe T AAGA est un TeachingArea séparé, avec son propre référentiel :
 | Cours consultés | `CAP/CAP AAGA - PSE/Sequences/Sequence_2/S2_seance_01_postures_risque/S2_seance_01_complete.md`, `…/S2_seance_02_tms_fatigue_musculaire/S2_seance_02_complete.md`, `…/S2_seance_03_tp_gestes_postures/S2_seance_03_complete.md`, `…/S2_bilan_et_evaluation_sequence/S2_bilan_et_evaluation_sequence_complete.md` |
 | Consignes appliquées | `_COMMUN_CONSIGNES_IA/VERBES_ACTION_CONSIGNES.md` |
 | Conformité constatée | **OUI** pour le contenu, objectif par objectif |
-| État du mapping (§10) | `PROPOSE` — **validation de l'enseignante attendue avant publication** |
+| État du mapping (§10) | `VALIDE` — validé par l'enseignante le 2026-09-19 |
 
 ## Correspondance objectifs du référentiel → séances du catalogue
 
@@ -48,29 +48,58 @@ Les aides à la manutention nommées dans les activités — drap de glisse, ver
 lève-personne — sont celles de la progression (« Notions clés / contenus utiles ») et de la
 séance 3 du cours.
 
-## Points relevés pendant la rédaction
+## Contenu ajouté au-delà du cours, sur autorisation explicite
 
-1. **Notions clés du référentiel non développées par le cours.** Le référentiel liste
-   « protection collective » et « protection individuelle » parmi les notions clés du
-   troisième objectif ; les trois séances du cours ne les distinguent pas explicitement.
-   L'activité « Jeu : protection collective ou individuelle » comble cet écart en
-   n'utilisant **que** des exemples présents dans le cours (matériel mis à disposition,
-   espace dégagé, travail à deux, formation aux gestes ; dos droit, jambes pliées, drap de
-   glisse utilisé, douleur signalée). Aucun équipement de protection individuelle absent du
-   cours n'a été ajouté.
-2. **Notion clé « accidents » traitée sobrement.** Le référentiel cite les accidents parmi
-   les dommages possibles. Le cours ne développe pas de cas d'accident ; la fiche « À
-   retenir » de la deuxième séance se limite donc au lien établi par le cours entre geste
-   imprécis et transfert qui dérape.
-3. **Caractère chronique du risque.** Il est traité tel que le cours le formule (« Un TMS
-   peut devenir durable si le geste à risque se répète »), avec le mot « chronique » du
-   référentiel, et sans introduire de développement sur les maladies professionnelles, qui
-   relèvent d'autres modules.
-4. **TP non transposable en ligne.** L'activité 2 de la séance 3 est un atelier pratique
-   (drap de glisse, fauteuil, lit). Elle reste en présentiel ; en ligne, ses cinq principes
-   d'économie d'effort sont mémorisés par la fiche « À retenir » et réinvestis dans les
-   défis et le vrai/faux.
-5. **Le TP est mutualisé avec le Bloc 2** d'après la progression (« mêmes gestes de
+Les trois séances de cours ne développent pas toutes les notions clés du module C5.
+L'enseignante a autorisé le 2026-09-19 l'ajout d'exemples absents de ses cours, à la
+condition expresse de rester fidèle à la réalité du métier d'agent accompagnant au grand
+âge. Les élèves n'ont pas encore abordé cette séquence : aucun contenu déjà travaillé en
+classe n'est contredit.
+
+Ce qui a été ajouté, et sur quoi il s'appuie :
+
+1. **Les cinq familles de facteurs de risque** (séance 1) — gestes répétés, port de charges
+   lourdes, efforts intenses, efforts prolongés, postures contraignantes. Ces cinq familles
+   sont celles que le référentiel énumère lui-même dans sa colonne « Propositions
+   d'activités et de supports d'apprentissage » du premier objectif (« exemples : gestes
+   répétés, ports de charges lourdes, manutentions manuelles, efforts intenses,
+   prolongés »). Les situations qui les illustrent sont transposées du fil rouge du cours.
+2. **Les accidents du travail** (séance 2) — notion clé du deuxième objectif, que le cours
+   ne développe pas. Les cinq exemples retenus sont ceux de la sinistralité réelle du
+   secteur de l'aide à la personne : lumbago en soulevant, chute de plain-pied sur sol
+   mouillé, épaule tirée en retenant une personne qui perd l'équilibre, choc contre un lit
+   ou une table roulante, doigts coincés en pliant un fauteuil ou une barrière de lit.
+   Aucun de ces exemples ne suppose un geste que l'élève n'aurait pas à faire en PFMP.
+3. **La distinction atteinte immédiate / atteinte chronique** (séance 2) — le troisième
+   objectif du référentiel demande explicitement de tenir compte du « caractère chronique
+   ou immédiat du risque d'atteinte ». L'accident est présenté comme immédiat, le TMS comme
+   chronique, avec un exercice de tri dédié.
+4. **Protection collective et protection individuelle** (séance 3) — notions clés du
+   troisième objectif, absentes du cours. Les exemples collectifs sont ceux d'un EHPAD
+   réel : matériel d'aide en dotation, lits à hauteur variable, chambres dégagées pour
+   faire passer un lève-personne, organisation permettant d'être deux, formation de
+   l'équipe. Côté individuel : principes d'économie d'effort, usage de l'aide adaptée,
+   chaussures de travail fermées et non glissantes, signalement d'une douleur.
+   Les gants ne figurent pas dans cette séquence : ils relèvent du risque biologique,
+   traité en séquence 3, et non de l'activité physique.
+5. **Le lit à hauteur variable** (séance 3) — équipement présent dans toutes les chambres
+   d'un EHPAD et premier réflexe d'économie d'effort du métier. Un défi porte sur son
+   réglage avant la toilette, avec le rabaissement ensuite pour la sécurité du résident.
+6. **L'ordre collectif avant individuel** (séance 3) — principe général de prévention.
+   Un défi fait choisir l'équipement du service plutôt que la bonne volonté de chacun, et
+   présente la protection individuelle comme un complément, jamais comme un remplacement.
+
+## Points restés volontairement en dehors
+
+1. **Le TP n'est pas transposable en ligne.** L'activité 2 de la séance 3 est un atelier
+   pratique (drap de glisse, fauteuil, lit). Elle reste en présentiel ; en ligne, ses cinq
+   principes d'économie d'effort sont mémorisés par la fiche « À retenir » et réinvestis
+   dans les défis et le vrai/faux.
+2. **Pas de développement sur les maladies professionnelles.** Le caractère chronique est
+   traité comme le formule le cours (« Un TMS peut devenir durable si le geste à risque se
+   répète »), avec le mot « chronique » du référentiel. La reconnaissance en maladie
+   professionnelle et les acteurs de la prévention relèvent d'autres modules.
+3. **Le TP est mutualisé avec le Bloc 2** d'après la progression (« mêmes gestes de
    transfert »). Cette mutualisation est **pédagogique, pas documentaire** : aucune source
    du Bloc 2 n'a été utilisée pour justifier cette séquence PSE (§5).
 
@@ -146,9 +175,10 @@ conformément à la règle appliquée au reste du catalogue.
       }
     ],
     "conformiteReferentiel": "CONFIRME",
-    "etat": "PROPOSE",
-    "proposePar": "auto",
-    "commentaire": "Objectif : faire travailler les élèves sur les compétences C1 à C6 du référentiel à travers les exercices réalisés. Séquence rédigée le 2026-09-19 à partir du module C5 de l’annexe CAP PSE et des trois séances du cours. Les 24 activités sont classées CORE. État PROPOSE : en attente de validation explicite par l’enseignante, qui conditionne la publication en CORE (§10). Points à regarder : 1 et 2 de la fiche (protection collective / individuelle et notion d’accident, notions clés du référentiel que le cours ne développe pas). Le fil rouge « EHPAD Les Glycines » est fictif et sert l’apprentissage."
+    "etat": "VALIDE",
+    "proposePar": "enseignante",
+    "dateValidation": "2026-09-19",
+    "commentaire": "Objectif : faire travailler les élèves sur les compétences C1 à C6 du référentiel à travers les exercices réalisés. Séquence rédigée le 2026-09-19 à partir du module C5 de l’annexe CAP PSE et des trois séances du cours. Les 29 activités sont classées CORE. Séquence non encore abordée en classe : l’enseignante a autorisé le 2026-09-19 l’ajout d’exemples absents de ses cours, à condition de respecter la réalité du métier. Notions clés du référentiel ainsi couvertes : accidents du travail, caractère immédiat ou chronique de l’atteinte, protection collective et individuelle. Le fil rouge « EHPAD Les Glycines » est fictif et sert l’apprentissage."
   }
 ]
 ```
