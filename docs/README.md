@@ -29,8 +29,10 @@ objectif par objectif. C'est ce qui permet de justifier une activité si on la c
 | 2 AERO | PSE (module C2) | [`mapping-pedagogique-2-aero-c2.md`](mapping-pedagogique-2-aero-c2.md) |
 | 2 CIEL | PSE (module C1) | [`mapping-pedagogique-2-ciel.md`](mapping-pedagogique-2-ciel.md) |
 | 2 CIEL | PSE (module C2) | [`mapping-pedagogique-2-ciel-c2.md`](mapping-pedagogique-2-ciel-c2.md) |
-| 1 AERO | PSE | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
-| 1 TCI | PSE | [`mapping-pedagogique-1-tci.md`](mapping-pedagogique-1-tci.md) |
+| 1 AERO | PSE (module C3) | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
+| 1 AERO | PSE (module C5) | [`mapping-pedagogique-1-aero-c5.md`](mapping-pedagogique-1-aero-c5.md) |
+| 1 TCI | PSE (module C3) | [`mapping-pedagogique-1-tci.md`](mapping-pedagogique-1-tci.md) |
+| 1 TCI | PSE (module C5) | [`mapping-pedagogique-1-tci-c5.md`](mapping-pedagogique-1-tci-c5.md) |
 | T AERO | PSE | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
 | T TCI | PSE | [`mapping-pedagogique-t-tci.md`](mapping-pedagogique-t-tci.md) |
 | T AAGA | PSE (module C1) | [`mapping-pedagogique-t-aaga.md`](mapping-pedagogique-t-aaga.md) |

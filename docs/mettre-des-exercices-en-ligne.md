@@ -33,7 +33,9 @@ En pratique : une première passe en `simulation` pour regarder, une seconde en
 | 2 CIEL / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 19 activités | [`mapping-pedagogique-2-ciel.md`](mapping-pedagogique-2-ciel.md) |
 | 2 CIEL / PSE | `C2. Les notions de base en prévention des risques professionnels` | 3 séances, 26 activités | [`mapping-pedagogique-2-ciel-c2.md`](mapping-pedagogique-2-ciel-c2.md) |
 | 1 AERO / PSE | `C3. Les acteurs de prévention` | 3 séances, 21 activités | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
+| 1 AERO / PSE | `C5. L’analyse des risques professionnels` | 4 séances, 30 activités | [`mapping-pedagogique-1-aero-c5.md`](mapping-pedagogique-1-aero-c5.md) |
 | 1 TCI / PSE | `C3. Les acteurs de prévention` | 3 séances, 18 activités | [`mapping-pedagogique-1-tci.md`](mapping-pedagogique-1-tci.md) |
+| 1 TCI / PSE | `C5. L’analyse des risques professionnels` | 4 séances, 30 activités | [`mapping-pedagogique-1-tci-c5.md`](mapping-pedagogique-1-tci-c5.md) |
 | T AERO / PSE | `C7. Le suivi de la santé au travail` | 4 séances, 21 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
 | T TCI / PSE | `C7. Le suivi de la santé au travail` | 5 séances, 30 activités | [`mapping-pedagogique-t-tci.md`](mapping-pedagogique-t-tci.md) |
 | T AAGA / PSE | `C1. Les différents contrats de travail` | 3 séances, 18 activités | [`mapping-pedagogique-t-aaga.md`](mapping-pedagogique-t-aaga.md) |
