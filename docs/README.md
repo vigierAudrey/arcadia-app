@@ -31,7 +31,8 @@ objectif par objectif. C'est ce qui permet de justifier une activité si on la c
 | 1 TCI | PSE | [`mapping-pedagogique-1-tci.md`](mapping-pedagogique-1-tci.md) |
 | T AERO | PSE | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
 | T TCI | PSE | [`mapping-pedagogique-t-tci.md`](mapping-pedagogique-t-tci.md) |
-| T AAGA | PSE | [`mapping-pedagogique-t-aaga.md`](mapping-pedagogique-t-aaga.md) |
+| T AAGA | PSE (module C1) | [`mapping-pedagogique-t-aaga.md`](mapping-pedagogique-t-aaga.md) |
+| T AAGA | PSE (module C5) | [`mapping-pedagogique-t-aaga-c5.md`](mapping-pedagogique-t-aaga-c5.md) |
 | T AAGA | Bloc 2 | [`mapping-pedagogique-t-aaga-bloc2.md`](mapping-pedagogique-t-aaga-bloc2.md) |
 
 ## Le reste du projet

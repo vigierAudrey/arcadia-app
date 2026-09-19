@@ -8,6 +8,7 @@ import { pse2AeroC1Sequence } from "./pse-2aero-c1";
 import { pse2CielC1Sequence } from "./pse-2ciel-c1";
 import { pseTAeroC7Sequence } from "./pse-taero-c7";
 import { pseTAagaC1Sequence } from "./pse-taaga-c1";
+import { pseTAagaC5Sequence } from "./pse-taaga-c5";
 import { pseTTciC7Sequence } from "./pse-ttci-c7";
 
 /**
@@ -88,6 +89,14 @@ export const contentImports: readonly ContentImport[] = [
     teachingArea: "PSE",
     teachingAreaKind: TeachingAreaKind.SUBJECT,
     sequence: pseTAagaC1Sequence,
+  },
+  {
+    program: "CAP",
+    level: "Terminale",
+    classroom: "T AAGA",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pseTAagaC5Sequence,
   },
   {
     program: "CAP",
