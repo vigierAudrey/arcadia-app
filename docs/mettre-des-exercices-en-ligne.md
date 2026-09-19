@@ -28,21 +28,45 @@ En pratique : une première passe en `simulation` pour regarder, une seconde en
 
 | Classe / enseignement | Séquence | Contenu | Traçabilité |
 |---|---|---|---|
-| 2 AERO / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 19 activités | [`mapping-pedagogique-2-aero.md`](mapping-pedagogique-2-aero.md) |
-| 2 AERO / PSE | `C2. Les notions de base en prévention des risques professionnels` | 3 séances, 26 activités | [`mapping-pedagogique-2-aero-c2.md`](mapping-pedagogique-2-aero-c2.md) |
-| 2 CIEL / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 19 activités | [`mapping-pedagogique-2-ciel.md`](mapping-pedagogique-2-ciel.md) |
-| 2 CIEL / PSE | `C2. Les notions de base en prévention des risques professionnels` | 3 séances, 26 activités | [`mapping-pedagogique-2-ciel-c2.md`](mapping-pedagogique-2-ciel-c2.md) |
-| 1 AERO / PSE | `C3. Les acteurs de prévention` | 3 séances, 21 activités | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
-| 1 AERO / PSE | `C5. L’analyse des risques professionnels` | 4 séances, 30 activités | [`mapping-pedagogique-1-aero-c5.md`](mapping-pedagogique-1-aero-c5.md) |
-| 1 TCI / PSE | `C3. Les acteurs de prévention` | 3 séances, 18 activités | [`mapping-pedagogique-1-tci.md`](mapping-pedagogique-1-tci.md) |
-| 1 TCI / PSE | `C5. L’analyse des risques professionnels` | 4 séances, 30 activités | [`mapping-pedagogique-1-tci-c5.md`](mapping-pedagogique-1-tci-c5.md) |
-| T AERO / PSE | `C7. Le suivi de la santé au travail` | 4 séances, 21 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
-| T AERO / PSE | `C8. Déclaration et réparation des accidents du travail et des maladies professionnelles` | 2 séances, 23 activités | [`mapping-pedagogique-t-aero-c8.md`](mapping-pedagogique-t-aero-c8.md) |
-| T TCI / PSE | `C7. Le suivi de la santé au travail` | 5 séances, 30 activités | [`mapping-pedagogique-t-tci.md`](mapping-pedagogique-t-tci.md) |
-| T TCI / PSE | `C8. Déclaration et réparation des accidents du travail et des maladies professionnelles` | 2 séances, 23 activités | [`mapping-pedagogique-t-tci-c8.md`](mapping-pedagogique-t-tci-c8.md) |
-| T AAGA / PSE | `C1. Les différents contrats de travail` | 3 séances, 18 activités | [`mapping-pedagogique-t-aaga.md`](mapping-pedagogique-t-aaga.md) |
-| T AAGA / PSE | `C5. Les risques liés à l’activité physique du métier` | 3 séances, 30 activités | [`mapping-pedagogique-t-aaga-c5.md`](mapping-pedagogique-t-aaga-c5.md) |
-| T AAGA / Bloc 2 | `CT3. Cadre d’intervention, autonomie et ressources` | 7 séances, 39 activités | [`mapping-pedagogique-t-aaga-bloc2.md`](mapping-pedagogique-t-aaga-bloc2.md) |
+| 2 AERO / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 25 activités | [`mapping-pedagogique-2-aero.md`](mapping-pedagogique-2-aero.md) |
+| 2 AERO / PSE | `C2. Les notions de base en prévention des risques professionnels` | 3 séances, 32 activités | [`mapping-pedagogique-2-aero-c2.md`](mapping-pedagogique-2-aero-c2.md) |
+| 2 CIEL / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 25 activités | [`mapping-pedagogique-2-ciel.md`](mapping-pedagogique-2-ciel.md) |
+| 2 CIEL / PSE | `C2. Les notions de base en prévention des risques professionnels` | 3 séances, 32 activités | [`mapping-pedagogique-2-ciel-c2.md`](mapping-pedagogique-2-ciel-c2.md) |
+| 1 AERO / PSE | `C3. Les acteurs de prévention` | 3 séances, 25 activités | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
+| 1 AERO / PSE | `C5. L’analyse des risques professionnels` | 4 séances, 37 activités | [`mapping-pedagogique-1-aero-c5.md`](mapping-pedagogique-1-aero-c5.md) |
+| 1 TCI / PSE | `C3. Les acteurs de prévention` | 3 séances, 24 activités | [`mapping-pedagogique-1-tci.md`](mapping-pedagogique-1-tci.md) |
+| 1 TCI / PSE | `C5. L’analyse des risques professionnels` | 4 séances, 37 activités | [`mapping-pedagogique-1-tci-c5.md`](mapping-pedagogique-1-tci-c5.md) |
+| T AERO / PSE | `C7. Le suivi de la santé au travail` | 4 séances, 30 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
+| T AERO / PSE | `C8. Déclaration et réparation des accidents du travail et des maladies professionnelles` | 2 séances, 26 activités | [`mapping-pedagogique-t-aero-c8.md`](mapping-pedagogique-t-aero-c8.md) |
+| T TCI / PSE | `C7. Le suivi de la santé au travail` | 5 séances, 39 activités | [`mapping-pedagogique-t-tci.md`](mapping-pedagogique-t-tci.md) |
+| T TCI / PSE | `C8. Déclaration et réparation des accidents du travail et des maladies professionnelles` | 2 séances, 26 activités | [`mapping-pedagogique-t-tci-c8.md`](mapping-pedagogique-t-tci-c8.md) |
+| T AAGA / PSE | `C1. Les différents contrats de travail` | 3 séances, 25 activités | [`mapping-pedagogique-t-aaga.md`](mapping-pedagogique-t-aaga.md) |
+| T AAGA / PSE | `C5. Les risques liés à l’activité physique du métier` | 3 séances, 36 activités | [`mapping-pedagogique-t-aaga-c5.md`](mapping-pedagogique-t-aaga-c5.md) |
+| T AAGA / Bloc 2 | `CT3. Cadre d’intervention, autonomie et ressources` | 7 séances, 52 activités | [`mapping-pedagogique-t-aaga-bloc2.md`](mapping-pedagogique-t-aaga-bloc2.md) |
+
+## Équilibrer les blocs d'une séance
+
+Côté élève, les activités d'une séance sont regroupées en blocs par type : les fiches, le
+quiz, les vrai ou faux, les jeux. Réussir **toutes** les activités d'un bloc **du premier
+coup** débloque une partie de Saute-Microbe à la fin du bloc ; les fiches ne comptent pas,
+puisqu'il n'y a rien à y réussir. La règle est dans
+[`src/app/classe/student-activity.tsx`](../src/app/classe/student-activity.tsx), elle ne
+dépend d'aucune classe ni d'aucune séquence.
+
+Conséquence : **un bloc à une seule activité offre la même récompense qu'un bloc de cinq.**
+Au 2026-09-19, 40 séances sur 52 n'avaient qu'un seul vrai ou faux, soit une partie gagnée
+pour une seule bonne réponse, alors que le bloc quiz en demandait trois ou quatre d'affilée.
+
+**Règle retenue : au moins trois activités par bloc évaluable dans chaque séance**, ce qui
+aligne les vrai ou faux sur la médiane du bloc quiz. Elle vaut pour toute nouvelle séance.
+
+Deux points à surveiller en écrivant des vrai ou faux :
+
+- **Alterner les réponses.** Avant le rééquilibrage, presque tous attendaient « faux » :
+  un élève qui répondait « faux » partout gagnait le bloc sans rien lire. Viser un mélange.
+- **N'introduire aucune notion nouvelle.** Un vrai ou faux ajouté à une séquence existante
+  se rédige à partir de ce que cette séance dit déjà, dans ses fiches « À retenir » et ses
+  corrections. Rien de neuf à ajouter au référentiel, donc rien à revalider.
 
 ## Corriger un texte déjà en ligne
 

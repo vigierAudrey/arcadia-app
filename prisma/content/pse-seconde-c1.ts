@@ -117,6 +117,26 @@ export function buildPseSecondeC1Sequence(context: Context): InitialLearningSequ
             },
           },
           {
+            title: "Vrai ou faux : un accident ne touche que la victime",
+            type: "true_false",
+            instructions: "Expliquer qui est concerné par les conséquences d’un incident au travail.",
+            payload: {
+              statement: "Les conséquences d’un accident du travail ne touchent que la personne blessée.",
+              correctAnswer: false,
+              explanation: "Faux : il y a un enjeu humain pour la personne, un enjeu social pour l’équipe et la famille, et un enjeu socio-économique pour l’activité. Une même situation produit les trois.",
+            },
+          },
+          {
+            title: "Vrai ou faux : la prévention agit avant",
+            type: "true_false",
+            instructions: "Expliquer à quel moment intervient la prévention.",
+            payload: {
+              statement: "La prévention est une action réalisée avant le dommage.",
+              correctAnswer: true,
+              explanation: "Vrai : c’est ce qui la définit. Agir après le dommage, c’est soigner ou réparer, ce n’est plus prévenir.",
+            },
+          },
+          {
             title: "Jeu : relier les mots clés de la séance",
             type: "matching",
             instructions:
@@ -223,6 +243,26 @@ export function buildPseSecondeC1Sequence(context: Context): InitialLearningSequ
               correctAnswer: false,
               explanation:
                 "Faux : elle est souvent liée à une exposition répétée ou prolongée dans le travail.",
+            },
+          },
+          {
+            title: "Vrai ou faux : l’accident repose sur un fait soudain",
+            type: "true_false",
+            instructions: "Identifier l’indice principal d’un accident du travail.",
+            payload: {
+              statement: "Un accident du travail repose sur un fait soudain, lié au travail, qui provoque une lésion.",
+              correctAnswer: true,
+              explanation: "Vrai : le fait soudain, datable, est l’indice principal. La maladie professionnelle, elle, se recherche quand l’atteinte suit une exposition répétée ou prolongée.",
+            },
+          },
+          {
+            title: "Vrai ou faux : conclure sans les faits",
+            type: "true_false",
+            instructions: "Expliquer la conduite à tenir quand les informations manquent.",
+            payload: {
+              statement: "Quand la date, la tâche et l’exposition ne sont pas connues, on peut quand même conclure à un accident du travail.",
+              correctAnswer: false,
+              explanation: "Faux : sans faits précis, on ne conclut pas trop vite. On cherche d’abord les informations manquantes, sinon l’analyse ne repose sur rien.",
             },
           },
           {
@@ -353,6 +393,26 @@ export function buildPseSecondeC1Sequence(context: Context): InitialLearningSequ
               correctChoiceIds: ["clair"],
               explanation:
                 "Une communication sûre décrit le problème, annonce l'action prudente et formule une demande claire.",
+            },
+          },
+          {
+            title: "Vrai ou faux : l’employeur fournit les protections",
+            type: "true_false",
+            instructions: "Identifier une obligation de l’employeur en santé-sécurité.",
+            payload: {
+              statement: "L’employeur doit évaluer les risques, informer, former et fournir les moyens de protection.",
+              correctAnswer: true,
+              explanation: "Vrai : ce sont ses obligations. Le salarié, de son côté, respecte les consignes, utilise correctement les protections et signale les situations dangereuses.",
+            },
+          },
+          {
+            title: "Vrai ou faux : toutes les tâches sont permises",
+            type: "true_false",
+            instructions: "Expliquer les règles qui protègent les jeunes travailleurs.",
+            payload: {
+              statement: "Un jeune travailleur peut effectuer toutes les tâches de l’entreprise, comme n’importe quel salarié.",
+              correctAnswer: false,
+              explanation: "Faux : certaines tâches dangereuses sont interdites ou réglementées pour les jeunes travailleurs, et un accueil ainsi que des consignes adaptés leur sont dus.",
             },
           },
           {

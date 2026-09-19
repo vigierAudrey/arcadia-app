@@ -121,6 +121,26 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : l’accueil de jour héberge la nuit",
+          type: "true_false",
+          instructions: "Définir ce qu’est un accueil de jour.",
+          payload: {
+            statement: "L’accueil de jour propose un accueil pendant la journée, sans hébergement permanent.",
+            correctAnswer: true,
+            explanation: "Vrai : c’est ce qui le distingue de l’EHPAD, qui propose un hébergement permanent. Les indices à repérer sont le public accueilli, la présence soignante et l’hébergement ou non.",
+          },
+        },
+        {
+          title: "Vrai ou faux : la résidence autonomie et les soins continus",
+          type: "true_false",
+          instructions: "Identifier la structure qui assure des soins médicaux importants.",
+          payload: {
+            statement: "La résidence autonomie assure des soins médicaux importants et une surveillance continue.",
+            correctAnswer: false,
+            explanation: "Faux : c’est l’USLD, unité de soins de longue durée. La résidence autonomie propose un logement et des services à des personnes encore autonomes.",
+          },
+        },
+        {
           title: "Défi 02 : une information manque",
           type: "qcm",
           instructions:
@@ -229,6 +249,16 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : le bon relais selon la situation",
+          type: "true_false",
+          instructions: "Identifier le relais adapté à chaque type de demande.",
+          payload: {
+            statement: "Une panne se transmet à la maintenance, et un soin à l’équipe soignante.",
+            correctAnswer: true,
+            explanation: "Vrai : le relais dépend de la situation. Transmettre au bon professionnel fait gagner du temps et évite qu’une demande se perde.",
+          },
+        },
+        {
           title: "Vrai ou faux : signaler un stock presque vide",
           type: "true_false",
           instructions: "Expliquer l’intérêt du signalement pour l’équipe.",
@@ -294,6 +324,26 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
             correctChoiceIds: ["proposer"],
             explanation:
               "Le projet de vie est évolutif. Le refus et l’alternative proposée sont transmis à l’équipe, qui actualise le projet avec la personne.",
+          },
+        },
+        {
+          title: "Vrai ou faux : trois projets, trois portées",
+          type: "true_false",
+          instructions: "Expliquer la différence de portée entre le projet d’établissement et le projet de vie.",
+          payload: {
+            statement: "Le projet d’établissement fixe les orientations de toute la structure, alors que le projet de vie est individuel.",
+            correctAnswer: true,
+            explanation: "Vrai : entre les deux, le projet de service organise une unité ou une équipe. Trois niveaux, du plus collectif au plus personnel.",
+          },
+        },
+        {
+          title: "Vrai ou faux : décider à la place de la personne",
+          type: "true_false",
+          instructions: "Expliquer la place de la personne dans son projet de vie.",
+          payload: {
+            statement: "La famille et les professionnels décident du projet de vie à la place de la personne.",
+            correctAnswer: false,
+            explanation: "Faux : ils recueillent, proposent, mettent en œuvre et suivent, sans décider à sa place. La personne participe selon ses capacités et son accord.",
           },
         },
         {
@@ -370,6 +420,26 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
             correctChoiceIds: ["respecter"],
             explanation:
               "La tutelle porte sur certains actes juridiques. Le choix d’une tenue reste un choix quotidien : il appartient à la personne et sa dignité doit être respectée.",
+          },
+        },
+        {
+          title: "Vrai ou faux : qui décide d’une mesure de protection",
+          type: "true_false",
+          instructions: "Identifier qui décide d’une mesure de protection juridique.",
+          payload: {
+            statement: "Une mesure de protection juridique est décidée par un juge, selon la situation de la personne.",
+            correctAnswer: true,
+            explanation: "Vrai : ni la famille ni l’établissement ne la décident. L’agent, lui, n’interprète jamais seul un jugement : il transmet au professionnel compétent.",
+          },
+        },
+        {
+          title: "Vrai ou faux : la curatelle et la tutelle, c’est pareil",
+          type: "true_false",
+          instructions: "Définir la curatelle et la tutelle.",
+          payload: {
+            statement: "En curatelle la personne est assistée pour certains actes, en tutelle elle peut être représentée pour certains actes.",
+            correctAnswer: true,
+            explanation: "Vrai : c’est la différence entre les deux. La sauvegarde de justice, elle, est généralement une mesure temporaire.",
           },
         },
         {
@@ -462,6 +532,26 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : une audition réduite",
+          type: "true_false",
+          instructions: "Identifier la dimension du vieillissement concernée par cette observation.",
+          payload: {
+            statement: "Une force diminuée ou une audition réduite relèvent de la dimension biologique du vieillissement.",
+            correctAnswer: true,
+            explanation: "Vrai : le biologique concerne le corps et son fonctionnement. Le cognitif concerne la mémoire, l’attention et la compréhension, et le psychologique les émotions et le vécu.",
+          },
+        },
+        {
+          title: "Vrai ou faux : tout le monde vieillit pareil",
+          type: "true_false",
+          instructions: "Expliquer si les effets du vieillissement sont les mêmes pour tous.",
+          payload: {
+            statement: "Les effets du vieillissement sont les mêmes pour toutes les personnes du même âge.",
+            correctAnswer: false,
+            explanation: "Faux : chaque personne vieillit différemment, et une même observation peut concerner plusieurs dimensions à la fois. Généraliser conduit à mal accompagner.",
+          },
+        },
+        {
           title: "Défi 07 : habituel ou inhabituel ?",
           type: "qcm",
           instructions: "Repérer le changement qui doit être transmis rapidement.",
@@ -545,6 +635,26 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
             ],
             explanation:
               "Les capacités se séparent activité par activité. Une seule difficulté ne permet pas de déduire un niveau d’autonomie global.",
+          },
+        },
+        {
+          title: "Vrai ou faux : l’autonomie varie",
+          type: "true_false",
+          instructions: "Définir l’autonomie d’une personne accompagnée.",
+          payload: {
+            statement: "L’autonomie est la capacité de décider et d’agir dans sa vie quotidienne, et elle varie selon les actes et les moments.",
+            correctAnswer: true,
+            explanation: "Vrai : une personne peut être autonome pour s’habiller et avoir besoin d’aide pour se déplacer, et cela peut changer d’un jour à l’autre.",
+          },
+        },
+        {
+          title: "Vrai ou faux : aider, c’est faire à la place",
+          type: "true_false",
+          instructions: "Déduire la bonne façon d’aider une personne partiellement autonome.",
+          payload: {
+            statement: "Bien aider, c’est faire à la place de la personne tout ce qui lui demande un effort.",
+            correctAnswer: false,
+            explanation: "Faux : aider juste ce qu’il faut, c’est laisser faire ce qui est possible, compléter seulement ce qui est nécessaire, et encourager sans faire à la place.",
           },
         },
         {
@@ -659,6 +769,26 @@ export const bloc2TAagaCt3Sequence: InitialLearningSequence = {
             correctAnswer: false,
             explanation:
               "Faux : le secret et la vie privée sont protégés. L’agent n’a pas à communiquer ces informations et oriente la demande vers le professionnel compétent.",
+          },
+        },
+        {
+          title: "Vrai ou faux : transmettre des faits",
+          type: "true_false",
+          instructions: "Justifier ce que doit contenir une transmission professionnelle.",
+          payload: {
+            statement: "Une transmission contient des faits précis et datés, adressés au bon professionnel, sans interprétation.",
+            correctAnswer: true,
+            explanation: "Vrai : c’est la quatrième étape de la méthode. L’interprétation et l’avis personnel n’y ont pas leur place : ils faussent la lecture de ceux qui prendront le relais.",
+          },
+        },
+        {
+          title: "Vrai ou faux : vérifier la source d’une information",
+          type: "true_false",
+          instructions: "Repérer ce qui rend une information fiable.",
+          payload: {
+            statement: "Une information est fiable dès lors qu’elle est publiée sur internet.",
+            correctAnswer: false,
+            explanation: "Faux : il faut vérifier l’auteur identifiable, la date, l’organisme, et recouper l’information. Une publication anonyme ou sans date ne suffit pas.",
           },
         },
         {

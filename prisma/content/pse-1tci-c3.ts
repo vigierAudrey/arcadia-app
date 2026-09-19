@@ -157,6 +157,26 @@ export const pse1TciC3Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : le CSE représente les salariés",
+          type: "true_false",
+          instructions: "Définir le rôle du comité social et économique.",
+          payload: {
+            statement: "Le CSE, comité social et économique, représente les salariés et formule des propositions en santé et sécurité.",
+            correctAnswer: true,
+            explanation: "Vrai : il contribue aux questions de santé et de sécurité, analyse des situations et formule des propositions.",
+          },
+        },
+        {
+          title: "Vrai ou faux : le service de santé au travail ne conseille que les salariés",
+          type: "true_false",
+          instructions: "Identifier les personnes conseillées par le service de prévention et de santé au travail.",
+          payload: {
+            statement: "Le SPST, service de prévention et de santé au travail, ne conseille que les salariés, jamais l’employeur.",
+            correctAnswer: false,
+            explanation: "Faux : il conseille les salariés comme l’employeur pour prévenir les risques professionnels, et informe sur les effets possibles d’une exposition.",
+          },
+        },
+        {
           title: "Jeu : relier chaque acteur interne à son rôle",
           type: "matching",
           instructions:
@@ -294,6 +314,26 @@ export const pse1TciC3Sequence: InitialLearningSequence = {
             correctAnswer: false,
             explanation:
               "Faux : les organismes externes complètent l'action interne. Ils ne remplacent pas les acteurs de l'entreprise.",
+          },
+        },
+        {
+          title: "Vrai ou faux : l’inspection du travail et le droit",
+          type: "true_false",
+          instructions: "Définir la mission de l’inspection du travail.",
+          payload: {
+            statement: "L’inspection du travail informe et conseille sur le droit du travail, et contrôle son application.",
+            correctAnswer: true,
+            explanation: "Vrai : elle informe et conseille aussi bien les salariés que l’employeur, et elle peut intervenir dans le cadre de ses pouvoirs de contrôle.",
+          },
+        },
+        {
+          title: "Vrai ou faux : décrire les faits avant de contacter",
+          type: "true_false",
+          instructions: "Justifier ce qu’il faut préparer avant de contacter un organisme externe.",
+          payload: {
+            statement: "Avant de contacter un organisme externe, il faut décrire des faits précis et formuler une demande claire.",
+            correctAnswer: true,
+            explanation: "Vrai : des faits précis, sans accusation ni rumeur, permettent à l’organisme de comprendre la situation et de répondre utilement.",
           },
         },
         {
@@ -445,6 +485,26 @@ export const pse1TciC3Sequence: InitialLearningSequence = {
             correctAnswer: false,
             explanation:
               "Faux : la prévention est collective. Selon la situation, plusieurs acteurs coopèrent.",
+          },
+        },
+        {
+          title: "Vrai ou faux : un acteur par situation",
+          type: "true_false",
+          instructions: "Expliquer si plusieurs acteurs peuvent intervenir sur une même situation.",
+          payload: {
+            statement: "Plusieurs acteurs de prévention peuvent coopérer sur une même situation.",
+            correctAnswer: true,
+            explanation: "Vrai : la prévention est une action collective. Selon le problème, acteurs internes et organismes externes interviennent ensemble, chacun dans sa mission.",
+          },
+        },
+        {
+          title: "Vrai ou faux : choisir l’interlocuteur au hasard",
+          type: "true_false",
+          instructions: "Expliquer la démarche à suivre pour choisir un interlocuteur.",
+          payload: {
+            statement: "Le choix de l’interlocuteur se fait avant même d’avoir décrit les faits de la situation.",
+            correctAnswer: false,
+            explanation: "Faux : on décrit d’abord les faits, puis on identifie le besoin, et c’est ce besoin qui désigne l’acteur dont la mission correspond.",
           },
         },
         {

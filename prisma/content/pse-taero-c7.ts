@@ -96,6 +96,26 @@ export const pseTAeroC7Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : le suivi dépend du poste",
+          type: "true_false",
+          instructions: "Expliquer ce qui détermine le type de suivi médical d’un salarié.",
+          payload: {
+            statement: "Le suivi de santé au travail dépend du poste occupé et des risques réellement présents.",
+            correctAnswer: true,
+            explanation: "Vrai : ce n’est pas le nom du métier qui compte, mais l’exposition réelle du poste. Un poste à risques particuliers donne lieu à un examen médical d’aptitude, et parfois à un suivi individuel renforcé.",
+          },
+        },
+        {
+          title: "Vrai ou faux : à quoi sert la visite d’information",
+          type: "true_false",
+          instructions: "Définir l’objet de la visite d’information et de prévention.",
+          payload: {
+            statement: "La VIP, visite d’information et de prévention, sert à vérifier que le salarié est apte à occuper son poste.",
+            correctAnswer: false,
+            explanation: "Faux : la VIP informe le salarié sur les risques de son poste et sur les moyens de prévention. C’est l’EMA, examen médical d’aptitude, qui vérifie l’aptitude, sur les postes à risques particuliers.",
+          },
+        },
+        {
           title: "Défi 02 : le rôle du service de santé au travail",
           type: "qcm",
           instructions:
@@ -165,6 +185,26 @@ export const pseTAeroC7Sequence: InitialLearningSequence = {
               { id: "anticorps", left: "Anticorps", right: "Molécule produite par l’organisme qui reconnaît un antigène" },
             ],
             explanation: "Ces cinq notions sont celles du programme pour ce module : elles doivent être employées avec leur sens exact dans une réponse rédigée.",
+          },
+        },
+        {
+          title: "Vrai ou faux : la peau, première défense",
+          type: "true_false",
+          instructions: "Définir le rôle de la barrière cutanéo-muqueuse.",
+          payload: {
+            statement: "La peau et les muqueuses forment la première défense de l’organisme contre l’entrée des microbes.",
+            correctAnswer: true,
+            explanation: "Vrai : c’est la barrière cutanéo-muqueuse. Tant qu’elle est intacte, elle empêche les microbes d’entrer ; une coupure ouvre un passage.",
+          },
+        },
+        {
+          title: "Vrai ou faux : la rougeur autour d’une plaie",
+          type: "true_false",
+          instructions: "Identifier la défense qui provoque la rougeur autour d’une plaie.",
+          payload: {
+            statement: "La rougeur et le gonflement autour d’une plaie viennent de l’immunité spécifique, qui vise un microbe précis.",
+            correctAnswer: false,
+            explanation: "Faux : c’est l’immunité non spécifique, qui agit vite et sans viser un microbe précis. L’immunité spécifique prend le relais ensuite, et elle, reconnaît un antigène précis.",
           },
         },
         {
@@ -258,6 +298,26 @@ export const pseTAeroC7Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : la vaccination donne la maladie",
+          type: "true_false",
+          instructions: "Expliquer le principe de la vaccination.",
+          payload: {
+            statement: "La vaccination présente un antigène à l’organisme sans provoquer la maladie.",
+            correctAnswer: true,
+            explanation: "Vrai : l’organisme prépare une mémoire immunitaire, si bien qu’à un nouveau contact avec le même antigène, la réponse est plus rapide.",
+          },
+        },
+        {
+          title: "Vrai ou faux : le tétanos s’attrape entre collègues",
+          type: "true_false",
+          instructions: "Justifier l’intérêt du rappel contre le tétanos dans un hangar.",
+          payload: {
+            statement: "Le tétanos s’attrape par une plaie souillée, par exemple une coupure sur une tôle ou un rivet.",
+            correctAnswer: true,
+            explanation: "Vrai : c’est ce qui rend le rappel utile dans un hangar. Le tétanos ne se transmet pas d’une personne à l’autre : c’est la plaie souillée qui est en cause.",
+          },
+        },
+        {
           title: "Défi 02 : qui propose une vaccination recommandée ?",
           type: "qcm",
           instructions:
@@ -333,6 +393,36 @@ export const pseTAeroC7Sequence: InitialLearningSequence = {
             ],
             explanation:
               "Le danger existe avant l’accident. La situation dangereuse expose une personne. L’événement déclencheur provoque le passage vers le dommage.",
+          },
+        },
+        {
+          title: "Vrai ou faux : l’ordre du processus",
+          type: "true_false",
+          instructions: "Classer les quatre étapes dans l’ordre du processus d’apparition du dommage.",
+          payload: {
+            statement: "L’ordre à retenir est : danger, situation dangereuse, événement déclencheur, dommage.",
+            correctAnswer: true,
+            explanation: "Vrai : cet ordre ne change pas. Chaque étape est un endroit où l’on peut agir avant que le dommage arrive.",
+          },
+        },
+        {
+          title: "Vrai ou faux : un bord de tôle est un dommage",
+          type: "true_false",
+          instructions: "Identifier ce que désigne un bord de tôle coupant dans le processus.",
+          payload: {
+            statement: "Un bord de tôle coupant est un dommage.",
+            correctAnswer: false,
+            explanation: "Faux : c’est un danger, c’est-à-dire ce qui peut provoquer un dommage. Le dommage, c’est l’atteinte à la santé : la coupure elle-même.",
+          },
+        },
+        {
+          title: "Vrai ou faux : la main proche de la zone de perçage",
+          type: "true_false",
+          instructions: "Identifier l’étape du processus décrite par cette situation.",
+          payload: {
+            statement: "Une main qui reste proche de la zone de perçage décrit une situation dangereuse.",
+            correctAnswer: true,
+            explanation: "Vrai : il y a un danger, le foret en rotation, et une personne exposée à ce danger. C’est la définition de la situation dangereuse.",
           },
         },
         {

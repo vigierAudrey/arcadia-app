@@ -156,6 +156,16 @@ export function buildPsePremiereC5Sequence(context: PremiereC5Context): InitialL
             },
           },
           {
+            title: "Vrai ou faux : décrire ou résoudre",
+            type: "true_false",
+            instructions: "Justifier l’ordre entre la description et la proposition de solution.",
+            payload: {
+              statement: "On propose une solution d’abord, et on décrit l’activité ensuite.",
+              correctAnswer: false,
+              explanation: "Faux : la description factuelle vient toujours en premier. Proposer une solution avant d’avoir décrit revient à traiter un problème qu’on n’a pas compris, et souvent à côté.",
+            },
+          },
+          {
             title: "Défi 02 : la tâche et l’activité réelle",
             type: "qcm",
             instructions: "Comparer la tâche demandée et l’activité réellement réalisée.",
@@ -277,6 +287,26 @@ export function buildPsePremiereC5Sequence(context: PremiereC5Context): InitialL
             },
           },
           {
+            title: "Vrai ou faux : l’ordre du processus",
+            type: "true_false",
+            instructions: "Classer les quatre maillons dans l’ordre du processus.",
+            payload: {
+              statement: "Le processus se lit dans cet ordre : danger, situation dangereuse, événement déclencheur, dommage.",
+              correctAnswer: true,
+              explanation: "Vrai : cet ordre ne change jamais. Sauter un maillon fait perdre un endroit où l’on aurait pu agir avant le dommage.",
+            },
+          },
+          {
+            title: "Vrai ou faux : la surdité, un dommage immédiat",
+            type: "true_false",
+            instructions: "Comparer un dommage immédiat et un dommage différé.",
+            payload: {
+              statement: "Une perte d’audition apparue après des années de bruit est un dommage immédiat.",
+              correctAnswer: false,
+              explanation: "Faux : c’est un dommage différé, qui met des années à s’installer. Il renvoie plutôt à une maladie professionnelle, alors que le dommage immédiat renvoie plutôt à l’accident du travail.",
+            },
+          },
+          {
             title: "Défi 05 : où casser la chaîne",
             type: "qcm",
             instructions: "Expliquer quel maillon il vaut mieux casser en premier.",
@@ -363,6 +393,26 @@ export function buildPsePremiereC5Sequence(context: PremiereC5Context): InitialL
               correctAnswer: false,
               explanation:
                 "Faux : chaque entreprise construit ou adapte sa grille, avec ses propres niveaux. C’est l’outil fourni qui fait foi, et il se lit avant de coter.",
+            },
+          },
+          {
+            title: "Vrai ou faux : la gravité et la fréquence",
+            type: "true_false",
+            instructions: "Comparer ce que mesurent la gravité et la probabilité.",
+            payload: {
+              statement: "La gravité décrit l’importance du dommage possible, pas la fréquence à laquelle la situation se produit.",
+              correctAnswer: true,
+              explanation: "Vrai : la gravité porte sur ce que la personne peut subir. La fréquence et la durée d’exposition servent, elles, à estimer la probabilité.",
+            },
+          },
+          {
+            title: "Vrai ou faux : une priorité faible, un risque acceptable",
+            type: "true_false",
+            instructions: "Expliquer ce que dit et ne dit pas un niveau de priorité.",
+            payload: {
+              statement: "Un risque classé en priorité faible est un risque qu’il n’est pas nécessaire de traiter.",
+              correctAnswer: false,
+              explanation: "Faux : la priorité dit seulement par quoi commencer quand on ne peut pas tout traiter en même temps. Elle ne rend aucun risque acceptable.",
             },
           },
           {
@@ -469,6 +519,26 @@ export function buildPsePremiereC5Sequence(context: PremiereC5Context): InitialL
               correctAnswer: false,
               explanation:
                 "Faux : l’équipement protège la personne qui le porte, mais le danger reste entier. Il vient en dernier, quand la suppression, la réduction et la protection collective ne suffisent pas.",
+            },
+          },
+          {
+            title: "Vrai ou faux : supprimer protège tout le monde",
+            type: "true_false",
+            instructions: "Justifier la place de la suppression en tête de l’ordre des mesures.",
+            payload: {
+              statement: "Supprimer le danger protège tout le monde, sans dépendre de la vigilance de chacun.",
+              correctAnswer: true,
+              explanation: "Vrai : c’est la seule mesure qui fait disparaître le problème, définitivement et pour toutes les personnes du poste. C’est pour cela qu’elle est cherchée en premier.",
+            },
+          },
+          {
+            title: "Vrai ou faux : faire attention suffit",
+            type: "true_false",
+            instructions: "Expliquer si un rappel à la vigilance constitue une mesure de prévention.",
+            payload: {
+              statement: "Demander aux opérateurs de faire attention est une mesure de prévention suffisante.",
+              correctAnswer: false,
+              explanation: "Faux : un rappel à la vigilance ne change rien au danger. L’information et la formation accompagnent les autres mesures, elles ne les remplacent jamais.",
             },
           },
           {

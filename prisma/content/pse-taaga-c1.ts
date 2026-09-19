@@ -144,6 +144,26 @@ export const pseTAagaC1Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : le contrat fixe les règles",
+          type: "true_false",
+          instructions: "Expliquer ce que fixe un contrat de travail.",
+          payload: {
+            statement: "Un contrat de travail fixe les règles entre un salarié et un employeur.",
+            correctAnswer: true,
+            explanation: "Vrai : c’est un accord entre les deux. Il indique notamment la durée, le poste, le lieu de travail et le type de contrat.",
+          },
+        },
+        {
+          title: "Vrai ou faux : l’apprentissage, c’est seulement du travail",
+          type: "true_false",
+          instructions: "Identifier ce qui caractérise le contrat d’apprentissage.",
+          payload: {
+            statement: "Le contrat d’apprentissage associe le travail en entreprise et la formation.",
+            correctAnswer: true,
+            explanation: "Vrai : c’est l’alternance entre l’entreprise et le centre de formation, avec la préparation d’un diplôme, qui le caractérise.",
+          },
+        },
+        {
           title: "Vrai ou faux : la date de fin du CDD",
           type: "true_false",
           instructions: "Expliquer si l’affirmation correspond à la définition du CDD.",
@@ -213,6 +233,36 @@ export const pseTAagaC1Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : un droit et une obligation",
+          type: "true_false",
+          instructions: "Expliquer la différence entre un droit et une obligation du salarié.",
+          payload: {
+            statement: "Un droit est ce que je peux demander ou recevoir, une obligation est ce que je dois respecter.",
+            correctAnswer: true,
+            explanation: "Vrai : le salarié a des droits, comme recevoir les informations utiles, et des obligations, comme respecter les horaires et les consignes de sécurité.",
+          },
+        },
+        {
+          title: "Vrai ou faux : l’employeur n’a que des droits",
+          type: "true_false",
+          instructions: "Identifier une obligation de l’employeur.",
+          payload: {
+            statement: "L’employeur n’a aucune obligation envers le salarié : il donne seulement les consignes.",
+            correctAnswer: false,
+            explanation: "Faux : il doit respecter le contrat, informer sur le poste et donner les moyens de travailler. Les obligations vont dans les deux sens.",
+          },
+        },
+        {
+          title: "Vrai ou faux : ne pas comprendre son planning",
+          type: "true_false",
+          instructions: "Déduire la conduite à tenir quand une règle n’est pas comprise.",
+          payload: {
+            statement: "Si je ne comprends pas mon planning ou une règle, je demande une explication à une personne responsable.",
+            correctAnswer: true,
+            explanation: "Vrai : demander une explication fait partie du travail. Ne rien dire et recommencer la même erreur ne règle rien.",
+          },
+        },
+        {
           title: "Jeu : classe les responsabilités",
           type: "sorting",
           instructions: "Classer chaque action selon qu'elle relève du salarié ou de l'employeur.",
@@ -272,6 +322,26 @@ export const pseTAagaC1Sequence: InitialLearningSequence = {
             statement: "Je peux signer un contrat sans avoir repéré sa durée ni le poste occupé.",
             correctAnswer: false,
             explanation: "Faux : la durée, le poste, le lieu de travail et le type de contrat se vérifient avant de signer. En cas de doute, je demande une explication à une personne responsable.",
+          },
+        },
+        {
+          title: "Vrai ou faux : la durée renseigne sur le contrat",
+          type: "true_false",
+          instructions: "Repérer l’information qui indique si un contrat est durable ou temporaire.",
+          payload: {
+            statement: "La durée indiquée dans le contrat permet de savoir s’il est durable ou temporaire.",
+            correctAnswer: true,
+            explanation: "Vrai : pas de date de fin pour un CDI, une date de fin ou une mission précise pour un CDD. C’est la première information à repérer.",
+          },
+        },
+        {
+          title: "Vrai ou faux : signer quand même",
+          type: "true_false",
+          instructions: "Justifier la conduite à tenir face à une information manquante.",
+          payload: {
+            statement: "Si une information manque ou n’est pas comprise, je signe d’abord et je demande ensuite.",
+            correctAnswer: false,
+            explanation: "Faux : je demande une explication à une personne responsable avant de signer. Une fois signé, le contrat engage.",
           },
         },
         {

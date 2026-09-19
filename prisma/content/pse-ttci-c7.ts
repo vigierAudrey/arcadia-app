@@ -103,6 +103,26 @@ export const pseTTciC7Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : à quoi sert la visite d’information",
+          type: "true_false",
+          instructions: "Définir l’objet de la visite d’information et de prévention.",
+          payload: {
+            statement: "La VIP, visite d’information et de prévention, sert à vérifier que le salarié est apte à occuper son poste.",
+            correctAnswer: false,
+            explanation: "Faux : la VIP informe le salarié sur les risques de son poste et sur les moyens de prévention. C’est l’EMA, examen médical d’aptitude, qui vérifie l’aptitude, sur les postes à risques particuliers.",
+          },
+        },
+        {
+          title: "Vrai ou faux : les postes exposés suivis plus souvent",
+          type: "true_false",
+          instructions: "Expliquer ce qu’apporte un suivi individuel renforcé.",
+          payload: {
+            statement: "Sur certains postes exposés, les visites sont plus fréquentes et adaptées à l’exposition.",
+            correctAnswer: true,
+            explanation: "Vrai : c’est le suivi individuel renforcé. Il découle des risques réellement présents au poste, pas du nom du métier.",
+          },
+        },
+        {
           title: "Jeu : classer les modalités de suivi",
           type: "sorting",
           instructions:
@@ -352,6 +372,16 @@ export const pseTTciC7Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : la rougeur autour d’une plaie",
+          type: "true_false",
+          instructions: "Identifier la défense qui provoque la rougeur autour d’une plaie.",
+          payload: {
+            statement: "La rougeur et le gonflement autour d’une plaie viennent de l’immunité spécifique, qui vise un microbe précis.",
+            correctAnswer: false,
+            explanation: "Faux : c’est l’immunité non spécifique, qui agit vite et sans viser un microbe précis. L’immunité spécifique prend le relais ensuite, et elle, reconnaît un antigène précis.",
+          },
+        },
+        {
           title: "Vrai ou faux : la peau, une simple enveloppe",
           type: "true_false",
           instructions:
@@ -522,6 +552,16 @@ export const pseTTciC7Sequence: InitialLearningSequence = {
             correctAnswer: false,
             explanation:
               "Faux : le tétanos ne se transmet pas d’une personne à une autre. La vaccination antitétanique est une protection individuelle ; il n’y a pas d’effet collectif comme pour une maladie transmissible.",
+          },
+        },
+        {
+          title: "Vrai ou faux : la vaccination donne la maladie",
+          type: "true_false",
+          instructions: "Expliquer le principe de la vaccination.",
+          payload: {
+            statement: "La vaccination présente un antigène à l’organisme sans provoquer la maladie.",
+            correctAnswer: true,
+            explanation: "Vrai : l’organisme prépare une mémoire immunitaire, si bien qu’à un nouveau contact avec le même antigène, la réponse est plus rapide.",
           },
         },
         {
@@ -743,6 +783,26 @@ export const pseTTciC7Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : décrire les faits dans une réponse",
+          type: "true_false",
+          instructions: "Justifier ce qu’une réponse rédigée doit contenir à l’épreuve.",
+          payload: {
+            statement: "Une réponse rédigée s’appuie sur les faits de la situation et emploie le vocabulaire exact de la séquence.",
+            correctAnswer: true,
+            explanation: "Vrai : citer les faits, employer le mot juste, puis formuler une phrase complète. C’est ce qui est attendu, et ce qui distingue une réponse d’une impression.",
+          },
+        },
+        {
+          title: "Vrai ou faux : le poste sans exposition particulière",
+          type: "true_false",
+          instructions: "Expliquer quel suivi s’applique à un poste sans risques particuliers.",
+          payload: {
+            statement: "Tous les salariés passent un examen médical d’aptitude, quel que soit leur poste.",
+            correctAnswer: false,
+            explanation: "Faux : l’examen médical d’aptitude concerne les postes présentant des risques particuliers. Sur les autres postes, c’est la visite d’information et de prévention qui s’applique.",
+          },
+        },
+        {
           title: "Jeu : reconstituer la séquence C7",
           type: "sorting",
           instructions:
@@ -841,6 +901,36 @@ export const pseTTciC7Sequence: InitialLearningSequence = {
             ],
             explanation:
               "Le danger existe avant l’accident. La situation dangereuse expose une personne. L’événement déclencheur provoque le passage vers le dommage.",
+          },
+        },
+        {
+          title: "Vrai ou faux : l’ordre du processus",
+          type: "true_false",
+          instructions: "Classer les quatre étapes dans l’ordre du processus d’apparition du dommage.",
+          payload: {
+            statement: "L’ordre à retenir est : danger, situation dangereuse, événement déclencheur, dommage.",
+            correctAnswer: true,
+            explanation: "Vrai : cet ordre ne change pas. Chaque étape est un endroit où l’on peut agir avant que le dommage arrive.",
+          },
+        },
+        {
+          title: "Vrai ou faux : un bord de tôle est un dommage",
+          type: "true_false",
+          instructions: "Identifier ce que désigne un bord de tôle coupant dans le processus.",
+          payload: {
+            statement: "Un bord de tôle coupant est un dommage.",
+            correctAnswer: false,
+            explanation: "Faux : c’est un danger, c’est-à-dire ce qui peut provoquer un dommage. Le dommage, c’est l’atteinte à la santé : la coupure elle-même.",
+          },
+        },
+        {
+          title: "Vrai ou faux : l’événement déclencheur",
+          type: "true_false",
+          instructions: "Définir ce qu’est l’événement déclencheur.",
+          payload: {
+            statement: "L’événement déclencheur est le fait qui fait basculer la situation vers le dommage.",
+            correctAnswer: true,
+            explanation: "Vrai : la tôle qui glisse, la main qui dérape, l’outil qui accroche. Sans lui, la situation reste dangereuse mais rien n’arrive.",
           },
         },
         {

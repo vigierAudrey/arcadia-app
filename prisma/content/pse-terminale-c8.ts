@@ -211,6 +211,26 @@ export function buildPseTerminaleC8Sequence(context: TerminaleC8Context): Initia
             },
           },
           {
+            title: "Vrai ou faux : chaque acteur son rôle",
+            type: "true_false",
+            instructions: "Identifier qui décide du caractère professionnel d’une atteinte.",
+            payload: {
+              statement: "C’est l’employeur qui décide si l’accident est reconnu comme accident du travail.",
+              correctAnswer: false,
+              explanation: "Faux : l’employeur déclare, il ne décide pas. C’est l’organisme d’assurance maladie qui instruit le dossier puis décide du caractère professionnel.",
+            },
+          },
+          {
+            title: "Vrai ou faux : le certificat médical initial",
+            type: "true_false",
+            instructions: "Définir le rôle du certificat médical initial.",
+            payload: {
+              statement: "Le certificat médical initial est établi par le médecin et décrit les lésions constatées.",
+              correctAnswer: true,
+              explanation: "Vrai : c’est la pièce médicale du dossier. La feuille d’accident et la déclaration, elles, viennent de l’employeur.",
+            },
+          },
+          {
             title: "Défi 05 : où vérifier un délai",
             type: "qcm",
             instructions: "Identifier la source officielle où se vérifie le délai exact d’une démarche.",
@@ -396,6 +416,16 @@ export function buildPseTerminaleC8Sequence(context: TerminaleC8Context): Initia
               correctAnswer: false,
               explanation:
                 "Faux : la sanction pénale répond à une infraction, elle ne répare pas le dommage de la victime. L’indemnisation passe par les prestations et, le cas échéant, par la responsabilité civile.",
+            },
+          },
+          {
+            title: "Vrai ou faux : la faute inexcusable et l’indemnisation",
+            type: "true_false",
+            instructions: "Expliquer l’effet de la reconnaissance d’une faute inexcusable.",
+            payload: {
+              statement: "La reconnaissance d’une faute inexcusable de l’employeur majore l’indemnisation de la victime.",
+              correctAnswer: true,
+              explanation: "Vrai : il s’agit d’un manquement grave à l’obligation de sécurité, apprécié juridiquement au cas par cas, et sa reconnaissance augmente ce que perçoit la victime.",
             },
           },
           {

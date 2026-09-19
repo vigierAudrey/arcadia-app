@@ -132,6 +132,16 @@ export const pse1AeroC3Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : le CSE représente les salariés",
+          type: "true_false",
+          instructions: "Définir le rôle du comité social et économique.",
+          payload: {
+            statement: "Le CSE, comité social et économique, représente les salariés et formule des propositions en santé et sécurité.",
+            correctAnswer: true,
+            explanation: "Vrai : il contribue aux questions de santé et de sécurité, analyse des situations avec les représentants du personnel et formule des propositions.",
+          },
+        },
+        {
           title: "Jeu : relier chaque acteur interne à son rôle",
           type: "matching",
           instructions:
@@ -248,6 +258,16 @@ export const pse1AeroC3Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : l’inspection du travail et le droit",
+          type: "true_false",
+          instructions: "Définir la mission de l’inspection du travail.",
+          payload: {
+            statement: "L’inspection du travail informe et conseille sur le droit du travail, et contrôle son application.",
+            correctAnswer: true,
+            explanation: "Vrai : elle informe et conseille aussi bien les salariés que l’employeur, et elle peut intervenir dans le cadre de ses pouvoirs de contrôle.",
+          },
+        },
+        {
           title: "Jeu : relier chaque acteur à sa mission",
           type: "matching",
           instructions:
@@ -331,6 +351,26 @@ export const pse1AeroC3Sequence: InitialLearningSequence = {
             statement: "Un seul acteur suffit pour traiter tous les problèmes de prévention.",
             correctAnswer: false,
             explanation: "Faux : la prévention est une action collective. Selon la situation, les acteurs internes et les organismes externes coopèrent.",
+          },
+        },
+        {
+          title: "Vrai ou faux : l’externe remplace l’interne",
+          type: "true_false",
+          instructions: "Expliquer la place des organismes externes par rapport aux acteurs internes.",
+          payload: {
+            statement: "Contacter un organisme externe dispense de faire appel aux acteurs internes de l’entreprise.",
+            correctAnswer: false,
+            explanation: "Faux : les organismes externes complètent l’action des acteurs internes, ils ne la remplacent pas. Le bon interlocuteur dépend du problème rencontré.",
+          },
+        },
+        {
+          title: "Vrai ou faux : décrire les faits d’abord",
+          type: "true_false",
+          instructions: "Justifier la démarche à suivre avant de choisir un interlocuteur.",
+          payload: {
+            statement: "Pour choisir le bon interlocuteur, on décrit d’abord les faits, puis on identifie le besoin.",
+            correctAnswer: true,
+            explanation: "Vrai : décrire des faits précis, sans accusation ni rumeur, permet d’identifier le besoin réel, donc l’acteur dont la mission correspond.",
           },
         },
         {

@@ -143,6 +143,26 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Vrai ou faux : plusieurs risques dans un seul geste",
+          type: "true_false",
+          instructions: "Justifier la réponse à partir des facteurs de risque du métier.",
+          payload: {
+            statement: "Un même transfert peut contenir plusieurs facteurs de risque en même temps.",
+            correctAnswer: true,
+            explanation: "Vrai : remonter M. André, c’est souvent un effort intense, une posture contraignante et un geste déjà répété dix fois dans la matinée. Les facteurs s’additionnent, et c’est ce cumul qui use le corps.",
+          },
+        },
+        {
+          title: "Vrai ou faux : seules les charges lourdes abîment le corps",
+          type: "true_false",
+          instructions: "Expliquer si le poids est le seul facteur de risque à surveiller.",
+          payload: {
+            statement: "Seuls les efforts très lourds peuvent abîmer le corps au travail.",
+            correctAnswer: false,
+            explanation: "Faux : un geste léger mais répété toute la journée, ou une posture tenue longtemps, fatiguent aussi le corps. Le poids n’est qu’un facteur parmi cinq.",
+          },
+        },
+        {
           title: "Défi 03 : la chambre encombrée",
           type: "qcm",
           instructions: "Déduire le danger principal de cette situation de travail.",
@@ -262,6 +282,26 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
             statement: "Une douleur liée au travail qui revient chaque jour finit toujours par passer toute seule.",
             correctAnswer: false,
             explanation: "Faux : la douleur est un signal d’alerte. Si le geste à risque se répète, elle revient de plus en plus tôt et peut devenir durable. Il faut la signaler, adapter le geste et utiliser une aide.",
+          },
+        },
+        {
+          title: "Vrai ou faux : deux atteintes, deux vitesses",
+          type: "true_false",
+          instructions: "Comparer le moment d’apparition d’un accident et celui d’un trouble musculosquelettique.",
+          payload: {
+            statement: "Un accident du travail arrive d’un coup, alors qu’un TMS s’installe sur des semaines.",
+            correctAnswer: true,
+            explanation: "Vrai : c’est exactement ce qui les distingue. L’accident se voit tout de suite, le TMS s’installe si lentement qu’on s’en aperçoit souvent trop tard.",
+          },
+        },
+        {
+          title: "Vrai ou faux : les jambes lourdes du soir",
+          type: "true_false",
+          instructions: "Déduire si ce signe demande d’alerter la tutrice.",
+          payload: {
+            statement: "Avoir les jambes lourdes le soir, et se sentir bien le lendemain matin, est un signal d’alerte à signaler.",
+            correctAnswer: false,
+            explanation: "Faux : une fatigue qui disparaît avec le repos est normale. Le signal d’alerte, c’est la douleur qui revient, qui est déjà là au début du service, ou qui gêne le geste.",
           },
         },
         {
@@ -461,6 +501,26 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
             statement: "Il vaut mieux soulever un résident à la main plutôt que de perdre du temps à installer le lève-personne.",
             correctAnswer: false,
             explanation: "Faux : soulever à la main quand une aide existe expose à une douleur durable et à un accident. Le temps d’installation est court par rapport à un arrêt de travail, et le transfert est plus sûr pour le résident.",
+          },
+        },
+        {
+          title: "Vrai ou faux : par quoi on commence",
+          type: "true_false",
+          instructions: "Justifier l’ordre dans lequel les protections sont recherchées.",
+          payload: {
+            statement: "On cherche d’abord une protection collective, et la protection individuelle vient en complément.",
+            correctAnswer: true,
+            explanation: "Vrai : une protection collective, comme un lève-personne dans le service, protège toute l’équipe sans rien demander à personne. Les gestes de chacun viennent ensuite, jamais à la place.",
+          },
+        },
+        {
+          title: "Vrai ou faux : le lève-personne pour repositionner",
+          type: "true_false",
+          instructions: "Identifier l’aide adaptée au repositionnement dans un lit.",
+          payload: {
+            statement: "Le lève-personne est l’aide adaptée pour remonter une personne qui a glissé dans son lit.",
+            correctAnswer: false,
+            explanation: "Faux : pour remonter quelqu’un dans son lit, c’est le drap de glisse. Le lève-personne sert au transfert complet d’une personne qui ne peut plus se lever.",
           },
         },
         {

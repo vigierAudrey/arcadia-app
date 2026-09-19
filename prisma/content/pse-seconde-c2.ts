@@ -206,6 +206,26 @@ export function buildPseSecondeC2Sequence(context: SecondeC2Context): InitialLea
             },
           },
           {
+            title: "Vrai ou faux : la consigne demande d’agir",
+            type: "true_false",
+            instructions: "Expliquer ce qui distingue une consigne de sécurité d’une simple information.",
+            payload: {
+              statement: "Une consigne de sécurité demande d’agir, alors qu’une information se contente de renseigner.",
+              correctAnswer: true,
+              explanation: "Vrai : c’est ce qui les distingue. « Porter les lunettes » demande une action, « Poste n° 4 » ne demande rien. Repérer laquelle des deux on a sous les yeux évite de passer à côté d’une obligation.",
+            },
+          },
+          {
+            title: "Vrai ou faux : le panneau rond bleu",
+            type: "true_false",
+            instructions: "Identifier ce que demande un panneau rond et bleu.",
+            payload: {
+              statement: "Un panneau rond et bleu signale une interdiction.",
+              correctAnswer: false,
+              explanation: "Faux : le rond bleu impose toujours une obligation. L’interdiction, c’est le rond blanc bordé de rouge avec une barre en diagonale.",
+            },
+          },
+          {
             title: "Jeu : le lexique de la séance",
             type: "matching",
             instructions: "Indiquer le sens exact de chaque mot de la séance.",
@@ -355,6 +375,26 @@ export function buildPseSecondeC2Sequence(context: SecondeC2Context): InitialLea
             },
           },
           {
+            title: "Vrai ou faux : le danger existe sans personne",
+            type: "true_false",
+            instructions: "Justifier la réponse à partir de la définition du danger.",
+            payload: {
+              statement: "Un produit irritant rangé dans son armoire reste un danger, même si personne ne l’utilise.",
+              correctAnswer: true,
+              explanation: "Vrai : le danger est une propriété de l’élément lui-même, il ne disparaît pas quand on range le bidon. Ce qui disparaît, c’est l’exposition, donc la situation dangereuse.",
+            },
+          },
+          {
+            title: "Vrai ou faux : une personne peut être un danger",
+            type: "true_false",
+            instructions: "Identifier ce qui peut être qualifié de danger dans une situation.",
+            payload: {
+              statement: "La personne qui travaille au poste sans ses protections est le danger de la situation.",
+              correctAnswer: false,
+              explanation: "Faux : une personne n’est jamais un danger. Elle peut être exposée à un danger, ce qui crée une situation dangereuse. Décrire les faits, pas les personnes.",
+            },
+          },
+          {
             title: "Jeu : le lexique de la chaîne",
             type: "matching",
             instructions: "Indiquer le sens exact de chaque mot de la séance.",
@@ -464,6 +504,26 @@ export function buildPseSecondeC2Sequence(context: SecondeC2Context): InitialLea
               correctChoiceIds: ["signaler"],
               explanation:
                 "Repérer un risque ne sert à rien s’il n’est pas signalé. Un élève en formation ne modifie pas un poste de lui-même : il décrit les faits à une personne responsable, qui décide de la mesure.",
+            },
+          },
+          {
+            title: "Vrai ou faux : ranger le produit fait baisser le risque",
+            type: "true_false",
+            instructions: "Expliquer l’effet du rangement d’un produit sur le risque.",
+            payload: {
+              statement: "Ranger un produit irritant dans une armoire ventilée fait baisser le risque, sans supprimer le danger.",
+              correctAnswer: true,
+              explanation: "Vrai : le produit reste dangereux, mais plus personne n’y est exposé. Le danger est une propriété du produit, le risque dépend de l’activité réelle.",
+            },
+          },
+          {
+            title: "Vrai ou faux : signaler, ce n’est pas mon rôle",
+            type: "true_false",
+            instructions: "Déduire la conduite à tenir après avoir repéré un risque en formation.",
+            payload: {
+              statement: "Un élève en formation n’a pas à signaler un risque qu’il a repéré : ce n’est pas son rôle.",
+              correctAnswer: false,
+              explanation: "Faux : repérer un risque ne sert à rien s’il n’est pas signalé. L’élève décrit ce qu’il a vu à une personne responsable. Ce qu’il ne fait pas de lui-même, c’est modifier le poste.",
             },
           },
           {
