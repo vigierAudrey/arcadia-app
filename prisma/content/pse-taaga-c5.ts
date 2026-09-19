@@ -302,6 +302,21 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
+          title: "Défi 08 : accident ou TMS",
+          type: "qcm",
+          instructions: "Comparer un accident du travail et un trouble musculosquelettique.",
+          payload: {
+            question: "Qu’est-ce qui distingue un accident du travail d’un TMS ?",
+            choices: [
+              { id: "moment", label: "L’accident arrive d’un coup, le TMS s’installe sur des semaines" },
+              { id: "gravite", label: "L’accident est toujours grave, le TMS ne l’est jamais" },
+              { id: "lieu", label: "L’accident arrive au travail, le TMS arrive à la maison" },
+            ],
+            correctChoiceIds: ["moment"],
+            explanation: "Le point commun : les deux viennent de l’activité physique du travail et peuvent empêcher de travailler. La différence : le moment d’apparition. L’accident est immédiat, le TMS est chronique.",
+          },
+        },
+        {
           title: "Jeu : les conséquences d’un trouble musculosquelettique",
           type: "sorting",
           instructions: "Classer chaque élément selon ce qu’il représente dans la situation.",
@@ -341,7 +356,7 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
-          title: "Défi 08 : avant de bouger la personne",
+          title: "Défi 09 : avant de bouger la personne",
           type: "qcm",
           instructions: "Indiquer ce que tu prépares avant le transfert de Mme Rose.",
           payload: {
@@ -356,7 +371,7 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
-          title: "Défi 09 : soulever ou faire glisser",
+          title: "Défi 10 : soulever ou faire glisser",
           type: "qcm",
           instructions: "Justifier le choix du geste le plus sûr pour remonter M. André dans son lit.",
           payload: {
@@ -409,7 +424,7 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
-          title: "Défi 10 : la hauteur du lit",
+          title: "Défi 11 : la hauteur du lit",
           type: "qcm",
           instructions: "Indiquer le réglage à faire avant de commencer la toilette au lit.",
           payload: {
@@ -424,7 +439,7 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
-          title: "Défi 11 : par quoi commencer",
+          title: "Défi 12 : par quoi commencer",
           type: "qcm",
           instructions: "Justifier l’ordre dans lequel les protections sont recherchées.",
           payload: {
@@ -449,7 +464,7 @@ export const pseTAagaC5Sequence: InitialLearningSequence = {
           },
         },
         {
-          title: "Défi 12 : la situation du dos de l’agent",
+          title: "Défi 13 : la situation du dos de l’agent",
           type: "qcm",
           instructions: "Repérer les deux éléments qui rendent ce geste dangereux.",
           payload: {

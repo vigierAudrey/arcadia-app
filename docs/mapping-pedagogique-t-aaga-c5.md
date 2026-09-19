@@ -178,7 +178,7 @@ conformément à la règle appliquée au reste du catalogue.
     "etat": "VALIDE",
     "proposePar": "enseignante",
     "dateValidation": "2026-09-19",
-    "commentaire": "Objectif : faire travailler les élèves sur les compétences C1 à C6 du référentiel à travers les exercices réalisés. Séquence rédigée le 2026-09-19 à partir du module C5 de l’annexe CAP PSE et des trois séances du cours. Les 29 activités sont classées CORE. Séquence non encore abordée en classe : l’enseignante a autorisé le 2026-09-19 l’ajout d’exemples absents de ses cours, à condition de respecter la réalité du métier. Notions clés du référentiel ainsi couvertes : accidents du travail, caractère immédiat ou chronique de l’atteinte, protection collective et individuelle. Le fil rouge « EHPAD Les Glycines » est fictif et sert l’apprentissage."
+    "commentaire": "Objectif : faire travailler les élèves sur les compétences C1 à C6 du référentiel à travers les exercices réalisés. Séquence rédigée le 2026-09-19 à partir du module C5 de l’annexe CAP PSE et des trois séances du cours. Les 30 activités sont classées CORE. Séquence non encore abordée en classe : l’enseignante a autorisé le 2026-09-19 l’ajout d’exemples absents de ses cours, à condition de respecter la réalité du métier. Notions clés du référentiel ainsi couvertes : accidents du travail, caractère immédiat ou chronique de l’atteinte, protection collective et individuelle. Le fil rouge « EHPAD Les Glycines » est fictif et sert l’apprentissage."
   }
 ]
 ```
