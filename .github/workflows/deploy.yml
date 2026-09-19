@@ -64,6 +64,11 @@ on:
           - simulation
           - appliquer
           - ignorer
+      reparer_depot:
+        description: 'Réinitialise le dépôt du serveur sur main avant de déployer. À utiliser uniquement après un déploiement interrompu, jamais en routine : un correctif écrit à la main sur le serveur serait perdu.'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -100,6 +105,8 @@ jobs:
       SMOKE_BASE_URL: https://arcadia.blobsurf.com
       # Mode choisi au lancement pour les exercices : simulation / appliquer / ignorer.
       CONTENUS: ${{ inputs.contenus }}
+      # Réinitialisation du dépôt distant, réservée aux suites d'incident.
+      REPARER_DEPOT: ${{ inputs.reparer_depot }}
 
     steps:
       # ─────────────────────────────────────────────────────────────────────
@@ -199,6 +206,7 @@ jobs:
 
           DEPLOY_PATH="$1"
           CONTENUS="${2:-ignorer}"
+          REPARER_DEPOT="${3:-false}"
           cd "$DEPLOY_PATH"
 
           DC="docker compose -p arcadia --env-file .env.production -f docker-compose.production.yml"
@@ -207,12 +215,58 @@ jobs:
           [ -f .env.production ] || { echo "ERREUR: .env.production absent sur le serveur"; exit 1; }
           [ -f docker-compose.production.yml ] || { echo "ERREUR: docker-compose.production.yml absent"; exit 1; }
 
+          # ── Place disponible ──────────────────────────────────────────────
+          # Chaque déploiement reconstruit l'image sur le serveur. Sans ménage,
+          # le cache de construction et les images remplacées s'accumulent
+          # jusqu'à saturer le disque : le 2026-09-19, la construction s'est
+          # arrêtée sur « no space left on device », et le retour en arrière
+          # n'a pas pu écrire ses fichiers, laissant le dépôt à moitié
+          # réinitialisé. Le ménage a donc lieu AVANT toute écriture.
+          #
+          # Ce qui est supprimé : le cache de construction, et les images qui
+          # ne portent plus de nom parce qu'une version plus récente les a
+          # remplacées. Ce qui n'est JAMAIS touché : les volumes, donc la base
+          # de données : le nettoyage des volumes fait partie des commandes que
+          # le garde-fou de ce script refuse. Les images des conteneurs en
+          # service ne sont pas touchées non plus.
+          echo "─── Place disponible avant ménage ───"
+          df -h "$DEPLOY_PATH" | tail -n +1
+          docker system df || true
+
+          docker builder prune --all --force || true
+          docker image prune --force || true
+
+          echo "─── Place disponible après ménage ───"
+          df -h "$DEPLOY_PATH" | tail -n +1
+
+          # Il faut de la marge pour construire l'image : refuser tôt vaut
+          # mieux qu'échouer au milieu d'un COPY, comme le 2026-09-19.
+          LIBRE_MO="$(df -Pm "$DEPLOY_PATH" | awk 'NR==2 {print $4}')"
+          echo "Espace libre : ${LIBRE_MO} Mo"
+          if [ "$LIBRE_MO" -lt 3000 ]; then
+            echo "ERREUR: il reste ${LIBRE_MO} Mo sur le disque du serveur, moins que les 3000 Mo nécessaires à la construction de l'image."
+            echo "Le ménage automatique n'a pas suffi : le disque est occupé par autre chose que Docker."
+            exit 1
+          fi
+
+          # ── État du dépôt sur le serveur ──────────────────────────────────
           # Un worktree modifié à la main serait écrasé silencieusement par le
           # reset. On refuse plutôt que de détruire un correctif en cours.
+          # L'entrée « reparer_depot » lève ce refus, pour le cas précis d'un
+          # déploiement interrompu qui a laissé le dépôt entre deux états.
           if [ -n "$(git status --porcelain)" ]; then
-            echo "ERREUR: modifications locales non commitées sur le serveur."
-            git status --short
-            exit 1
+            if [ "$REPARER_DEPOT" = "true" ]; then
+              echo "AVERTISSEMENT: réparation demandée, voici ce qui va être écarté :"
+              git status --short
+              git fetch origin main
+              git reset --hard origin/main
+              echo "Dépôt réinitialisé sur origin/main."
+            else
+              echo "ERREUR: modifications locales non commitées sur le serveur."
+              git status --short
+              echo "Si elles viennent d'un déploiement interrompu, relancer avec « reparer_depot » coché."
+              exit 1
+            fi
           fi
 
           PREV_SHA="$(git rev-parse HEAD)"
@@ -307,7 +361,7 @@ jobs:
               -o BatchMode=yes \
               -p "$VPS_PORT" \
               "$VPS_USER@$VPS_HOST" \
-              'bash -s' -- "$DEPLOY_PATH" "$CONTENUS" < remote-deploy.sh | tee deploy.log
+              'bash -s' -- "$DEPLOY_PATH" "$CONTENUS" "$REPARER_DEPOT" < remote-deploy.sh | tee deploy.log
 
           # Mémorisé pour un éventuel rollback déclenché par le smoke test.
           PREV_SHA="$(grep -m1 '^PREV_SHA=' deploy.log | cut -d= -f2)"

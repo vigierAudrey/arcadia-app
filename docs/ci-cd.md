@@ -379,6 +379,54 @@ test. Ajouter un contrôle de version servie reste à faire.
 
 ---
 
+## Incident du 2026-09-19 — le disque du serveur était plein
+
+Le déploiement de la séquence C5 de PSE en T AAGA a échoué pendant la construction
+de l'image :
+
+```
+#17 [runner  3/12] COPY --from=builder /app/.next ./.next
+#17 ERROR: failed to copy files: copy file range failed: no space left on device
+failed to solve: ResourceExhausted
+```
+
+Puis le retour en arrière a échoué à son tour, faute de place pour écrire :
+
+```
+─── ROLLBACK vers 05cd42a ───
+error: unable to write file docs/README.md
+fatal: Could not reset index file to revision '05cd42a'
+```
+
+**Conséquence pour les élèves : aucune.** L'image n'ayant jamais été construite, les
+conteneurs en service sont restés sur la version précédente et le site a continué à
+répondre. La base n'a pas été touchée. En revanche, le dépôt du serveur est resté
+entre deux états, avec un index non réinitialisé.
+
+**Cause.** Chaque déploiement reconstruit l'image sur le serveur, et rien ne nettoyait
+jamais le cache de construction ni les images remplacées. Le disque s'est rempli
+déploiement après déploiement, jusqu'à saturation.
+
+**Corrections apportées à `deploy.yml` :**
+
+1. Un ménage a lieu **avant toute écriture**, donc avant même le contrôle du dépôt :
+   `docker builder prune --all` et `docker image prune` suppriment le cache de
+   construction et les images devenues anonymes. Les volumes, donc la base de
+   données, ne sont jamais touchés.
+2. La place disponible est affichée avant et après le ménage. S'il reste moins de
+   3 Go, le déploiement s'arrête tout de suite avec un message clair, au lieu
+   d'échouer au milieu d'un `COPY`.
+3. Une entrée `reparer_depot` permet de réinitialiser le dépôt du serveur sur `main`
+   quand un déploiement interrompu l'a laissé entre deux états. Elle est décochée par
+   défaut, et affiche ce qu'elle écarte avant de le faire : sans elle, le refus de
+   toucher à un worktree modifié reste entier.
+
+**Limite connue.** Le seuil de 3 Go est empirique. Si le disque se remplit pour une
+autre raison que Docker, le ménage automatique n'y changera rien : le message le dit
+explicitement, mais la place devra être libérée à la main sur le serveur.
+
+---
+
 ## Interdits, et comment ils sont appliqués
 
 | Interdit | Application |
