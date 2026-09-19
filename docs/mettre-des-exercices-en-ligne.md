@@ -37,7 +37,9 @@ En pratique : une première passe en `simulation` pour regarder, une seconde en
 | 1 TCI / PSE | `C3. Les acteurs de prévention` | 3 séances, 18 activités | [`mapping-pedagogique-1-tci.md`](mapping-pedagogique-1-tci.md) |
 | 1 TCI / PSE | `C5. L’analyse des risques professionnels` | 4 séances, 30 activités | [`mapping-pedagogique-1-tci-c5.md`](mapping-pedagogique-1-tci-c5.md) |
 | T AERO / PSE | `C7. Le suivi de la santé au travail` | 4 séances, 21 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
+| T AERO / PSE | `C8. Déclaration et réparation des accidents du travail et des maladies professionnelles` | 2 séances, 23 activités | [`mapping-pedagogique-t-aero-c8.md`](mapping-pedagogique-t-aero-c8.md) |
 | T TCI / PSE | `C7. Le suivi de la santé au travail` | 5 séances, 30 activités | [`mapping-pedagogique-t-tci.md`](mapping-pedagogique-t-tci.md) |
+| T TCI / PSE | `C8. Déclaration et réparation des accidents du travail et des maladies professionnelles` | 2 séances, 23 activités | [`mapping-pedagogique-t-tci-c8.md`](mapping-pedagogique-t-tci-c8.md) |
 | T AAGA / PSE | `C1. Les différents contrats de travail` | 3 séances, 18 activités | [`mapping-pedagogique-t-aaga.md`](mapping-pedagogique-t-aaga.md) |
 | T AAGA / PSE | `C5. Les risques liés à l’activité physique du métier` | 3 séances, 30 activités | [`mapping-pedagogique-t-aaga-c5.md`](mapping-pedagogique-t-aaga-c5.md) |
 | T AAGA / Bloc 2 | `CT3. Cadre d’intervention, autonomie et ressources` | 7 séances, 39 activités | [`mapping-pedagogique-t-aaga-bloc2.md`](mapping-pedagogique-t-aaga-bloc2.md) |

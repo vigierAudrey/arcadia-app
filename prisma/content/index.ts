@@ -11,9 +11,11 @@ import { pse2AeroC2Sequence } from "./pse-2aero-c2";
 import { pse2CielC1Sequence } from "./pse-2ciel-c1";
 import { pse2CielC2Sequence } from "./pse-2ciel-c2";
 import { pseTAeroC7Sequence } from "./pse-taero-c7";
+import { pseTAeroC8Sequence } from "./pse-taero-c8";
 import { pseTAagaC1Sequence } from "./pse-taaga-c1";
 import { pseTAagaC5Sequence } from "./pse-taaga-c5";
 import { pseTTciC7Sequence } from "./pse-ttci-c7";
+import { pseTTciC8Sequence } from "./pse-ttci-c8";
 
 /**
  * Où se placer dans le catalogue : les quatre noms doivent correspondre
@@ -113,10 +115,26 @@ export const contentImports: readonly ContentImport[] = [
   {
     program: "BAC PRO",
     level: "Terminale",
+    classroom: "T AERO",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pseTAeroC8Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Terminale",
     classroom: "T TCI",
     teachingArea: "PSE",
     teachingAreaKind: TeachingAreaKind.SUBJECT,
     sequence: pseTTciC7Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Terminale",
+    classroom: "T TCI",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pseTTciC8Sequence,
   },
   {
     program: "CAP",
