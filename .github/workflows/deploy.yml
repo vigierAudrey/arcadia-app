@@ -337,6 +337,28 @@ jobs:
               echo "─── Exercices : étape ignorée ───"
               ;;
           esac
+
+          # ── Rechargement de Caddy ─────────────────────────────────────────
+          # deploy/caddy/arcadia.caddy est monté en lecture seule dans le Caddy
+          # de la stack Blob. Le `git reset --hard` ci-dessus a mis le fichier à
+          # jour sur le disque, mais Caddy garde en mémoire la configuration
+          # lue au démarrage : sans rechargement, toute modification d'en-tête
+          # ou de routage reste sans effet (constaté le 2026-10-02 sur
+          # X-Frame-Options, qui empêchait l'affichage du mini-jeu).
+          #
+          # Le rechargement est atomique : si la configuration est invalide,
+          # Caddy la refuse et continue avec la précédente. Placé en dernier,
+          # après l'import des exercices, pour qu'un échec ici ne prive jamais
+          # les élèves d'un contenu déjà validé.
+          CADDY="$(docker ps --format '{{.Names}}' | grep -i caddy | head -1 || true)"
+          if [ -n "$CADDY" ]; then
+            echo "─── Rechargement de Caddy ($CADDY) ───"
+            docker exec "$CADDY" caddy reload --config /etc/caddy/Caddyfile < /dev/null
+            echo "Caddy rechargé."
+          else
+            echo "Aucun conteneur Caddy trouvé : en-têtes inchangés."
+            exit 1
+          fi
           REMOTE
 
           # Garde-fou : le script distant ne doit contenir aucune commande
@@ -418,6 +440,16 @@ jobs:
           curl -sSI --max-time 10 "$SMOKE_BASE_URL/" > headers.txt
           grep -qi '^strict-transport-security:' headers.txt \
             || { echo "::error::En-tête Strict-Transport-Security absent — vérifier arcadia.caddy."; exit 1; }
+
+          echo "── 5. Saute-Microbe peut s'afficher dans un cadre ──"
+          # Le mini-jeu est affiché dans un cadre par la page de séance. Un
+          # X-Frame-Options DENY le rend invisible, le navigateur annonçant
+          # « le site n'autorise pas la connexion » (incident du 2026-10-02).
+          curl -sSI --max-time 10 "$SMOKE_BASE_URL/jeux/saute-microbe/index.html" > jeu.txt
+          grep -qiE '^x-frame-options: *sameorigin' jeu.txt \
+            || { echo "::error::Saute-Microbe renvoie encore X-Frame-Options DENY — Caddy n'a pas rechargé arcadia.caddy."; exit 1; }
+          grep -qiE '^x-frame-options: *deny' headers.txt \
+            || { echo "::error::La page d'accueil doit rester en X-Frame-Options DENY."; exit 1; }
 
           echo "Smoke test réussi."
 

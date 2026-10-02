@@ -25,13 +25,27 @@ arcadia.blobsurf.com {
 	header {
 		Strict-Transport-Security "max-age=31536000; includeSubDomains"
 		X-Content-Type-Options "nosniff"
-		X-Frame-Options "DENY"
 		Referrer-Policy "strict-origin-when-cross-origin"
 		# La plateforme n'a pas besoin de ces API navigateur.
 		Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
 		# Ne pas divulguer le serveur.
 		-Server
 	}
+
+	# ─── Qui a le droit d'afficher ArcadiA dans un cadre ──────────────────────
+	# `DENY` interdit TOUT affichage en cadre, y compris par ArcadiA lui-même :
+	# c'est ce qui empêchait le mini-jeu Saute-Microbe de s'ouvrir, le navigateur
+	# annonçant « le site n'autorise pas la connexion » (constaté le 2026-10-02).
+	# Le jeu vit dans public/jeux/ et est affiché dans un cadre par la page de
+	# séance (src/features/jeu/saute-microbe.tsx).
+	#
+	# Seul ce dossier passe donc en `SAMEORIGIN` : ArcadiA peut s'afficher
+	# lui-même, aucun autre site ne le peut. Tout le reste — connexion admin,
+	# saisie du code classe, pages élève — reste en `DENY`.
+	@jeu path /jeux/*
+	@horsJeu not path /jeux/*
+	header @jeu X-Frame-Options "SAMEORIGIN"
+	header @horsJeu X-Frame-Options "DENY"
 
 	# ArcadiA ne reçoit aucun téléversement : tout corps de requête volumineux
 	# est anormal. Marge confortable pour les Server Actions des formulaires.
