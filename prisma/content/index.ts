@@ -16,6 +16,7 @@ import { pseTAagaC1Sequence } from "./pse-taaga-c1";
 import { pseTAagaC5Sequence } from "./pse-taaga-c5";
 import { pseTTciC7Sequence } from "./pse-ttci-c7";
 import { pseTTciC8Sequence } from "./pse-ttci-c8";
+import { pseTTciC9Sequence } from "./pse-ttci-c9";
 
 /**
  * Où se placer dans le catalogue : les quatre noms doivent correspondre
@@ -135,6 +136,14 @@ export const contentImports: readonly ContentImport[] = [
     teachingArea: "PSE",
     teachingAreaKind: TeachingAreaKind.SUBJECT,
     sequence: pseTTciC8Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Terminale",
+    classroom: "T TCI",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pseTTciC9Sequence,
   },
   {
     program: "CAP",
