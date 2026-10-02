@@ -351,13 +351,32 @@ jobs:
           # après l'import des exercices, pour qu'un échec ici ne prive jamais
           # les élèves d'un contenu déjà validé.
           CADDY="$(docker ps --format '{{.Names}}' | grep -i caddy | head -1 || true)"
-          if [ -n "$CADDY" ]; then
-            echo "─── Rechargement de Caddy ($CADDY) ───"
-            docker exec "$CADDY" caddy reload --config /etc/caddy/Caddyfile < /dev/null
-            echo "Caddy rechargé."
-          else
+          if [ -z "$CADDY" ]; then
             echo "Aucun conteneur Caddy trouvé : en-têtes inchangés."
             exit 1
+          fi
+
+          echo "─── Rechargement de Caddy ($CADDY) ───"
+          docker exec "$CADDY" caddy version < /dev/null || true
+
+          # Deux méthodes, dans cet ordre.
+          #
+          # 1. `caddy reload` passe par l'API d'administration. Sur cette
+          #    machine elle est fermée : le 2026-10-02, la commande a répondu
+          #    « dial tcp [::1]:2019: connect: connection refused ». La
+          #    configuration avait pourtant été validée, donc l'échec ne vient
+          #    pas de arcadia.caddy.
+          # 2. SIGUSR1 relit le fichier de configuration sans passer par l'API
+          #    (Caddy 2.11 et au-delà, démarrage par `caddy run` avec un
+          #    fichier — c'est le cas de l'image officielle). Si la version est
+          #    trop ancienne, le signal est ignoré sans erreur : c'est la
+          #    vérification du mini-jeu, plus bas, qui le dira.
+          if docker exec "$CADDY" caddy reload --config /etc/caddy/Caddyfile < /dev/null; then
+            echo "Caddy rechargé par l'API d'administration."
+          else
+            echo "API d'administration indisponible, envoi de SIGUSR1."
+            docker kill -s USR1 "$CADDY" < /dev/null
+            echo "SIGUSR1 envoyé à $CADDY."
           fi
           REMOTE
 
@@ -441,17 +460,31 @@ jobs:
           grep -qi '^strict-transport-security:' headers.txt \
             || { echo "::error::En-tête Strict-Transport-Security absent — vérifier arcadia.caddy."; exit 1; }
 
-          echo "── 5. Saute-Microbe peut s'afficher dans un cadre ──"
+          echo "Smoke test réussi."
+
+      # ─────────────────────────────────────────────────────────────────────
+      # Étape distincte, et volontairement placée APRÈS le smoke test : un
+      # en-tête mal rechargé ne doit pas ramener l'application en arrière. Elle
+      # échoue bruyamment, l'application reste en ligne.
+      - name: Vérifier que Saute-Microbe peut s'afficher
+        shell: bash
+        run: |
+          set -euo pipefail
+
           # Le mini-jeu est affiché dans un cadre par la page de séance. Un
           # X-Frame-Options DENY le rend invisible, le navigateur annonçant
           # « le site n'autorise pas la connexion » (incident du 2026-10-02).
           curl -sSI --max-time 10 "$SMOKE_BASE_URL/jeux/saute-microbe/index.html" > jeu.txt
           grep -qiE '^x-frame-options: *sameorigin' jeu.txt \
-            || { echo "::error::Saute-Microbe renvoie encore X-Frame-Options DENY — Caddy n'a pas rechargé arcadia.caddy."; exit 1; }
-          grep -qiE '^x-frame-options: *deny' headers.txt \
-            || { echo "::error::La page d'accueil doit rester en X-Frame-Options DENY."; exit 1; }
+            || { echo "::error title=Mini-jeu invisible::Saute-Microbe renvoie encore X-Frame-Options DENY. Caddy n'a pas relu arcadia.caddy."; exit 1; }
 
-          echo "Smoke test réussi."
+          # L'inverse compte autant : le reste du site ne doit pas s'être
+          # ouvert à l'affichage en cadre par mégarde.
+          curl -sSI --max-time 10 "$SMOKE_BASE_URL/" > accueil.txt
+          grep -qiE '^x-frame-options: *deny' accueil.txt \
+            || { echo "::error title=En-tête trop permissif::La page d'accueil doit rester en X-Frame-Options DENY."; exit 1; }
+
+          echo "Saute-Microbe affichable, reste du site protégé."
 
       # ─────────────────────────────────────────────────────────────────────
       - name: Rollback si le smoke test a échoué
