@@ -5,6 +5,8 @@ import { connection } from "next/server";
 import { BrandMark } from "@/components/brand-mark";
 import { AdminForm, OrderForm } from "@/features/admin/admin-forms";
 import { ClassAccessPanel } from "@/features/admin/class-access-panel";
+import { LiveSessionPanel } from "@/features/admin/live-session-panel";
+import { LIVE_QUESTION_BANK } from "@/features/live/question-bank";
 import {
   getOpenItems,
   getToggleHref,
@@ -18,6 +20,7 @@ import {
 import { getAdminCatalog } from "@/server/catalog/queries";
 import type { CatalogEntityReference } from "@/server/catalog/validation";
 import { requireAdminPage } from "@/server/auth/require-admin";
+import { getAdminLiveSessionsForClassroom } from "@/server/live-sessions/admin";
 
 import { logoutAdminAction } from "./auth-actions";
 import {
@@ -28,6 +31,10 @@ import {
   editCatalogItemAction,
   moveCatalogItemAction,
 } from "./actions";
+import {
+  revealLiveQuestionAction,
+  sendLiveQuestionAction,
+} from "./live-question-actions";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -236,6 +243,176 @@ type CatalogSequence = Awaited<
   ReturnType<typeof getAdminCatalog>
 >[number]["levels"][number]["classrooms"][number]["teachingAreas"][number]["learningSequences"][number];
 type CatalogLesson = CatalogSequence["lessons"][number];
+type LiveQuestionItem = (typeof LIVE_QUESTION_BANK)[number];
+type ActiveLiveTarget = {
+  classroomName: string;
+  currentQuestionTitle: string | null;
+  pin: string;
+  revealed: boolean;
+  sessionId: string;
+};
+
+const liveQuestionTypeLabels: Record<LiveQuestionItem["type"], string> = {
+  "single-choice": "QCM",
+  "true-false": "Vrai/Faux",
+};
+
+function groupLiveQuestionsByLevel() {
+  const groups = new Map<string, LiveQuestionItem[]>();
+
+  for (const question of LIVE_QUESTION_BANK) {
+    const key = `${question.reference.formation} · ${question.reference.level}`;
+    groups.set(key, [...(groups.get(key) ?? []), question]);
+  }
+
+  return Array.from(groups, ([label, questions]) => ({ label, questions }));
+}
+
+function LiveQuestionBankSection({
+  activeSessions,
+}: {
+  activeSessions: ActiveLiveTarget[];
+}) {
+  const groups = groupLiveQuestionsByLevel();
+  const hasActiveSession = activeSessions.length > 0;
+
+  return (
+    <section
+      className={styles.liveQuestionBank}
+      id="banque-live"
+      aria-labelledby="live-bank-title"
+    >
+      <div className={styles.liveBankHeading}>
+        <div>
+          <p className={styles.eyebrow}>Jeu en direct // Banque PSE</p>
+          <h2 id="live-bank-title">Questions live préparées</h2>
+          <p>
+            Questions générales PSE, sans contexte métier obligatoire, tracées
+            vers les référentiels officiels.
+          </p>
+        </div>
+        <div className={styles.liveBankStatus}>
+          <strong>{LIVE_QUESTION_BANK.length} questions</strong>
+          <span>
+            {hasActiveSession
+              ? `${activeSessions.length} session(s) active(s)`
+              : "Aucune session active"}
+          </span>
+        </div>
+      </div>
+
+      {hasActiveSession ? (
+        <div className={styles.liveSessionCommands}>
+          {activeSessions.map((session) => (
+            <article key={session.sessionId}>
+              <div>
+                <strong>{session.classroomName}</strong>
+                <span>PIN {session.pin}</span>
+                <p>
+                  {session.currentQuestionTitle
+                    ? session.currentQuestionTitle
+                    : "Aucune question envoyée"}
+                </p>
+              </div>
+              <AdminForm
+                action={revealLiveQuestionAction}
+                className={styles.liveRevealForm}
+                submitLabel={
+                  session.revealed ? "Correction visible" : "Révéler"
+                }
+                submitVariant="secondary"
+              >
+                <input
+                  name="sessionId"
+                  type="hidden"
+                  value={session.sessionId}
+                />
+              </AdminForm>
+            </article>
+          ))}
+        </div>
+      ) : null}
+
+      <div className={styles.liveBankGroups}>
+        {groups.map((group, groupIndex) => (
+          <details
+            className={styles.liveBankGroup}
+            key={group.label}
+            open={groupIndex < 2}
+          >
+            <summary>
+              <span>{group.label}</span>
+              <small>{group.questions.length} question(s)</small>
+            </summary>
+            <ol className={styles.liveQuestionList}>
+              {group.questions.map((question) => (
+                <li key={question.id}>
+                  <article className={styles.liveQuestionItem}>
+                    <div className={styles.liveQuestionMain}>
+                      <span className={styles.liveQuestionType}>
+                        {liveQuestionTypeLabels[question.type]}
+                      </span>
+                      <h3>{question.title}</h3>
+                      <p>{question.prompt}</p>
+                    </div>
+                    <dl className={styles.liveQuestionMeta}>
+                      <div>
+                        <dt>Module</dt>
+                        <dd>{question.reference.module}</dd>
+                      </div>
+                      <div>
+                        <dt>Temps</dt>
+                        <dd>{question.timeLimitSeconds}s</dd>
+                      </div>
+                      <div>
+                        <dt>Points</dt>
+                        <dd>{question.points}</dd>
+                      </div>
+                    </dl>
+                    <p className={styles.liveQuestionSource}>
+                      Source : {question.reference.sectionOrPage}
+                    </p>
+                    {hasActiveSession ? (
+                      <AdminForm
+                        action={sendLiveQuestionAction}
+                        className={styles.liveQuestionSendForm}
+                        submitLabel="Envoyer"
+                        submitVariant="secondary"
+                      >
+                        <input
+                          name="questionId"
+                          type="hidden"
+                          value={question.id}
+                        />
+                        <label>
+                          <span>Session</span>
+                          <select name="sessionId" required>
+                            {activeSessions.map((session) => (
+                              <option
+                                key={session.sessionId}
+                                value={session.sessionId}
+                              >
+                                {session.classroomName} · PIN {session.pin}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      </AdminForm>
+                    ) : (
+                      <button type="button" disabled>
+                        Ouvrir une session
+                      </button>
+                    )}
+                  </article>
+                </li>
+              ))}
+            </ol>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 function SequenceTools({
   index,
@@ -458,6 +635,19 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   const openItems = getOpenItems((await searchParams) ?? {});
   const admin = await requireAdminPage();
   const catalog = await getAdminCatalog();
+  const activeLiveTargets = catalog.flatMap((program) =>
+    program.levels.flatMap((level) =>
+      level.classrooms.flatMap((classroom) =>
+        getAdminLiveSessionsForClassroom(classroom.id).map((session) => ({
+          classroomName: classroom.name,
+          currentQuestionTitle: session.currentQuestion?.title ?? null,
+          pin: session.pin,
+          revealed: session.status === "reveal",
+          sessionId: session.id,
+        })),
+      ),
+    ),
+  );
   const classroomCount = catalog.reduce(
     (total, program) =>
       total +
@@ -516,8 +706,12 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               <span aria-hidden="true">02</span>
               Séquences et séances
             </a>
-            <span className={styles.disabledNavItem} aria-disabled="true">
+            <a className={styles.activeNavItem} href="#banque-live">
               <span aria-hidden="true">03</span>
+              Banque live
+            </a>
+            <span className={styles.disabledNavItem} aria-disabled="true">
+              <span aria-hidden="true">04</span>
               Activités
             </span>
           </nav>
@@ -571,6 +765,8 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               <span>enseignements renseignés</span>
             </article>
           </section>
+
+          <LiveQuestionBankSection activeSessions={activeLiveTargets} />
 
           <section
             className={styles.catalog}
@@ -662,6 +858,10 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                                     id: classroom.id,
                                     parentId: level.id,
                                   } as const;
+                                  const activeLiveSession =
+                                    getAdminLiveSessionsForClassroom(
+                                      classroom.id,
+                                    )[0] ?? null;
                                   const classroomOpen = openItems.has(
                                     classroom.id,
                                   );
@@ -709,6 +909,20 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                                                       .active
                                                   ? "active"
                                                   : "disabled"
+                                            }
+                                          />
+                                          <LiveSessionPanel
+                                            classroomId={classroom.id}
+                                            className={classroom.name}
+                                            activeSession={
+                                              activeLiveSession
+                                                ? {
+                                                    id: activeLiveSession.id,
+                                                    pin: activeLiveSession.pin,
+                                                    expiresAt:
+                                                      activeLiveSession.expiresAt.toISOString(),
+                                                  }
+                                                : null
                                             }
                                           />
 

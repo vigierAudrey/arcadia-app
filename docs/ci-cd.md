@@ -327,7 +327,7 @@ l'année — un élève déjà connecté arrive dans sa classe, un élève sans 
 est renvoyé vers la saisie du code.
 
 Avant les assertions, le workflow patiente jusqu'à 100 secondes que
-l'application réponde : `next start` démarre en quelques secondes, mais le
+l'application réponde : le serveur custom démarre en quelques secondes, mais le
 conteneur peut être en cours de remplacement.
 
 ---

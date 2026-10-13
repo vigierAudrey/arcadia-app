@@ -7,6 +7,8 @@ Le projet contient actuellement :
 
 - un accès élève par code classe sur `/`, puis l'espace classe sur `/classe` ;
 - une administration du catalogue authentifiée sur `/admin` ;
+- une première base locale d'activités en direct temporaires, pilotées depuis
+  les cartes classe de `/admin` ;
 - un manifest PWA, sans service worker ni fonctionnement hors ligne ;
 - un catalogue pédagogique stocké dans PostgreSQL via Prisma.
 
@@ -99,6 +101,13 @@ Deux pièges propres à ce projet, détaillés dans les fichiers concernés :
 
 Les règles d'écriture des exercices, la traçabilité des sources et la procédure de mise
 en ligne des contenus ont leur propre sommaire : [`docs/README.md`](docs/README.md).
+
+## Activités en direct
+
+La fonctionnalité de jeu live type quiz/Kahoot est documentée dans
+[`docs/live-sessions.md`](docs/live-sessions.md). La base actuelle garde les
+sessions en mémoire, sans persistance des élèves ni réponses en base. Elle sert
+de socle local avant le choix définitif du transport temps réel.
 
 ## Périmètre différé
 

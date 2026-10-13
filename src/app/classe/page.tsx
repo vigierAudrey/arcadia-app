@@ -7,6 +7,7 @@ import { BrandMark } from "@/components/brand-mark";
 import { ReadingComfortBar } from "@/features/accessibility/reading-comfort-bar";
 import { getStudentCatalog } from "@/server/catalog/student-queries";
 import { requireClassSessionPage } from "@/server/class-auth/require-class-session";
+import { listLiveSessionsForClassroom } from "@/server/live-sessions/store";
 
 import { leaveClassAction } from "./leave-action";
 import styles from "./page.module.css";
@@ -21,6 +22,7 @@ export default async function ClassPage() {
   await connection();
   const { classroomId } = await requireClassSessionPage();
   const classroom = await getStudentCatalog(classroomId);
+  const activeLiveSession = listLiveSessionsForClassroom(classroomId)[0] ?? null;
 
   if (!classroom) {
     redirect("/");
@@ -53,6 +55,32 @@ export default async function ClassPage() {
             {missionCount} mission{missionCount > 1 ? "s" : ""} disponible
             {missionCount > 1 ? "s" : ""}
           </span>
+        </section>
+
+        <section className={styles.liveSessionCard} aria-labelledby="live-title">
+          <div>
+            <p className={styles.eyebrow}>Activité en direct</p>
+            <h2 id="live-title">Session live</h2>
+            <p>
+              {activeLiveSession
+                ? "Une activité en direct est ouverte pour ta classe. Regarde le tableau et prépare le PIN affiché."
+                : "Aucune activité en direct n’est ouverte pour le moment."}
+            </p>
+          </div>
+          <span
+            className={
+              activeLiveSession
+                ? styles.liveSessionActive
+                : styles.liveSessionInactive
+            }
+          >
+            {activeLiveSession ? "Active" : "En attente"}
+          </span>
+          {activeLiveSession ? (
+            <Link className={styles.liveSessionLink} href="/classe/live">
+              Rejoindre
+            </Link>
+          ) : null}
         </section>
 
         {classroom.teachingAreas.length === 0 ? (

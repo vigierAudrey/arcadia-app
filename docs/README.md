@@ -45,3 +45,7 @@ objectif par objectif. C'est ce qui permet de justifier une activité si on la c
 
 Le [`README.md`](../README.md) à la racine décrit l'application elle-même :
 installation locale, modèle du catalogue, vérifications avant publication.
+
+| Fichier | Quand l'ouvrir |
+|---|---|
+| [`live-sessions.md`](live-sessions.md) | Quand il faut travailler sur les activités en direct : sessions temporaires, PIN tableau, WebSocket/SSE, sécurité, scoring et animations. |

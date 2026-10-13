@@ -70,7 +70,7 @@ ENV HOSTNAME=0.0.0.0
 RUN groupadd --system --gid 1001 arcadia \
  && useradd --system --uid 1001 --gid arcadia arcadia
 
-# node_modules complet : nécessaire à `next start` ET au CLI prisma des migrations.
+# node_modules complet : nécessaire à `tsx server.ts` ET au CLI prisma des migrations.
 COPY --from=builder /app/node_modules   ./node_modules
 COPY --from=builder /app/.next          ./.next
 COPY --from=builder /app/public         ./public
@@ -86,6 +86,7 @@ COPY --from=builder /app/src            ./src
 COPY --from=builder /app/package.json       ./package.json
 COPY --from=builder /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=builder /app/next.config.ts     ./next.config.ts
+COPY --from=builder /app/server.ts          ./server.ts
 COPY --from=builder /app/tsconfig.json      ./tsconfig.json
 
 # Nécessaires à `prisma migrate deploy` et à `pnpm admin:create` au runtime.
@@ -96,5 +97,6 @@ COPY --from=builder /app/scripts           ./scripts
 USER arcadia
 EXPOSE 3000
 
-# next start. Le port et l'interface d'écoute viennent des variables ci-dessus.
+# Serveur Node custom : Next.js pour HTTP, WebSocket /live pour le jeu direct.
+# Le port et l'interface d'écoute viennent des variables ci-dessus.
 CMD ["pnpm", "start"]

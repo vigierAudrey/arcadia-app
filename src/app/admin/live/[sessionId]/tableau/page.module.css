@@ -1,0 +1,454 @@
+.boardShell {
+  min-height: 100vh;
+  background:
+    linear-gradient(rgb(117 255 245 / 2%) 1px, transparent 1px),
+    radial-gradient(circle at 80% 12%, rgb(var(--ch-magenta) / 15%), transparent 25rem),
+    var(--night-950);
+  background-size: 100% 36px, auto, auto;
+}
+
+.boardHeader,
+.boardMain {
+  width: min(100% - 2rem, 86rem);
+  margin-inline: auto;
+}
+
+.boardHeader {
+  display: flex;
+  min-height: 5.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.boardHeader a {
+  color: var(--cyan-300);
+  font-family: var(--font-pixel);
+  font-size: 0.64rem;
+  font-weight: 900;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.boardMain {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 2rem 4rem;
+}
+
+.pinPanel,
+.questionPanel,
+.playersPanel {
+  border: 1px solid var(--line-strong);
+  background: rgb(var(--ch-deep) / 64%);
+  box-shadow: 5px 5px 0 rgb(var(--ch-deep) / 70%);
+}
+
+.pinPanel {
+  padding: clamp(1rem, 3vw, 2rem);
+  border-left: 5px solid var(--yellow-400);
+}
+
+.eyebrow {
+  margin: 0 0 0.6rem;
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.pinPanel h1 {
+  margin: 0;
+  color: var(--text-100);
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 12vw, 8rem);
+  letter-spacing: 0;
+  line-height: 0.95;
+  text-shadow: 6px 6px 0 var(--night-1000);
+  text-transform: uppercase;
+}
+
+.pinPanel p:not(.eyebrow) {
+  margin: 0.9rem 0 0;
+  color: var(--text-300);
+  font-size: 1rem;
+}
+
+.questionPanel {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-left: 5px solid var(--magenta-400);
+}
+
+.questionHeader {
+  display: grid;
+  gap: 1rem;
+}
+
+.questionTools {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.questionTools button {
+  width: fit-content;
+  min-height: 2.35rem;
+  border: 1px solid var(--cyan-300);
+  border-radius: 0;
+  padding: 0.5rem 0.7rem;
+  background: rgb(var(--ch-cyan) / 10%);
+  color: var(--cyan-300);
+  cursor: pointer;
+  font-family: var(--font-pixel);
+  font-size: 0.54rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.questionTools button[aria-pressed="true"] {
+  border-color: var(--green-400);
+  color: var(--green-400);
+}
+
+.questionTools button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.questionHeader h2,
+.emptyQuestion h2 {
+  margin: 0;
+  color: var(--text-100);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 4.6rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.questionStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.questionStats div {
+  padding: 0.7rem;
+  border: 1px solid rgb(var(--ch-cyan) / 26%);
+  background: rgb(var(--ch-cyan) / 8%);
+}
+
+.questionStats dt {
+  margin: 0 0 0.3rem;
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.54rem;
+  text-transform: uppercase;
+}
+
+.questionStats dd {
+  margin: 0;
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.countdownTrack {
+  overflow: hidden;
+  block-size: 0.7rem;
+  border: 1px solid rgb(var(--ch-cyan) / 28%);
+  background: rgb(var(--ch-deep) / 80%);
+}
+
+.countdownTrack span {
+  display: block;
+  block-size: 100%;
+  background: linear-gradient(90deg, var(--green-400), var(--yellow-300));
+  transition: inline-size 220ms linear;
+}
+
+.countdownUrgent span {
+  background: linear-gradient(90deg, var(--yellow-300), var(--red-400));
+  animation: countdownPulse 650ms steps(2, end) infinite;
+}
+
+.questionPrompt {
+  margin: 0;
+  color: var(--text-100);
+  font-size: clamp(1.15rem, 3vw, 2rem);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.choiceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.choiceGrid li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.7rem;
+  align-items: center;
+  min-height: 4.75rem;
+  padding: 0.9rem;
+  border: 1px solid rgb(var(--ch-cyan) / 28%);
+  background: rgb(var(--ch-cyan) / 8%);
+  color: var(--text-100);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.choiceGrid .choiceCorrect {
+  border-color: var(--green-400);
+  background: rgb(var(--ch-green) / 16%);
+  box-shadow: inset 0 0 0 2px rgb(var(--ch-green) / 28%);
+}
+
+.choiceGrid span {
+  display: grid;
+  width: 2.2rem;
+  aspect-ratio: 1;
+  place-items: center;
+  background: var(--yellow-300);
+  color: var(--night-1000);
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+}
+
+.revealPanel {
+  padding: 1rem;
+  border: 1px solid rgb(var(--ch-green) / 34%);
+  border-left: 5px solid var(--green-400);
+  background: rgb(var(--ch-green) / 9%);
+}
+
+.revealPanel strong {
+  display: block;
+  color: var(--green-400);
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.revealPanel p:not(.eyebrow) {
+  margin: 0.7rem 0 0;
+  color: var(--text-100);
+  font-size: clamp(1rem, 2vw, 1.45rem);
+  line-height: 1.4;
+}
+
+.emptyQuestion p:not(.eyebrow) {
+  margin: 0.8rem 0 0;
+  color: var(--text-400);
+}
+
+.playersPanel {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.panelHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.panelHeading h2 {
+  margin: 0;
+  color: var(--cyan-300);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1;
+}
+
+.connectionStatus {
+  border: 1px solid currentColor;
+  padding: 0.45rem 0.6rem;
+  color: var(--green-400);
+  font-family: var(--font-pixel);
+  font-size: 0.56rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.playerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.75rem;
+}
+
+.emptyPlayers {
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed var(--line-soft);
+  color: var(--text-500);
+}
+
+.playerCard {
+  display: grid;
+  min-height: 8.5rem;
+  place-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem;
+  border: 1px solid rgb(var(--ch-cyan) / 30%);
+  background: rgb(var(--ch-cyan) / 7%);
+  text-align: center;
+}
+
+.playerCard strong {
+  color: var(--text-100);
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.playerCard span:last-child {
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.avatarFace {
+  position: relative;
+  display: block;
+  width: 4rem;
+  aspect-ratio: 1;
+  border: 3px solid var(--night-1000);
+  border-radius: 50%;
+  background: var(--avatar-color);
+  box-shadow: 4px 4px 0 rgb(var(--ch-deep) / 70%);
+  clip-path: polygon(0 0, 100% 0, 100% 38%, 66% 50%, 100% 62%, 100% 100%, 0 100%);
+}
+
+.avatarFace::before {
+  position: absolute;
+  top: 26%;
+  left: 44%;
+  width: 0.45rem;
+  aspect-ratio: 1;
+  background: var(--night-1000);
+  content: "";
+}
+
+.avatarFace::after {
+  position: absolute;
+  content: "";
+}
+
+.avatarColoryellow { --avatar-color: var(--yellow-300); }
+.avatarColorcyan { --avatar-color: var(--cyan-300); }
+.avatarColormagenta { --avatar-color: var(--magenta-400); }
+.avatarColorgreen { --avatar-color: var(--green-400); }
+.avatarColorred { --avatar-color: var(--red-400); }
+.avatarColorviolet { --avatar-color: #b995ff; }
+
+.avatarAccessorycap::after {
+  top: -0.55rem;
+  left: 0.7rem;
+  width: 2.3rem;
+  height: 0.7rem;
+  background: var(--cyan-400);
+}
+
+.avatarAccessoryglasses::after {
+  top: 1rem;
+  left: 1rem;
+  width: 1.8rem;
+  height: 0.55rem;
+  border-top: 0.2rem solid var(--night-1000);
+  border-bottom: 0.2rem solid var(--night-1000);
+}
+
+.avatarAccessorystar::after {
+  top: -0.4rem;
+  left: 1.45rem;
+  width: 0.9rem;
+  aspect-ratio: 1;
+  background: var(--yellow-400);
+  clip-path: polygon(50% 0, 62% 35%, 100% 35%, 70% 57%, 82% 100%, 50% 72%, 18% 100%, 30% 57%, 0 35%, 38% 35%);
+}
+
+.avatarAccessorybolt::after {
+  top: -0.45rem;
+  left: 1.55rem;
+  width: 0.9rem;
+  height: 1.55rem;
+  background: var(--yellow-400);
+  clip-path: polygon(55% 0, 100% 0, 62% 42%, 100% 42%, 36% 100%, 50% 55%, 0 55%);
+}
+
+.avatarAccessoryband::after {
+  top: 1.15rem;
+  left: 0.25rem;
+  width: 2.45rem;
+  height: 0.45rem;
+  background: var(--magenta-500);
+}
+
+.avatarAccessorycrown::after {
+  top: -0.6rem;
+  left: 1rem;
+  width: 1.8rem;
+  height: 0.8rem;
+  background: var(--yellow-400);
+  clip-path: polygon(0 100%, 0 35%, 28% 70%, 50% 0, 72% 70%, 100% 35%, 100% 100%);
+}
+
+.expiryHint {
+  margin: 0;
+  color: var(--text-500);
+  font-size: 0.8rem;
+}
+
+@media (min-width: 42rem) {
+  .boardHeader,
+  .boardMain {
+    width: min(100% - 4rem, 86rem);
+  }
+
+  .questionHeader {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .questionTools {
+    justify-items: end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countdownTrack span {
+    transition: none;
+  }
+
+  .countdownUrgent span {
+    animation: none;
+  }
+}
+
+@keyframes countdownPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.58;
+  }
+}

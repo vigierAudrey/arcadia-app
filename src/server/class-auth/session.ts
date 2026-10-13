@@ -1,28 +1,22 @@
-import { createHmac, randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 
 import { cookies } from "next/headers";
 
 import { prisma } from "@/server/db/prisma";
 
-import { getClassSessionSecret } from "./config";
 import {
   CLASS_SESSION_COOKIE,
   CLASS_SESSION_DURATION_MS,
 } from "./constants";
+import {
+  getClassroomBySessionToken,
+  hashClassSessionToken,
+  isClassSessionToken,
+  type AuthenticatedClass,
+} from "./session-token";
 
-export type AuthenticatedClass = {
-  classroomId: string;
-};
-
-export function hashClassSessionToken(token: string) {
-  return createHmac("sha256", getClassSessionSecret())
-    .update(`class-session:${token}`)
-    .digest("hex");
-}
-
-function isSessionToken(token: string) {
-  return /^[A-Za-z0-9_-]{43}$/.test(token);
-}
+export { getClassroomBySessionToken, hashClassSessionToken };
+export type { AuthenticatedClass };
 
 export async function createClassSession(
   classroomId: string,
@@ -43,40 +37,6 @@ export async function createClassSession(
   return { token, expiresAt };
 }
 
-export async function getClassroomBySessionToken(
-  token: string | undefined,
-  now = new Date(),
-): Promise<AuthenticatedClass | null> {
-  if (!token || !isSessionToken(token)) return null;
-
-  const session = await prisma.classSession.findUnique({
-    where: { tokenHash: hashClassSessionToken(token) },
-    select: {
-      expiresAt: true,
-      revokedAt: true,
-      classroom: {
-        select: {
-          id: true,
-          archivedAt: true,
-          classAccessCode: { select: { active: true } },
-        },
-      },
-    },
-  });
-
-  if (
-    !session ||
-    session.revokedAt ||
-    session.expiresAt <= now ||
-    session.classroom.archivedAt ||
-    !session.classroom.classAccessCode?.active
-  ) {
-    return null;
-  }
-
-  return { classroomId: session.classroom.id };
-}
-
 export async function setClassSessionCookie(token: string, expiresAt: Date) {
   const cookieStore = await cookies();
   cookieStore.set(CLASS_SESSION_COOKIE, token, {
@@ -92,7 +52,8 @@ export async function revokeClassSession(
   token: string | undefined,
   now = new Date(),
 ) {
-  if (!token || !isSessionToken(token)) return false;
+  void now;
+  if (!token || !isClassSessionToken(token)) return false;
 
   const result = await prisma.classSession.updateMany({
     where: {

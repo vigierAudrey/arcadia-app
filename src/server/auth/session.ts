@@ -1,29 +1,22 @@
-import { createHmac, randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 
 import { cookies } from "next/headers";
 
 import { prisma } from "@/server/db/prisma";
 
-import { getAdminSessionSecret } from "./config";
 import {
   ADMIN_SESSION_COOKIE,
   ADMIN_SESSION_DURATION_MS,
 } from "./constants";
+import {
+  getAdminBySessionToken,
+  hashAdminSessionToken,
+  isAdminSessionToken,
+  type AuthenticatedAdmin,
+} from "./session-token";
 
-export type AuthenticatedAdmin = {
-  id: string;
-  login: string;
-};
-
-export function hashAdminSessionToken(token: string) {
-  return createHmac("sha256", getAdminSessionSecret())
-    .update(token)
-    .digest("hex");
-}
-
-function isSessionToken(token: string) {
-  return /^[A-Za-z0-9_-]{43}$/.test(token);
-}
+export { getAdminBySessionToken, hashAdminSessionToken };
+export type { AuthenticatedAdmin };
 
 export async function createAdminSession(
   adminUserId: string,
@@ -44,26 +37,6 @@ export async function createAdminSession(
   return { token, expiresAt };
 }
 
-export async function getAdminBySessionToken(
-  token: string | undefined,
-  now = new Date(),
-): Promise<AuthenticatedAdmin | null> {
-  if (!token || !isSessionToken(token)) return null;
-
-  const session = await prisma.adminSession.findUnique({
-    where: { tokenHash: hashAdminSessionToken(token) },
-    select: {
-      expiresAt: true,
-      revokedAt: true,
-      adminUser: { select: { id: true, login: true } },
-    },
-  });
-
-  if (!session || session.revokedAt || session.expiresAt <= now) return null;
-
-  return session.adminUser;
-}
-
 export async function setAdminSessionCookie(
   token: string,
   expiresAt: Date,
@@ -82,7 +55,8 @@ export async function revokeAdminSession(
   token: string | undefined,
   now = new Date(),
 ) {
-  if (!token || !isSessionToken(token)) return false;
+  void now;
+  if (!token || !isAdminSessionToken(token)) return false;
 
   const result = await prisma.adminSession.updateMany({
     where: {

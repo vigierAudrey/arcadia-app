@@ -317,6 +317,278 @@
   line-height: 1.35;
 }
 
+.liveQuestionBank {
+  display: grid;
+  gap: 1rem;
+  margin-block: 0 2rem;
+  padding: 1rem;
+  border: 1px solid rgb(53 234 223 / 26%);
+  border-left: 4px solid var(--cyan-400);
+  background: rgb(5 6 21 / 44%);
+}
+
+.liveBankHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.liveBankHeading h2 {
+  margin: 0;
+  color: var(--text-100);
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.liveBankHeading p:not(.eyebrow) {
+  max-width: 46rem;
+  margin: 0.55rem 0 0;
+  color: var(--text-300);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.liveBankStatus {
+  flex: 0 0 auto;
+  display: grid;
+  gap: 0.4rem;
+  justify-items: end;
+}
+
+.liveBankStatus strong {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--yellow-400);
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.58rem;
+  text-transform: uppercase;
+}
+
+.liveBankStatus span {
+  color: var(--green-400);
+  font-family: var(--font-pixel);
+  font-size: 0.54rem;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.liveSessionCommands {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.liveSessionCommands article {
+  display: grid;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.8rem;
+  border: 1px solid rgb(var(--ch-green) / 24%);
+  background: rgb(var(--ch-green) / 7%);
+}
+
+.liveSessionCommands strong,
+.liveSessionCommands span {
+  font-family: var(--font-pixel);
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.liveSessionCommands strong {
+  color: var(--green-400);
+}
+
+.liveSessionCommands span {
+  display: inline-block;
+  margin-left: 0.45rem;
+  color: var(--yellow-300);
+}
+
+.liveSessionCommands p {
+  margin: 0.35rem 0 0;
+  color: var(--text-300);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.liveRevealForm {
+  display: grid;
+  gap: 0.45rem;
+  justify-items: start;
+}
+
+.liveBankGroups {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.liveBankGroup {
+  border: 1px solid var(--line-soft);
+  background: rgb(14 18 48 / 72%);
+}
+
+.liveBankGroup > summary {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0.9rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.liveBankGroup > summary::-webkit-details-marker {
+  display: none;
+}
+
+.liveBankGroup > summary span {
+  color: var(--cyan-300);
+  font-family: var(--font-pixel);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.liveBankGroup > summary small {
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.54rem;
+  text-transform: uppercase;
+}
+
+.liveQuestionList {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0 0.8rem 0.8rem;
+  list-style: none;
+}
+
+.liveQuestionItem {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.8rem;
+  border: 1px solid rgb(169 179 214 / 18%);
+  border-left: 3px solid var(--magenta-400);
+  background: rgb(5 6 21 / 52%);
+}
+
+.liveQuestionMain {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.liveQuestionType {
+  width: fit-content;
+  padding: 0.28rem 0.4rem;
+  border: 1px solid var(--yellow-400);
+  color: var(--yellow-300);
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.liveQuestionMain h3 {
+  margin: 0;
+  color: var(--text-100);
+  font-family: var(--font-pixel);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.liveQuestionMain p,
+.liveQuestionSource {
+  margin: 0;
+  color: var(--text-300);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.liveQuestionMeta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0;
+}
+
+.liveQuestionMeta div {
+  min-width: 0;
+  padding: 0.55rem;
+  border: 1px solid rgb(169 179 214 / 16%);
+  background: rgb(14 18 48 / 58%);
+}
+
+.liveQuestionMeta dt {
+  margin: 0 0 0.25rem;
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  text-transform: uppercase;
+}
+
+.liveQuestionMeta dd {
+  margin: 0;
+  color: var(--text-100);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.liveQuestionSource {
+  color: var(--text-500);
+  font-size: 0.68rem;
+}
+
+.liveQuestionItem > button:disabled {
+  width: fit-content;
+  min-height: 2.35rem;
+  border: 1px solid rgb(169 179 214 / 25%);
+  border-radius: 0;
+  padding: 0.55rem 0.75rem;
+  background: transparent;
+  color: var(--text-500);
+  cursor: not-allowed;
+  font-family: var(--font-pixel);
+  font-size: 0.56rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.liveQuestionSendForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: end;
+}
+
+.liveQuestionSendForm label {
+  display: grid;
+  gap: 0.3rem;
+  min-width: min(100%, 16rem);
+}
+
+.liveQuestionSendForm label span {
+  color: var(--text-500);
+  font-family: var(--font-pixel);
+  font-size: 0.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.liveQuestionSendForm select {
+  min-height: 2.35rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  padding: 0.5rem 0.65rem;
+  background: var(--night-900);
+  color: var(--text-100);
+  font: inherit;
+}
+
 .catalog {
   display: grid;
   gap: 1rem;
@@ -586,6 +858,52 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.liveSessionPanel {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.65rem 0 0;
+  padding: 0.75rem 0.8rem;
+  border: 1px dashed rgb(53 234 223 / 28%);
+  background: rgb(53 234 223 / 5%);
+}
+
+.liveSessionStatus {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-family: var(--font-pixel);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.liveSessionStatus > span {
+  color: var(--text-500);
+}
+
+.liveSessionPin,
+.liveSessionHint {
+  margin: 0;
+  color: var(--text-300);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.liveSessionPin {
+  border-left: 3px solid var(--cyan-400);
+  padding: 0.55rem 0.7rem;
+  background: rgb(53 234 223 / 8%);
+}
+
+.liveSessionPin code {
+  color: var(--cyan-300);
+  font-family: var(--font-pixel);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
 }
 
 .teachingList {
