@@ -912,6 +912,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                                             }
                                           />
                                           <LiveSessionPanel
+                                            key={`live-${classroom.id}-${activeLiveSession?.id ?? "none"}`}
                                             classroomId={classroom.id}
                                             className={classroom.name}
                                             activeSession={

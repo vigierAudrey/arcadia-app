@@ -8,11 +8,35 @@ import {
   joinLiveSession,
   listLiveSessionsForClassroom,
   purgeExpiredLiveSessions,
+  resumeLiveParticipant,
   revealLiveQuestionForSession,
   resetLiveSessionsForTests,
   sendLiveQuestionToSession,
-  submitLiveAnswer,
+  submitLiveAnswer as submitLiveAnswerToSession,
 } from "@/server/live-sessions/store";
+
+function submitLiveAnswer({
+  choiceIndex,
+  classroomId,
+  now,
+  participantId,
+}: {
+  choiceIndex: number;
+  classroomId: string;
+  now?: Date;
+  participantId: string;
+}) {
+  const session = listLiveSessionsForClassroom(classroomId, now)[0];
+  assert.ok(session);
+  return submitLiveAnswerToSession({
+    choiceIndex,
+    classroomId,
+    now,
+    participantId,
+    roundId: session.currentQuestion?.roundId ?? "no-active-round",
+    sessionId: session.id,
+  });
+}
 
 test("live sessions are temporary and scoped by classroom", () => {
   resetLiveSessionsForTests();
@@ -60,11 +84,13 @@ test("joining a live session assigns a server-side avatar name", () => {
   const first = joinLiveSession({
     avatarId: "pac-yellow-cap",
     classroomId: "classroom-a",
+    ownerKey: "student-a",
     pin: session.pin,
   });
   const second = joinLiveSession({
     avatarId: "pac-yellow-cap",
     classroomId: "classroom-a",
+    ownerKey: "student-b",
     pin: session.pin,
   });
 
@@ -72,6 +98,32 @@ test("joining a live session assigns a server-side avatar name", () => {
   assert.equal(second.participant.displayName, "Pac Jaune 2");
   assert.equal(first.session.participants.length, 1);
   assert.equal(listLiveSessionsForClassroom("classroom-a")[0].participants.length, 2);
+});
+
+test("reconnecting with the same server-side owner resumes one participant", () => {
+  resetLiveSessionsForTests();
+  const session = createLiveSession("classroom-a");
+  const first = joinLiveSession({
+    avatarId: "pac-yellow-cap",
+    classroomId: "classroom-a",
+    ownerKey: "session-token-hash-a",
+    pin: session.pin,
+  });
+  const rejoined = joinLiveSession({
+    avatarId: "blob-red-crown",
+    classroomId: "classroom-a",
+    ownerKey: "session-token-hash-a",
+    pin: session.pin,
+  });
+  const resumed = resumeLiveParticipant(
+    "classroom-a",
+    "session-token-hash-a",
+  );
+
+  assert.equal(rejoined.participant.id, first.participant.id);
+  assert.equal(resumed?.participant.id, first.participant.id);
+  assert.equal(resumed?.session.participants.length, 1);
+  assert.equal("ownerKey" in (resumed?.participant as object), false);
 });
 
 test("joining rejects invalid pins and avatar ids", () => {
@@ -83,6 +135,7 @@ test("joining rejects invalid pins and avatar ids", () => {
       joinLiveSession({
         avatarId: "pac-yellow-cap",
         classroomId: "classroom-a",
+        ownerKey: "student-a",
         pin: "ABC123",
       }),
     { message: "LIVE_SESSION_INVALID_PIN" },
@@ -92,6 +145,7 @@ test("joining rejects invalid pins and avatar ids", () => {
       joinLiveSession({
         avatarId: "free-text-name",
         classroomId: "classroom-a",
+        ownerKey: "student-a",
         pin: session.pin,
       }),
     { message: "LIVE_SESSION_INVALID_AVATAR" },
@@ -170,6 +224,24 @@ test("revealing requires an active question and new questions clear correction",
   assert.equal(nextQuestion.revealedAnswer, null);
 });
 
+test("a new question cannot replace an unrevealed round", () => {
+  resetLiveSessionsForTests();
+  const session = createLiveSession("classroom-a");
+  sendLiveQuestionToSession({
+    questionId: "pse-bacpro-a2-sommeil-qcm",
+    sessionId: session.id,
+  });
+
+  assert.throws(
+    () =>
+      sendLiveQuestionToSession({
+        questionId: "pse-bacpro-b1-alimentation-eco-vf",
+        sessionId: session.id,
+      }),
+    { message: "LIVE_QUESTION_REVEAL_REQUIRED" },
+  );
+});
+
 test("sending a live question rejects unknown sessions and questions", () => {
   resetLiveSessionsForTests();
   const session = createLiveSession("classroom-a");
@@ -198,6 +270,7 @@ test("submitting an answer is refused after correction reveal", () => {
   const joined = joinLiveSession({
     avatarId: "pac-yellow-cap",
     classroomId: "classroom-a",
+    ownerKey: "student-a",
     pin: session.pin,
   });
   sendLiveQuestionToSession({
@@ -217,12 +290,13 @@ test("submitting an answer is refused after correction reveal", () => {
   );
 });
 
-test("submitting an answer scores once per current question", () => {
+test("submitting hides points until reveal and scores the round once", () => {
   resetLiveSessionsForTests();
   const session = createLiveSession("classroom-a");
   const joined = joinLiveSession({
     avatarId: "pac-yellow-cap",
     classroomId: "classroom-a",
+    ownerKey: "student-a",
     pin: session.pin,
   });
   sendLiveQuestionToSession({
@@ -236,11 +310,9 @@ test("submitting an answer scores once per current question", () => {
     participantId: joined.participant.id,
   });
 
-  assert.equal(answer.correct, true);
-  assert.equal(answer.pointsAwarded, 120);
   assert.equal(answer.session.answerSummary.answeredCount, 1);
-  assert.equal(answer.session.answerSummary.correctCount, 1);
-  assert.equal(answer.session.participants[0]?.score, 120);
+  assert.equal(answer.session.answerSummary.correctCount, null);
+  assert.equal(answer.session.participants[0]?.score, 0);
   assert.throws(
     () =>
       submitLiveAnswer({
@@ -250,6 +322,12 @@ test("submitting an answer scores once per current question", () => {
       }),
     { message: "LIVE_ANSWER_ALREADY_SUBMITTED" },
   );
+
+  const revealed = revealLiveQuestionForSession({ sessionId: session.id });
+  const revealedAgain = revealLiveQuestionForSession({ sessionId: session.id });
+  assert.equal(revealed.answerSummary.correctCount, 1);
+  assert.equal(revealed.participants[0]?.score, 120);
+  assert.equal(revealedAgain.participants[0]?.score, 120);
 });
 
 test("sending a new question clears temporary answers but keeps scores", () => {
@@ -258,6 +336,7 @@ test("sending a new question clears temporary answers but keeps scores", () => {
   const joined = joinLiveSession({
     avatarId: "pac-yellow-cap",
     classroomId: "classroom-a",
+    ownerKey: "student-a",
     pin: session.pin,
   });
   sendLiveQuestionToSession({
@@ -269,6 +348,7 @@ test("sending a new question clears temporary answers but keeps scores", () => {
     classroomId: "classroom-a",
     participantId: joined.participant.id,
   });
+  revealLiveQuestionForSession({ sessionId: session.id });
 
   const updated = sendLiveQuestionToSession({
     questionId: "pse-bacpro-b1-alimentation-eco-vf",
@@ -276,7 +356,7 @@ test("sending a new question clears temporary answers but keeps scores", () => {
   });
 
   assert.equal(updated.answerSummary.answeredCount, 0);
-  assert.equal(updated.answerSummary.correctCount, 0);
+  assert.equal(updated.answerSummary.correctCount, null);
   assert.equal(updated.participants[0]?.score, 120);
 });
 
@@ -286,6 +366,7 @@ test("submitting an answer requires a participant, question and valid choice", (
   const joined = joinLiveSession({
     avatarId: "pac-yellow-cap",
     classroomId: "classroom-a",
+    ownerKey: "student-a",
     pin: session.pin,
   });
 
@@ -331,6 +412,7 @@ test("submitting an answer after the time limit is refused", () => {
   const joined = joinLiveSession({
     avatarId: "pac-yellow-cap",
     classroomId: "classroom-a",
+    ownerKey: "student-a",
     now,
     pin: session.pin,
   });
@@ -349,5 +431,44 @@ test("submitting an answer after the time limit is refused", () => {
         participantId: joined.participant.id,
       }),
     { message: "LIVE_QUESTION_CLOSED" },
+  );
+});
+
+test("an answer is bound to the exact session and round", () => {
+  resetLiveSessionsForTests();
+  const session = createLiveSession("classroom-a");
+  const joined = joinLiveSession({
+    avatarId: "pac-yellow-cap",
+    classroomId: "classroom-a",
+    ownerKey: "student-a",
+    pin: session.pin,
+  });
+  const question = sendLiveQuestionToSession({
+    questionId: "pse-bacpro-a2-sommeil-qcm",
+    sessionId: session.id,
+  });
+  assert.ok(question.currentQuestion);
+
+  assert.throws(
+    () =>
+      submitLiveAnswerToSession({
+        choiceIndex: 1,
+        classroomId: "classroom-a",
+        participantId: joined.participant.id,
+        roundId: "00000000-0000-0000-0000-000000000000",
+        sessionId: session.id,
+      }),
+    { message: "LIVE_ROUND_STALE" },
+  );
+  assert.throws(
+    () =>
+      submitLiveAnswerToSession({
+        choiceIndex: 1,
+        classroomId: "classroom-a",
+        participantId: joined.participant.id,
+        roundId: question.currentQuestion!.roundId,
+        sessionId: "00000000-0000-0000-0000-000000000000",
+      }),
+    { message: "LIVE_SESSION_NOT_FOUND" },
   );
 });

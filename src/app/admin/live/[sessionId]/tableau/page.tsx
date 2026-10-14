@@ -47,7 +47,10 @@ export default async function LiveBoardPage({
         </section>
 
         <LiveBoardClient
-          initialAnswerSummary={session.answerSummary}
+          initialAnswerSummary={{
+            answeredCount: session.answerSummary.answeredCount,
+            totalParticipants: session.answerSummary.totalParticipants,
+          }}
           expiresAt={session.expiresAt.toISOString()}
           initialParticipants={session.participants.map((participant) => ({
             id: participant.id,

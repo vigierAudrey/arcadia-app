@@ -15,6 +15,7 @@ type JoinState = {
 
 type StudentQuestion = {
   id: string;
+  roundId: string;
   type: "single-choice" | "true-false";
   title: string;
   prompt: string;
@@ -55,6 +56,7 @@ function isStudentQuestion(value: unknown): value is StudentQuestion | null {
     typeof value === "object" &&
     value !== null &&
     "id" in value &&
+    "roundId" in value &&
     "type" in value &&
     "title" in value &&
     "prompt" in value &&
@@ -63,6 +65,7 @@ function isStudentQuestion(value: unknown): value is StudentQuestion | null {
     "points" in value &&
     "sentAt" in value &&
     typeof value.id === "string" &&
+    typeof value.roundId === "string" &&
     (value.type === "single-choice" || value.type === "true-false") &&
     typeof value.title === "string" &&
     typeof value.prompt === "string" &&
@@ -108,7 +111,13 @@ export function LiveJoinClient() {
   });
   const socketRef = useRef<WebSocket | null>(null);
   const joinedRef = useRef(false);
+  const joinRequestRef = useRef<{ avatarId: LiveAvatarId; pin: string } | null>(
+    null,
+  );
+  const reconnectAttemptRef = useRef(0);
+  const [connectionNonce, setConnectionNonce] = useState(0);
   const sound = useLiveSound();
+  const playSoundRef = useRef(sound.play);
   const lastQuestionSoundRef = useRef<string | null>(null);
   const lastRevealSoundRef = useRef<string | null>(null);
   const lastTickSoundRef = useRef<number | null>(null);
@@ -117,6 +126,10 @@ export function LiveJoinClient() {
     () => LIVE_AVATARS.find((avatar) => avatar.id === avatarId) ?? LIVE_AVATARS[0],
     [avatarId],
   );
+
+  useEffect(() => {
+    playSoundRef.current = sound.play;
+  }, [sound.play]);
 
   useEffect(() => {
     if (!currentQuestion || revealedAnswer) return;
@@ -140,24 +153,37 @@ export function LiveJoinClient() {
       return;
     }
 
-    socketRef.current?.close();
     joinedRef.current = false;
+    joinRequestRef.current = { avatarId, pin: normalizedPin };
     setJoinState({ status: "connecting", message: "Connexion à la session…" });
-
-    const socket = new WebSocket(getLiveSocketUrl());
-    socketRef.current = socket;
-
-    socket.addEventListener("open", () => {
+    const socket = socketRef.current;
+    if (socket?.readyState === WebSocket.OPEN) {
       socket.send(
-        JSON.stringify({
-          type: "participant:join",
-          pin: normalizedPin,
-          avatarId,
-        }),
+        JSON.stringify({ type: "participant:join", pin: normalizedPin, avatarId }),
       );
-    });
+      return;
+    }
+    setConnectionNonce((value) => value + 1);
+  }
 
-    socket.addEventListener("message", (event) => {
+  useEffect(() => {
+    let disposed = false;
+    let reconnectTimer: number | undefined;
+
+    function connect() {
+      if (disposed) return;
+      const socket = new WebSocket(getLiveSocketUrl());
+      socketRef.current = socket;
+
+      socket.addEventListener("open", () => {
+        reconnectAttemptRef.current = 0;
+        const request = joinRequestRef.current;
+        if (request && !joinedRef.current) {
+          socket.send(JSON.stringify({ type: "participant:join", ...request }));
+        }
+      });
+
+      socket.addEventListener("message", (event) => {
       let message: unknown;
       try {
         message = JSON.parse(String(event.data));
@@ -173,14 +199,51 @@ export function LiveJoinClient() {
         message.type === "live:state" &&
         "currentQuestion" in message &&
         "revealedAnswer" in message &&
+        "ownAnswer" in message &&
         isStudentQuestion(message.currentQuestion) &&
-        isStudentReveal(message.revealedAnswer)
+        isStudentReveal(message.revealedAnswer) &&
+        (message.ownAnswer === null ||
+          (typeof message.ownAnswer === "object" &&
+            message.ownAnswer !== null &&
+            "choiceIndex" in message.ownAnswer &&
+            "roundId" in message.ownAnswer &&
+            typeof message.ownAnswer.choiceIndex === "number" &&
+            typeof message.ownAnswer.roundId === "string"))
       ) {
         const nextQuestion = message.currentQuestion;
         const nextReveal = message.revealedAnswer;
+        const ownAnswer =
+          message.ownAnswer === null
+            ? null
+            : {
+                choiceIndex: Number(message.ownAnswer.choiceIndex),
+                roundId: String(message.ownAnswer.roundId),
+              };
         setCurrentQuestion((previousQuestion) => {
-          if (previousQuestion?.id !== nextQuestion?.id) {
-            setAnswerState({ status: "idle", message: "" });
+          if (previousQuestion?.roundId !== nextQuestion?.roundId) {
+            setAnswerState(
+              ownAnswer &&
+              nextQuestion &&
+              ownAnswer.roundId === nextQuestion.roundId
+                ? {
+                    status: "accepted",
+                    message: "Réponse enregistrée.",
+                    questionId: nextQuestion.id,
+                    selectedChoiceIndex: ownAnswer.choiceIndex,
+                  }
+                : { status: "idle", message: "" },
+            );
+          } else if (
+            ownAnswer &&
+            nextQuestion &&
+            ownAnswer.roundId === nextQuestion.roundId
+          ) {
+            setAnswerState({
+              status: "accepted",
+              message: "Réponse enregistrée.",
+              questionId: nextQuestion.id,
+              selectedChoiceIndex: ownAnswer.choiceIndex,
+            });
           }
           return nextQuestion;
         });
@@ -200,6 +263,7 @@ export function LiveJoinClient() {
         typeof message.participant.displayName === "string"
       ) {
         joinedRef.current = true;
+        joinRequestRef.current = null;
         setJoinState({
           status: "joined",
           message: "Tu es dans la session. Garde cette page ouverte.",
@@ -212,14 +276,18 @@ export function LiveJoinClient() {
         typeof message === "object" &&
         message !== null &&
         "type" in message &&
-        message.type === "answer:accepted"
+        message.type === "answer:accepted" &&
+        "choiceIndex" in message &&
+        "roundId" in message &&
+        typeof message.choiceIndex === "number" &&
+        typeof message.roundId === "string"
       ) {
-        sound.play("answer");
-        setAnswerState((current) => ({
-          ...current,
+        playSoundRef.current("answer");
+        setAnswerState({
           status: "accepted",
           message: "Réponse enregistrée.",
-        }));
+          selectedChoiceIndex: message.choiceIndex,
+        });
         return;
       }
 
@@ -241,21 +309,29 @@ export function LiveJoinClient() {
           });
         }
       }
-    });
+      });
 
-    socket.addEventListener("close", () => {
-      joinedRef.current = false;
-      setJoinState((current) =>
-        current.status === "joined"
-          ? current
-          : { status: "error", message: "Connexion live interrompue." },
-      );
-    });
+      socket.addEventListener("close", () => {
+        if (disposed || socketRef.current !== socket) return;
+        joinedRef.current = false;
+        setJoinState((current) => ({
+          status: "connecting",
+          displayName: current.displayName,
+          message: "Connexion interrompue, nouvelle tentative…",
+        }));
+        const attempt = reconnectAttemptRef.current++;
+        const delay = Math.min(15_000, 1_000 * 2 ** Math.min(attempt, 4));
+        reconnectTimer = window.setTimeout(connect, delay);
+      });
+    }
 
-    socket.addEventListener("error", () => {
-      setJoinState({ status: "error", message: "Connexion live impossible." });
-    });
-  }
+    connect();
+    return () => {
+      disposed = true;
+      if (reconnectTimer !== undefined) window.clearTimeout(reconnectTimer);
+      if (socketRef.current) socketRef.current.close();
+    };
+  }, [connectionNonce]);
 
   function submitAnswer(choiceIndex: number) {
     if (!currentQuestion || joinState.status !== "joined") return;
@@ -287,7 +363,13 @@ export function LiveJoinClient() {
       questionId: currentQuestion.id,
       selectedChoiceIndex: choiceIndex,
     });
-    socket.send(JSON.stringify({ type: "answer:submit", choiceIndex }));
+    socket.send(
+      JSON.stringify({
+        type: "answer:submit",
+        choiceIndex,
+        roundId: currentQuestion.roundId,
+      }),
+    );
   }
 
   const remainingSeconds = getRemainingSeconds(currentQuestion, nowMs);

@@ -1,4 +1,4 @@
-import { randomBytes, randomUUID } from "node:crypto";
+import { randomInt, randomUUID } from "node:crypto";
 
 import { getLiveAvatar } from "@/features/live/avatars";
 import {
@@ -24,6 +24,7 @@ export type LiveParticipant = {
 
 export type LiveQuestionSnapshot = {
   id: string;
+  roundId: string;
   type: LiveQuestionType;
   title: string;
   prompt: string;
@@ -41,7 +42,7 @@ export type LiveRevealSnapshot = {
 
 export type LiveAnswerSummary = {
   answeredCount: number;
-  correctCount: number;
+  correctCount: number | null;
   totalParticipants: number;
 };
 
@@ -58,12 +59,14 @@ export type LiveSessionSummary = {
   participants: LiveParticipant[];
 };
 
-type LiveParticipantRecord = LiveParticipant;
+type LiveParticipantRecord = LiveParticipant & {
+  ownerKey: string;
+};
 type LiveAnswerRecord = {
   choiceIndex: number;
   correct: boolean;
   pointsAwarded: number;
-  questionId: string;
+  roundId: string;
   submittedAt: Date;
 };
 
@@ -76,7 +79,7 @@ type LiveSessionRecord = Omit<
 };
 
 type LiveSessionStore = {
-  listeners: Set<() => void>;
+  listeners: Set<(classroomId: string) => void>;
   sessions: Map<string, LiveSessionRecord>;
 };
 
@@ -86,19 +89,19 @@ declare global {
 
 function getStore() {
   globalThis.__arcadiaLiveSessionStore ??= {
-    listeners: new Set<() => void>(),
+    listeners: new Set<(classroomId: string) => void>(),
     sessions: new Map<string, LiveSessionRecord>(),
   };
   return globalThis.__arcadiaLiveSessionStore;
 }
 
-function notifyLiveSessionListeners() {
+function notifyLiveSessionListeners(classroomId: string) {
   for (const listener of getStore().listeners) {
-    listener();
+    listener(classroomId);
   }
 }
 
-export function subscribeLiveSessions(listener: () => void) {
+export function subscribeLiveSessions(listener: (classroomId: string) => void) {
   const listeners = getStore().listeners;
   listeners.add(listener);
   return () => {
@@ -109,7 +112,10 @@ export function subscribeLiveSessions(listener: () => void) {
 function cloneSession(session: LiveSessionRecord): LiveSessionSummary {
   const answers = Array.from(session.answers.values());
   return {
-    ...session,
+    id: session.id,
+    classroomId: session.classroomId,
+    pin: session.pin,
+    status: session.status,
     createdAt: new Date(session.createdAt),
     expiresAt: new Date(session.expiresAt),
     currentQuestion: session.currentQuestion
@@ -127,13 +133,21 @@ function cloneSession(session: LiveSessionRecord): LiveSessionSummary {
       : null,
     answerSummary: {
       answeredCount: answers.length,
-      correctCount: answers.filter((answer) => answer.correct).length,
+      correctCount:
+        session.status === "reveal"
+          ? answers.filter((answer) => answer.correct).length
+          : null,
       totalParticipants: session.participants.size,
     },
-    participants: Array.from(session.participants.values()).map((participant) => ({
-      ...participant,
-      joinedAt: new Date(participant.joinedAt),
-    })),
+    participants: Array.from(session.participants.values()).map(
+      (participant) => ({
+        id: participant.id,
+        avatarId: participant.avatarId,
+        displayName: participant.displayName,
+        joinedAt: new Date(participant.joinedAt),
+        score: participant.score,
+      }),
+    ),
   };
 }
 
@@ -144,20 +158,24 @@ function isExpired(session: LiveSessionRecord, now: Date) {
 export function purgeExpiredLiveSessions(now = new Date()) {
   const store = getStore();
   let purged = 0;
+  const changedClassrooms = new Set<string>();
 
   for (const [id, session] of store.sessions) {
     if (session.status === "ended" || isExpired(session, now)) {
       store.sessions.delete(id);
       purged += 1;
+      changedClassrooms.add(session.classroomId);
     }
   }
 
-  if (purged > 0) notifyLiveSessionListeners();
+  for (const classroomId of changedClassrooms) {
+    notifyLiveSessionListeners(classroomId);
+  }
   return purged;
 }
 
 function generatePin() {
-  const value = randomBytes(4).readUInt32BE(0) % 1_000_000;
+  const value = randomInt(1_000_000);
   return value.toString().padStart(LIVE_PIN_LENGTH, "0");
 }
 
@@ -203,7 +221,7 @@ export function createLiveSession(classroomId: string, now = new Date()) {
   };
 
   store.sessions.set(session.id, session);
-  notifyLiveSessionListeners();
+  notifyLiveSessionListeners(session.classroomId);
   return cloneSession(session);
 }
 
@@ -251,8 +269,13 @@ export function sendLiveQuestionToSession({
     throw new Error("LIVE_QUESTION_NOT_FOUND");
   }
 
+  if (session.status === "question") {
+    throw new Error("LIVE_QUESTION_REVEAL_REQUIRED");
+  }
+
   session.currentQuestion = {
     id: question.id,
+    roundId: randomUUID(),
     type: question.type,
     title: question.title,
     prompt: question.prompt,
@@ -264,7 +287,7 @@ export function sendLiveQuestionToSession({
   session.status = "question";
   session.revealedAnswer = null;
   session.answers.clear();
-  notifyLiveSessionListeners();
+  notifyLiveSessionListeners(session.classroomId);
 
   return cloneSession(session);
 }
@@ -293,13 +316,22 @@ export function revealLiveQuestionForSession({
     throw new Error("LIVE_QUESTION_NOT_FOUND");
   }
 
+  if (session.status === "reveal") {
+    return cloneSession(session);
+  }
+
+  for (const [participantId, answer] of session.answers) {
+    const participant = session.participants.get(participantId);
+    if (participant) participant.score += answer.pointsAwarded;
+  }
+
   session.status = "reveal";
   session.revealedAnswer = {
     correctChoiceIndex: sourceQuestion.correctChoiceIndex,
     explanation: sourceQuestion.explanation,
     revealedAt: now,
   };
-  notifyLiveSessionListeners();
+  notifyLiveSessionListeners(session.classroomId);
 
   return cloneSession(session);
 }
@@ -307,11 +339,13 @@ export function revealLiveQuestionForSession({
 export function joinLiveSession({
   avatarId,
   classroomId,
+  ownerKey,
   pin,
   now = new Date(),
 }: {
   avatarId: string;
   classroomId: string;
+  ownerKey: string;
   pin: string;
   now?: Date;
 }) {
@@ -338,6 +372,19 @@ export function joinLiveSession({
     throw new Error("LIVE_SESSION_NOT_FOUND");
   }
 
+  const existingParticipant = Array.from(session.participants.values()).find(
+    (participant) => participant.ownerKey === ownerKey,
+  );
+  if (existingParticipant) {
+    const snapshot = cloneSession(session);
+    return {
+      session: snapshot,
+      participant: snapshot.participants.find(
+        (participant) => participant.id === existingParticipant.id,
+      )!,
+    };
+  }
+
   if (session.participants.size >= MAX_PARTICIPANTS_PER_SESSION) {
     throw new Error("LIVE_SESSION_FULL");
   }
@@ -347,6 +394,7 @@ export function joinLiveSession({
   ).length;
   const participant: LiveParticipantRecord = {
     id: randomUUID(),
+    ownerKey,
     avatarId: avatar.id,
     displayName: `${avatar.label} ${sameAvatarCount + 1}`,
     joinedAt: now,
@@ -354,13 +402,16 @@ export function joinLiveSession({
   };
 
   session.participants.set(participant.id, participant);
-  notifyLiveSessionListeners();
+  notifyLiveSessionListeners(session.classroomId);
 
   return {
     session: cloneSession(session),
     participant: {
-      ...participant,
+      id: participant.id,
+      avatarId: participant.avatarId,
+      displayName: participant.displayName,
       joinedAt: new Date(participant.joinedAt),
+      score: participant.score,
     },
   };
 }
@@ -370,11 +421,15 @@ export function submitLiveAnswer({
   classroomId,
   now = new Date(),
   participantId,
+  roundId,
+  sessionId,
 }: {
   choiceIndex: number;
   classroomId: string;
   now?: Date;
   participantId: string;
+  roundId: string;
+  sessionId: string;
 }) {
   purgeExpiredLiveSessions(now);
 
@@ -382,8 +437,13 @@ export function submitLiveAnswer({
     throw new Error("LIVE_ANSWER_INVALID_CHOICE");
   }
 
-  const session = listLiveSessionRecordsForClassroom(classroomId, now)[0] ?? null;
-  if (!session) {
+  const session = getStore().sessions.get(sessionId);
+  if (
+    !session ||
+    session.classroomId !== classroomId ||
+    session.status === "ended" ||
+    isExpired(session, now)
+  ) {
     throw new Error("LIVE_SESSION_NOT_FOUND");
   }
 
@@ -399,6 +459,10 @@ export function submitLiveAnswer({
 
   if (session.status !== "question") {
     throw new Error("LIVE_QUESTION_NOT_ACTIVE");
+  }
+
+  if (question.roundId !== roundId) {
+    throw new Error("LIVE_ROUND_STALE");
   }
 
   const answerDeadline =
@@ -422,37 +486,49 @@ export function submitLiveAnswer({
 
   const correct = sourceQuestion.correctChoiceIndex === choiceIndex;
   const pointsAwarded = correct ? question.points : 0;
-  participant.score += pointsAwarded;
   session.answers.set(participantId, {
     choiceIndex,
     correct,
     pointsAwarded,
-    questionId: question.id,
+    roundId: question.roundId,
     submittedAt: now,
   });
-  notifyLiveSessionListeners();
+  notifyLiveSessionListeners(session.classroomId);
 
   return {
     accepted: true,
-    correct,
-    pointsAwarded,
     session: cloneSession(session),
   };
 }
 
-function listLiveSessionRecordsForClassroom(
-  classroomId: string,
-  now = new Date(),
+export function resumeLiveParticipant(classroomId: string, ownerKey: string) {
+  purgeExpiredLiveSessions();
+  for (const session of getStore().sessions.values()) {
+    if (session.classroomId !== classroomId) continue;
+    const participant = Array.from(session.participants.values()).find(
+      (candidate) => candidate.ownerKey === ownerKey,
+    );
+    if (!participant) continue;
+
+    const snapshot = cloneSession(session);
+    return {
+      session: snapshot,
+      participant: snapshot.participants.find(
+        (candidate) => candidate.id === participant.id,
+      )!,
+    };
+  }
+  return null;
+}
+
+export function getLiveParticipantAnswer(
+  sessionId: string,
+  participantId: string,
 ) {
-  purgeExpiredLiveSessions(now);
-  return Array.from(getStore().sessions.values())
-    .filter(
-      (session) =>
-        session.classroomId === classroomId &&
-        session.status !== "ended" &&
-        !isExpired(session, now),
-    )
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  const session = getStore().sessions.get(sessionId);
+  const answer = session?.answers.get(participantId);
+  if (!answer) return null;
+  return { choiceIndex: answer.choiceIndex, roundId: answer.roundId };
 }
 
 export function endLiveSession(sessionId: string, classroomId?: string) {
@@ -462,11 +538,16 @@ export function endLiveSession(sessionId: string, classroomId?: string) {
 
   session.status = "ended";
   getStore().sessions.delete(sessionId);
-  notifyLiveSessionListeners();
+  notifyLiveSessionListeners(session.classroomId);
   return true;
 }
 
 export function resetLiveSessionsForTests() {
+  const classroomIds = new Set(
+    Array.from(getStore().sessions.values(), (session) => session.classroomId),
+  );
   getStore().sessions.clear();
-  notifyLiveSessionListeners();
+  for (const classroomId of classroomIds) {
+    notifyLiveSessionListeners(classroomId);
+  }
 }

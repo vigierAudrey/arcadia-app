@@ -16,6 +16,7 @@ type BoardParticipant = {
 
 type BoardQuestion = {
   id: string;
+  roundId: string;
   type: "single-choice" | "true-false";
   title: string;
   prompt: string;
@@ -94,6 +95,7 @@ function isBoardQuestion(value: unknown): value is BoardQuestion | null {
     typeof value === "object" &&
     value !== null &&
     "id" in value &&
+    "roundId" in value &&
     "type" in value &&
     "title" in value &&
     "prompt" in value &&
@@ -102,6 +104,7 @@ function isBoardQuestion(value: unknown): value is BoardQuestion | null {
     "points" in value &&
     "sentAt" in value &&
     typeof value.id === "string" &&
+    typeof value.roundId === "string" &&
     (value.type === "single-choice" || value.type === "true-false") &&
     typeof value.title === "string" &&
     typeof value.prompt === "string" &&
@@ -144,55 +147,69 @@ export function LiveBoardClient({
     "connecting",
   );
   const sound = useLiveSound();
-  const lastQuestionSoundRef = useRef(initialQuestion?.id ?? null);
+  const lastQuestionSoundRef = useRef(initialQuestion?.roundId ?? null);
   const lastRevealSoundRef = useRef(initialRevealedAnswer?.revealedAt ?? null);
   const lastTickSoundRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const socket = new WebSocket(getLiveSocketUrl(sessionId));
+    let disposed = false;
+    let reconnectAttempt = 0;
+    let reconnectTimer: number | undefined;
+    let currentSocket: WebSocket | null = null;
 
-    socket.addEventListener("open", () => {
-      setStatus("connected");
-    });
+    function connect() {
+      if (disposed) return;
+      setStatus("connecting");
+      const socket = new WebSocket(getLiveSocketUrl(sessionId));
+      currentSocket = socket;
+      socket.addEventListener("open", () => {
+        reconnectAttempt = 0;
+        setStatus("connected");
+      });
+      socket.addEventListener("message", (event) => {
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(String(event.data));
+        } catch {
+          return;
+        }
+        if (
+          typeof parsed === "object" &&
+          parsed !== null &&
+          "type" in parsed &&
+          parsed.type === "live:state" &&
+          "participants" in parsed &&
+          "currentQuestion" in parsed &&
+          "revealedAnswer" in parsed &&
+          "answerSummary" in parsed &&
+          isParticipantList(parsed.participants) &&
+          isBoardQuestion(parsed.currentQuestion) &&
+          isBoardReveal(parsed.revealedAnswer) &&
+          isAnswerSummary(parsed.answerSummary)
+        ) {
+          setParticipants(parsed.participants);
+          setCurrentQuestion(parsed.currentQuestion);
+          setRevealedAnswer(parsed.revealedAnswer);
+          setAnswerSummary(parsed.answerSummary);
+        }
+      });
+      socket.addEventListener("close", () => {
+        if (disposed) return;
+        setStatus("closed");
+        const delay = Math.min(
+          15_000,
+          1_000 * 2 ** Math.min(reconnectAttempt++, 4),
+        );
+        reconnectTimer = window.setTimeout(connect, delay);
+      });
+    }
 
-    socket.addEventListener("message", (event) => {
-      let parsed: unknown;
-      try {
-        parsed = JSON.parse(String(event.data));
-      } catch {
-        return;
-      }
-
-      if (
-        typeof parsed === "object" &&
-        parsed !== null &&
-        "type" in parsed &&
-        parsed.type === "live:state" &&
-        "participants" in parsed &&
-        "currentQuestion" in parsed &&
-        "revealedAnswer" in parsed &&
-        "answerSummary" in parsed &&
-        isParticipantList(parsed.participants) &&
-        isBoardQuestion(parsed.currentQuestion) &&
-        isBoardReveal(parsed.revealedAnswer) &&
-        isAnswerSummary(parsed.answerSummary)
-      ) {
-        setParticipants(parsed.participants);
-        setCurrentQuestion(parsed.currentQuestion);
-        setRevealedAnswer(parsed.revealedAnswer);
-        setAnswerSummary(parsed.answerSummary);
-      }
-    });
-
-    socket.addEventListener("close", () => {
-      setStatus("closed");
-    });
-
-    socket.addEventListener("error", () => {
-      setStatus("closed");
-    });
-
-    return () => socket.close();
+    connect();
+    return () => {
+      disposed = true;
+      if (reconnectTimer !== undefined) window.clearTimeout(reconnectTimer);
+      currentSocket?.close();
+    };
   }, [sessionId]);
 
   useEffect(() => {
@@ -213,11 +230,14 @@ export function LiveBoardClient({
     currentQuestion !== null && !revealedAnswer && remainingSeconds <= 5;
 
   useEffect(() => {
-    if (!currentQuestion || currentQuestion.id === lastQuestionSoundRef.current) {
+    if (
+      !currentQuestion ||
+      currentQuestion.roundId === lastQuestionSoundRef.current
+    ) {
       return;
     }
 
-    lastQuestionSoundRef.current = currentQuestion.id;
+    lastQuestionSoundRef.current = currentQuestion.roundId;
     lastTickSoundRef.current = null;
     sound.play("question");
   }, [currentQuestion, sound]);

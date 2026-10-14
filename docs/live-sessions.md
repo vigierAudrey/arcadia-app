@@ -113,6 +113,17 @@ Règles non négociables :
 - correction diffusée uniquement en phase `reveal`, via action admin.
 - délai de réponse appliqué côté serveur à partir de `sentAt` et
   `timeLimitSeconds`.
+- contrôle strict de l'origine lors de l'upgrade WebSocket ;
+- limites de connexions, de messages et de tentatives de PIN par session
+  classe ;
+- réévaluation périodique des sessions d'authentification pendant la
+  connexion ;
+- réponse liée à un identifiant de manche généré côté serveur, afin qu'une
+  réponse retardée ne puisse pas être appliquée à la manche suivante ;
+- score attribué et diffusé seulement au moment de la révélation ;
+- reprise du même participant et de sa réponse après une coupure, à partir du
+  cookie HttpOnly de la classe. Aucun jeton de reprise n'est exposé au
+  JavaScript du navigateur.
 
 ## Modèle performance
 
@@ -200,8 +211,9 @@ existent côté tableau et côté élève, via un bouton `Son coupé` / `Son act
 
 ## Etapes suivantes
 
-1. Ajouter les transitions de manche et le scoreboard projeté.
-2. Ajouter rate limits et tests d'autorisation sur les routes live.
+1. Valider régulièrement le parcours multi-navigateurs après les changements
+   de transport ou d'authentification.
+2. Ajouter les transitions de manche et le scoreboard projeté.
 
 ## Banque PSE générale
 
