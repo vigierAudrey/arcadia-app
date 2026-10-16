@@ -6,7 +6,11 @@ import { BrandMark } from "@/components/brand-mark";
 import { AdminForm, OrderForm } from "@/features/admin/admin-forms";
 import { ClassAccessPanel } from "@/features/admin/class-access-panel";
 import { LiveSessionPanel } from "@/features/admin/live-session-panel";
-import { LIVE_QUESTION_BANK } from "@/features/live/question-bank";
+import {
+  LIVE_QUESTION_BANK,
+  getLiveQuestionModules,
+  selectLiveQuestionModule,
+} from "@/features/live/question-bank";
 import {
   getOpenItems,
   getToggleHref,
@@ -257,23 +261,17 @@ const liveQuestionTypeLabels: Record<LiveQuestionItem["type"], string> = {
   "true-false": "Vrai/Faux",
 };
 
-function groupLiveQuestionsByLevel() {
-  const groups = new Map<string, LiveQuestionItem[]>();
-
-  for (const question of LIVE_QUESTION_BANK) {
-    const key = `${question.reference.formation} · ${question.reference.level}`;
-    groups.set(key, [...(groups.get(key) ?? []), question]);
-  }
-
-  return Array.from(groups, ([label, questions]) => ({ label, questions }));
-}
-
 function LiveQuestionBankSection({
   activeSessions,
+  moduleId,
+  openItems,
 }: {
   activeSessions: ActiveLiveTarget[];
+  moduleId: unknown;
+  openItems: Set<string>;
 }) {
-  const groups = groupLiveQuestionsByLevel();
+  const modules = getLiveQuestionModules();
+  const selectedModule = selectLiveQuestionModule(moduleId);
   const hasActiveSession = activeSessions.length > 0;
 
   return (
@@ -287,8 +285,10 @@ function LiveQuestionBankSection({
           <p className={styles.eyebrow}>Jeu en direct // Banque PSE</p>
           <h2 id="live-bank-title">Questions live préparées</h2>
           <p>
-            Questions générales PSE, sans contexte métier obligatoire, tracées
-            vers les référentiels officiels.
+            Chaque module propose 5 questions : 45 secondes pour répondre et
+            environ 15 secondes de correction par question, soit environ 5 minutes.
+            Envoyez les questions une par une et révélez chaque correction avant
+            de passer à la suivante. Le temps de discussion reste libre.
           </p>
         </div>
         <div className={styles.liveBankStatus}>
@@ -333,26 +333,46 @@ function LiveQuestionBankSection({
         </div>
       ) : null}
 
+      <form
+        action="/admin#banque-live"
+        method="get"
+        className={`${styles.liveQuestionSendForm} ${styles.liveModuleSelector}`}
+      >
+        {Array.from(openItems, (id) => (
+          <input key={id} type="hidden" name="open" value={id} />
+        ))}
+        <label>
+          <span>Module à réviser</span>
+          <select name="liveModule" defaultValue={selectedModule.id} key={selectedModule.id}>
+            {modules.map((module) => (
+              <option key={module.id} value={module.id}>{module.label}</option>
+            ))}
+          </select>
+        </label>
+        <button className="admin-submit admin-submit--secondary" type="submit">
+          Afficher les 5 questions
+        </button>
+      </form>
       <div className={styles.liveBankGroups}>
-        {groups.map((group, groupIndex) => (
+        {[selectedModule].map((group) => (
           <details
             className={styles.liveBankGroup}
             key={group.label}
-            open={groupIndex < 2}
+            open
           >
             <summary>
               <span>{group.label}</span>
-              <small>{group.questions.length} question(s)</small>
+              <small>{group.questions.length} questions · environ 5 min</small>
             </summary>
             <ol className={styles.liveQuestionList}>
-              {group.questions.map((question) => (
+              {group.questions.map((question, questionIndex) => (
                 <li key={question.id}>
                   <article className={styles.liveQuestionItem}>
                     <div className={styles.liveQuestionMain}>
                       <span className={styles.liveQuestionType}>
                         {liveQuestionTypeLabels[question.type]}
                       </span>
-                      <h3>{question.title}</h3>
+                      <h3>{questionIndex + 1}/{group.questions.length} · {question.title}</h3>
                       <p>{question.prompt}</p>
                     </div>
                     <dl className={styles.liveQuestionMeta}>
@@ -632,7 +652,8 @@ function LessonTools({
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
   await connection();
-  const openItems = getOpenItems((await searchParams) ?? {});
+  const params = (await searchParams) ?? {};
+  const openItems = getOpenItems(params);
   const admin = await requireAdminPage();
   const catalog = await getAdminCatalog();
   const activeLiveTargets = catalog.flatMap((program) =>
@@ -766,7 +787,11 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             </article>
           </section>
 
-          <LiveQuestionBankSection activeSessions={activeLiveTargets} />
+          <LiveQuestionBankSection
+            activeSessions={activeLiveTargets}
+            moduleId={params.liveModule}
+            openItems={openItems}
+          />
 
           <section
             className={styles.catalog}

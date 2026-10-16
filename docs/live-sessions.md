@@ -239,3 +239,51 @@ Les sources consultées sont :
 
 Ne pas ajouter de question live PSE sans indiquer le module, la section du
 référentiel et le chemin relatif du document source.
+
+
+## Mini-quiz par module (octobre 2026)
+
+La banque live contient 140 questions : 5 pour chacun des 21 modules PSE déjà
+présents et 5 pour chacune des 7 séances de la séquence 1 du Bloc 2 CAP AAGA.
+Ce périmètre n'est pas une couverture exhaustive de tous les modules des
+référentiels.
+
+Dans la Banque live, sélectionner le module puis « Afficher les 5 questions ».
+Un seul module (5 questions) est rendu à la fois pour borner la taille de la page.
+Les questions sont numérotées et restent envoyées manuellement dans la session
+active choisie. Révéler la correction avant d'envoyer la question suivante.
+
+Chaque question laisse 45 secondes de réponse, contrôlées côté serveur. Avec
+une correction d'environ 15 secondes par question, le module dure environ
+5 minutes (225 secondes de réponse + 75 secondes de correction). Ce n'est pas
+un arrêt automatique à cinq minutes : les échanges et les transitions restent
+au rythme de l'enseignante. Une session peut servir à plusieurs modules.
+
+Les questions évaluent des connaissances et des situations simples, plutôt que
+la présence d'un thème dans le programme. Chaque question conserve une référence
+au PDF officiel de sa formation et à la section du module. Les corrections et
+les scores restent révélés uniquement sur commande admin.
+
+### Bloc 2 CAP AAGA — Séquence 1
+
+Les 35 questions du Bloc 2 suivent strictement les sept séances de la séquence
+« Cadre d’intervention, autonomie et ressources professionnelles » : structures
+d’accueil et fiabilité des sources ; limites de rôle et prévention ; projets ;
+protection des majeurs ; vieillissement ; autonomie et environnement ; accueil
+d’un nouveau résident.
+
+Elles révisent l’observation, l’ajustement de l’aide, la sécurité et la
+transmission. Elles ne demandent pas de diagnostic, de calcul autonome d’un GIR
+ni de geste de soin hors rôle. La traçabilité de chaque question pointe vers la
+séance concernée dans `CAP/CAP AAGA - Bloc 2/Sequences/Sequence_1/`.
+
+Sources de cadrage consultées : les quatre référentiels locaux cités ci-dessus,
+ainsi que les ressources officielles suivantes pour recouper les notions :
+
+- Programmes PSE en vigueur : https://eduscol.education.gouv.fr/5901/programmes-et-ressources-en-prevention-sante-environnement-voie-professionnelle
+- Alternance : https://www.service-public.gouv.fr/particuliers/vosdroits/F31704
+- Bruit : https://www.inrs.fr/risques/bruit/ce-qu-il-faut-retenir.html
+- Organisation des secours : https://www.inrs.fr/demarche/organisation-secours/accident-malaise
+
+Le mini-quiz C8 révise la protection et l'alerte ; il ne remplace pas une
+formation pratique SST. Aucun geste médical technique n'est enseigné par le quiz.

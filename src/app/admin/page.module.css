@@ -1421,3 +1421,14 @@
     padding-inline: 3rem;
   }
 }
+
+/* Long formation/module labels must fit on narrow screens. */
+.liveModuleSelector label {
+  width: min(100%, 48rem);
+  min-width: 0;
+}
+
+.liveModuleSelector select {
+  width: 100%;
+  min-width: 0;
+}

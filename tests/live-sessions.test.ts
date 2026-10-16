@@ -427,7 +427,7 @@ test("submitting an answer after the time limit is refused", () => {
       submitLiveAnswer({
         choiceIndex: 1,
         classroomId: "classroom-a",
-        now: new Date(now.getTime() + 31_000),
+        now: new Date(now.getTime() + 46_000),
         participantId: joined.participant.id,
       }),
     { message: "LIVE_QUESTION_CLOSED" },
@@ -471,4 +471,28 @@ test("an answer is bound to the exact session and round", () => {
       }),
     { message: "LIVE_SESSION_NOT_FOUND" },
   );
+});
+
+test("the expanded quiz still accepts an answer after 30 seconds and before 45 seconds", () => {
+  resetLiveSessionsForTests();
+  const now = new Date("2026-10-15T10:00:00.000Z");
+  const session = createLiveSession("classroom-duration", now);
+  const joined = joinLiveSession({
+    avatarId: "pac-yellow-cap",
+    classroomId: "classroom-duration",
+    ownerKey: "student-duration",
+    now,
+    pin: session.pin,
+  });
+  sendLiveQuestionToSession({
+    now,
+    questionId: "pse-cap-c1-revision-1",
+    sessionId: session.id,
+  });
+  assert.doesNotThrow(() => submitLiveAnswer({
+    choiceIndex: 0,
+    classroomId: "classroom-duration",
+    now: new Date(now.getTime() + 44_000),
+    participantId: joined.participant.id,
+  }));
 });
