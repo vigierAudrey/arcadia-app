@@ -6,8 +6,10 @@ import { pse1AeroC3Sequence } from "./pse-1aero-c3";
 import { pse1AeroC5Sequence } from "./pse-1aero-c5";
 import { pse1TciC3Sequence } from "./pse-1tci-c3";
 import { pse1TciC5Sequence } from "./pse-1tci-c5";
+import { pse2AeroA1Sequence } from "./pse-2aero-a1";
 import { pse2AeroC1Sequence } from "./pse-2aero-c1";
 import { pse2AeroC2Sequence } from "./pse-2aero-c2";
+import { pse2CielA1Sequence } from "./pse-2ciel-a1";
 import { pse2CielC1Sequence } from "./pse-2ciel-c1";
 import { pse2CielC2Sequence } from "./pse-2ciel-c2";
 import { pseTAeroA9Sequence } from "./pse-taero-a9";
@@ -83,6 +85,22 @@ export const contentImports: readonly ContentImport[] = [
     teachingArea: "PSE",
     teachingAreaKind: TeachingAreaKind.SUBJECT,
     sequence: pse2CielC2Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Seconde",
+    classroom: "2 AERO",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse2AeroA1Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Seconde",
+    classroom: "2 CIEL",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse2CielA1Sequence,
   },
   {
     program: "BAC PRO",
