@@ -168,5 +168,5 @@ première séance.
 
 ## Emplacement du contenu
 
-`prisma/content/pse-t-tci-c8.ts`, qui paramètre le générateur commun
+`prisma/content/pse-ttci-c8.ts`, qui paramètre le générateur commun
 `prisma/content/pse-terminale-c8.ts`, inscrit au registre `prisma/content/index.ts`.

@@ -42,3 +42,65 @@ Le fil rouge est celui des cours de la classe : l'atelier CDE, avec Karim.
 Le générateur `buildPseTerminaleB5Sequence` ne paramètre que le nom de l'atelier et de
 l'élève du fil rouge. Les notions, le lexique, les QCM, les vrai/faux et les jeux de tri
 et d'association sont génériques et ne dépendent d'aucun métier particulier.
+
+## Entrée au format `PedagogyMappingEntry`
+
+```json
+[
+  {
+    "formation": "Bac Pro TCI",
+    "niveau": "Terminale",
+    "classe": "T TCI",
+    "enseignement": "PSE",
+    "sequence": "B5. Les ressources en énergie et le développement durable",
+    "sources": [
+      {
+        "typeSource": "REFERENTIEL",
+        "titreSource": "Programme de PSE, classe terminale professionnelle (annexe 2)",
+        "referenceRelative": "BACPRO/BACPRO PSE REFERENTIEL/REFERENTIELBACPRO/spe005_annexe2_1239667.pdf",
+        "sectionOuPage": "Thématique B, module B5",
+        "extraitOuNotionUtilisee": "Énergie renouvelable, énergie non renouvelable, énergie épuisable, répartition inégale, poste de consommation, effet de serre, réchauffement climatique, empreinte carbone, pollution, atteinte à la santé, mesure collective, geste écocitoyen"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 8 — Séance 1 : les sources d'énergie",
+        "referenceRelative": "BACPRO/T/TTCI PSE/TTCI_PSE_2026_2027/08_Sequence_8_B5/S8_seance_01_les_sources_d_energie/S8_seance_01_complete.md"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 8 — Séance 2 : la consommation d'un ménage",
+        "referenceRelative": "BACPRO/T/TTCI PSE/TTCI_PSE_2026_2027/08_Sequence_8_B5/S8_seance_02_la_consommation_d_un_menage/S8_seance_02_complete.md"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 8 — Séance 3 : impacts sur environnement et santé",
+        "referenceRelative": "BACPRO/T/TTCI PSE/TTCI_PSE_2026_2027/08_Sequence_8_B5/S8_seance_03_impacts_sur_environnement_et_sante/S8_seance_03_complete.md"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 8 — Séance 4 : agir collectivement et individuellement",
+        "referenceRelative": "BACPRO/T/TTCI PSE/TTCI_PSE_2026_2027/08_Sequence_8_B5/S8_seance_04_agir_collectivement_et_individuellement/S8_seance_04_complete.md"
+      },
+      {
+        "typeSource": "RESSOURCE",
+        "titreSource": "Verbes d'action des consignes (référence commune)",
+        "referenceRelative": "_COMMUN_CONSIGNES_IA/VERBES_ACTION_CONSIGNES.md"
+      }
+    ],
+    "conformiteReferentiel": "CONFIRME",
+    "etat": "VALIDE",
+    "proposePar": "enseignante",
+    "dateValidation": "2026-10-14",
+    "commentaire": "Objectif : faire travailler les élèves sur les compétences C1 à C6 du référentiel à travers les exercices réalisés. Contenu repris des quatre séances déjà rédigées et validées par l'enseignante pour T TCI, via le générateur transversal buildPseTerminaleB5Sequence (prisma/content/pse-terminale-b5.ts), paramétré ici par pse-ttci-b5.ts (atelier CDE, Karim). Les activités sont classées CORE, le seed ne produisant pas d'autre track."
+  }
+]
+```
+
+## Emplacement du contenu
+
+Le contenu de cette séquence vit dans [`pse-terminale-b5.ts`](../prisma/content/pse-terminale-b5.ts)
+(générateur transversal) et [`pse-ttci-b5.ts`](../prisma/content/pse-ttci-b5.ts)
+(paramétrage T TCI), inscrit au registre
+[`prisma/content/index.ts`](../prisma/content/index.ts) : il part sur le site en ligne
+par ajout seul, sans jamais écraser l'existant — voir
+[`mettre-des-exercices-en-ligne.md`](mettre-des-exercices-en-ligne.md).

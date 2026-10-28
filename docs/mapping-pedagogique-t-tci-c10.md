@@ -46,3 +46,60 @@ notions, le lexique, les QCM, les vrai/faux et les jeux de tri et d'association 
 génériques : ils ne dépendent d'aucun métier particulier et peuvent être réutilisés par
 toute classe de terminale Bac Pro, par simple ajout d'un fichier de contexte
 (`pse-t<classe>-c10.ts`) et d'une entrée dans `prisma/content/index.ts`.
+
+## Entrée au format `PedagogyMappingEntry`
+
+```json
+[
+  {
+    "formation": "Bac Pro TCI",
+    "niveau": "Terminale",
+    "classe": "T TCI",
+    "enseignement": "PSE",
+    "sequence": "C10. Les risques liés à l'activité physique",
+    "sources": [
+      {
+        "typeSource": "REFERENTIEL",
+        "titreSource": "Programme de PSE, classe terminale professionnelle (annexe 2)",
+        "referenceRelative": "BACPRO/BACPRO PSE REFERENTIEL/REFERENTIELBACPRO/spe005_annexe2_1239667.pdf",
+        "sectionOuPage": "Thématique C, module C10",
+        "extraitOuNotionUtilisee": "Activité physique, activité dynamique, activité statique, posture, trouble musculosquelettique (TMS), trouble circulatoire, traumatisme physique, fatigue musculaire, vertèbre, disque intervertébral, économie d'effort, protection collective, protection individuelle"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 4 — Séance 1 : facteurs de risque et atteintes",
+        "referenceRelative": "BACPRO/T/TTCI PSE/TTCI_PSE_2026_2027/04_Sequence_4_C10/S4_seance_01_facteurs_de_risque_et_atteintes/S4_seance_01_complete.md"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 4 — Séance 2 : la colonne vertébrale",
+        "referenceRelative": "BACPRO/T/TTCI PSE/TTCI_PSE_2026_2027/04_Sequence_4_C10/S4_seance_02_la_colonne_vertebrale/S4_seance_02_complete.md"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 4 — Séance 3 : prévenir les atteintes",
+        "referenceRelative": "BACPRO/T/TTCI PSE/TTCI_PSE_2026_2027/04_Sequence_4_C10/S4_seance_03_prevenir_les_atteintes/S4_seance_03_complete.md"
+      },
+      {
+        "typeSource": "RESSOURCE",
+        "titreSource": "Verbes d'action des consignes (référence commune)",
+        "referenceRelative": "_COMMUN_CONSIGNES_IA/VERBES_ACTION_CONSIGNES.md"
+      }
+    ],
+    "conformiteReferentiel": "CONFIRME",
+    "etat": "VALIDE",
+    "proposePar": "enseignante",
+    "dateValidation": "2026-10-14",
+    "commentaire": "Objectif : faire travailler les élèves sur les compétences C1 à C6 du référentiel à travers les exercices réalisés. Contenu repris des trois séances déjà rédigées et validées par l'enseignante pour T TCI, via le générateur transversal buildPseTerminaleC10Sequence (prisma/content/pse-terminale-c10.ts), paramétré ici par pse-ttci-c10.ts (atelier CDE, Karim). Les activités sont classées CORE, le seed ne produisant pas d'autre track."
+  }
+]
+```
+
+## Emplacement du contenu
+
+Le contenu de cette séquence vit dans [`pse-terminale-c10.ts`](../prisma/content/pse-terminale-c10.ts)
+(générateur transversal) et [`pse-ttci-c10.ts`](../prisma/content/pse-ttci-c10.ts)
+(paramétrage T TCI), inscrit au registre
+[`prisma/content/index.ts`](../prisma/content/index.ts) : il part sur le site en ligne
+par ajout seul, sans jamais écraser l'existant — voir
+[`mettre-des-exercices-en-ligne.md`](mettre-des-exercices-en-ligne.md).

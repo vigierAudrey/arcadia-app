@@ -41,3 +41,60 @@ Le fil rouge est celui des cours de la classe : l'atelier CDE, avec Élodie et K
 Le générateur `buildPseTerminaleA9Sequence` ne paramètre que le nom de l'atelier et de
 l'élève du fil rouge. Les notions, le lexique, les QCM, les vrai/faux et les jeux de tri
 et d'association sont génériques et ne dépendent d'aucun métier particulier.
+
+## Entrée au format `PedagogyMappingEntry`
+
+```json
+[
+  {
+    "formation": "Bac Pro TCI",
+    "niveau": "Terminale",
+    "classe": "T TCI",
+    "enseignement": "PSE",
+    "sequence": "A9. La sécurité alimentaire",
+    "sources": [
+      {
+        "typeSource": "REFERENTIEL",
+        "titreSource": "Programme de PSE, classe terminale professionnelle (annexe 2)",
+        "referenceRelative": "BACPRO/BACPRO PSE REFERENTIEL/REFERENTIELBACPRO/spe005_annexe2_1239667.pdf",
+        "sectionOuPage": "Thématique A, module A9",
+        "extraitOuNotionUtilisee": "Qualité microbiologique, qualité chimique, agent contaminant, flore de décomposition, matière organique, chaîne du froid, conservation, date limite de consommation, lavage des mains, allergène, additif, réglementation, principe de précaution"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 7 — Séance 1 : la qualité sanitaire",
+        "referenceRelative": "BACPRO/T/TTCI PSE/TTCI_PSE_2026_2027/07_Sequence_7_A9/S7_seance_01_la_qualite_sanitaire/S7_seance_01_complete.md"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 7 — Séance 2 : conserver et lire l'étiquette",
+        "referenceRelative": "BACPRO/T/TTCI PSE/TTCI_PSE_2026_2027/07_Sequence_7_A9/S7_seance_02_conserver_et_lire_l_etiquette/S7_seance_02_complete.md"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 7 — Séance 3 : le dispositif de sécurité alimentaire",
+        "referenceRelative": "BACPRO/T/TTCI PSE/TTCI_PSE_2026_2027/07_Sequence_7_A9/S7_seance_03_le_dispositif_de_securite_alimentaire/S7_seance_03_complete.md"
+      },
+      {
+        "typeSource": "RESSOURCE",
+        "titreSource": "Verbes d'action des consignes (référence commune)",
+        "referenceRelative": "_COMMUN_CONSIGNES_IA/VERBES_ACTION_CONSIGNES.md"
+      }
+    ],
+    "conformiteReferentiel": "CONFIRME",
+    "etat": "VALIDE",
+    "proposePar": "enseignante",
+    "dateValidation": "2026-10-14",
+    "commentaire": "Objectif : faire travailler les élèves sur les compétences C1 à C6 du référentiel à travers les exercices réalisés. Contenu repris des trois séances déjà rédigées et validées par l'enseignante pour T TCI, via le générateur transversal buildPseTerminaleA9Sequence (prisma/content/pse-terminale-a9.ts), paramétré ici par pse-ttci-a9.ts (atelier CDE, Élodie et Karim). Les activités sont classées CORE, le seed ne produisant pas d'autre track."
+  }
+]
+```
+
+## Emplacement du contenu
+
+Le contenu de cette séquence vit dans [`pse-terminale-a9.ts`](../prisma/content/pse-terminale-a9.ts)
+(générateur transversal) et [`pse-ttci-a9.ts`](../prisma/content/pse-ttci-a9.ts)
+(paramétrage T TCI), inscrit au registre
+[`prisma/content/index.ts`](../prisma/content/index.ts) : il part sur le site en ligne
+par ajout seul, sans jamais écraser l'existant — voir
+[`mettre-des-exercices-en-ligne.md`](mettre-des-exercices-en-ligne.md).

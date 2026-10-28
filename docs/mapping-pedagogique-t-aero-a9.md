@@ -47,3 +47,60 @@ et d'association sont génériques : ils ne dépendent d'aucun métier particuli
 peuvent être réutilisés par toute classe de terminale Bac Pro (T TCI dès à présent,
 T CIEL ou un autre niveau à l'avenir), par simple ajout d'un fichier de contexte
 (`pse-t<classe>-a9.ts`) et d'une entrée dans `prisma/content/index.ts`.
+
+## Entrée au format `PedagogyMappingEntry`
+
+```json
+[
+  {
+    "formation": "Bac Pro Aéronautique",
+    "niveau": "Terminale",
+    "classe": "T AERO",
+    "enseignement": "PSE",
+    "sequence": "A9. La sécurité alimentaire",
+    "sources": [
+      {
+        "typeSource": "REFERENTIEL",
+        "titreSource": "Programme de PSE, classe terminale professionnelle (annexe 2)",
+        "referenceRelative": "BACPRO/BACPRO PSE REFERENTIEL/REFERENTIELBACPRO/spe005_annexe2_1239667.pdf",
+        "sectionOuPage": "Thématique A, module A9",
+        "extraitOuNotionUtilisee": "Qualité microbiologique, qualité chimique, agent contaminant, flore de décomposition, matière organique, chaîne du froid, conservation, date limite de consommation, lavage des mains, allergène, additif, réglementation, principe de précaution"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 7 — Séance 1 : la qualité sanitaire des aliments",
+        "referenceRelative": "BACPRO/T/TAERO PSE/PSE - Progression et sequences/Sequences/Sequence_7/S7_seance_01_la_qualite_sanitaire_des_aliments/S7_seance_01_complete.md"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 7 — Séance 2 : conserver et lire une étiquette",
+        "referenceRelative": "BACPRO/T/TAERO PSE/PSE - Progression et sequences/Sequences/Sequence_7/S7_seance_02_conserver_et_lire_une_etiquette/S7_seance_02_complete.md"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 7 — Séance 3 : le dispositif de sécurité alimentaire",
+        "referenceRelative": "BACPRO/T/TAERO PSE/PSE - Progression et sequences/Sequences/Sequence_7/S7_seance_03_le_dispositif_de_securite_alimentaire/S7_seance_03_complete.md"
+      },
+      {
+        "typeSource": "RESSOURCE",
+        "titreSource": "Verbes d'action des consignes (référence commune)",
+        "referenceRelative": "_COMMUN_CONSIGNES_IA/VERBES_ACTION_CONSIGNES.md"
+      }
+    ],
+    "conformiteReferentiel": "CONFIRME",
+    "etat": "VALIDE",
+    "proposePar": "enseignante",
+    "dateValidation": "2026-10-14",
+    "commentaire": "Objectif : faire travailler les élèves sur les compétences C1 à C6 du référentiel à travers les exercices réalisés. Contenu repris des trois séances déjà rédigées et validées par l'enseignante pour T AERO, via le générateur transversal buildPseTerminaleA9Sequence (prisma/content/pse-terminale-a9.ts), paramétré ici par pse-taero-a9.ts (atelier AMA, élève Théo). Les activités sont classées CORE, le seed ne produisant pas d'autre track."
+  }
+]
+```
+
+## Emplacement du contenu
+
+Le contenu de cette séquence vit dans [`pse-terminale-a9.ts`](../prisma/content/pse-terminale-a9.ts)
+(générateur transversal) et [`pse-taero-a9.ts`](../prisma/content/pse-taero-a9.ts)
+(paramétrage T AERO), inscrit au registre
+[`prisma/content/index.ts`](../prisma/content/index.ts) : il part sur le site en ligne
+par ajout seul, sans jamais écraser l'existant — voir
+[`mettre-des-exercices-en-ligne.md`](mettre-des-exercices-en-ligne.md).

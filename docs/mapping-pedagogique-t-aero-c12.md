@@ -45,3 +45,55 @@ notions, le lexique, les QCM, les vrai/faux et les jeux de tri et d'association 
 génériques : ils ne dépendent d'aucun métier particulier et peuvent être réutilisés par
 toute classe de terminale Bac Pro, par simple ajout d'un fichier de contexte
 (`pse-t<classe>-c12.ts`) et d'une entrée dans `prisma/content/index.ts`.
+
+## Entrée au format `PedagogyMappingEntry`
+
+```json
+[
+  {
+    "formation": "Bac Pro Aéronautique",
+    "niveau": "Terminale",
+    "classe": "T AERO",
+    "enseignement": "PSE",
+    "sequence": "C12. L'égalité de traitement au travail",
+    "sources": [
+      {
+        "typeSource": "REFERENTIEL",
+        "titreSource": "Programme de PSE, classe terminale professionnelle (annexe 2)",
+        "referenceRelative": "BACPRO/BACPRO PSE REFERENTIEL/REFERENTIELBACPRO/spe005_annexe2_1239667.pdf",
+        "sectionOuPage": "Thématique C, module C12",
+        "extraitOuNotionUtilisee": "Discrimination, Code du travail, critère, égalité professionnelle, législation, obligation, comité social économique, Défenseur des droits, inspection du travail, organisation syndicale"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 6 — Séance 1 : reconnaître une discrimination",
+        "referenceRelative": "BACPRO/T/TAERO PSE/PSE - Progression et sequences/Sequences/Sequence_6/S6_seance_01_reconnaitre_une_discrimination/S6_seance_01_complete.md"
+      },
+      {
+        "typeSource": "COURS",
+        "titreSource": "Séquence 6 — Séance 2 : égalité et recours",
+        "referenceRelative": "BACPRO/T/TAERO PSE/PSE - Progression et sequences/Sequences/Sequence_6/S6_seance_02_egalite_et_recours/S6_seance_02_complete.md"
+      },
+      {
+        "typeSource": "RESSOURCE",
+        "titreSource": "Verbes d'action des consignes (référence commune)",
+        "referenceRelative": "_COMMUN_CONSIGNES_IA/VERBES_ACTION_CONSIGNES.md"
+      }
+    ],
+    "conformiteReferentiel": "CONFIRME",
+    "etat": "VALIDE",
+    "proposePar": "enseignante",
+    "dateValidation": "2026-10-14",
+    "commentaire": "Objectif : faire travailler les élèves sur les compétences C1 à C6 du référentiel à travers les exercices réalisés. Contenu repris des deux séances déjà rédigées et validées par l'enseignante pour T AERO, via le générateur transversal buildPseTerminaleC12Sequence (prisma/content/pse-terminale-c12.ts), paramétré ici par pse-taero-c12.ts (atelier AMA). Les activités sont classées CORE, le seed ne produisant pas d'autre track."
+  }
+]
+```
+
+## Emplacement du contenu
+
+Le contenu de cette séquence vit dans [`pse-terminale-c12.ts`](../prisma/content/pse-terminale-c12.ts)
+(générateur transversal) et [`pse-taero-c12.ts`](../prisma/content/pse-taero-c12.ts)
+(paramétrage T AERO), inscrit au registre
+[`prisma/content/index.ts`](../prisma/content/index.ts) : il part sur le site en ligne
+par ajout seul, sans jamais écraser l'existant — voir
+[`mettre-des-exercices-en-ligne.md`](mettre-des-exercices-en-ligne.md).

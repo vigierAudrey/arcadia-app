@@ -5,12 +5,11 @@ Ce document définit uniquement le **format** de correspondance entre les docume
 TeachingArea → thème/module référentiel → notion/capacité). Voir la règle d'autorité complète et les états dans
 [`pedagogie-agents.md`](pedagogie-agents.md) (§9-10).
 
-**Deux mappings réels ont été produits à ce jour** — voir
-[`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) (T AERO / PSE / module C7)
-et [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) (1 AERO / PSE /
-module C3). En dehors de ceux-ci, le format ne couvre
-aucun des 4121 fichiers de `cours-source/` — voir « Ce qui n'est pas fait » en fin de
-document.
+**27 fiches de mapping réelles existent à ce jour** (`docs/mapping-pedagogique-*.md`),
+couvrant Seconde, Première et Terminale Bac Pro ainsi que CAP AAGA — la première produite
+étant [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) (T AERO / PSE /
+module C7). En dehors de ces fiches, le format ne couvre aucun des autres fichiers de
+`cours-source/` — voir « Ce qui n'est pas fait » en fin de document.
 
 ## Principe
 
@@ -127,8 +126,8 @@ qu'elles ne sont pas passées à `VALIDE`.
 
 ## Ce qui n'est pas fait à ce stade
 
-- Aucun fichier de mapping réel n'existe dans le dépôt (les deux mappings produits sont
-  documentaires, pas des données).
+- Les mappings produits sont documentaires (fichiers Markdown), pas des données en base :
+  aucune table `PedagogicalSourceReference` n'est alimentée par ces fiches.
 - Aucune génération automatique de propositions (`PROPOSE`) n'a été lancée sur
   `cours-source/`.
 - Le mécanisme qui produirait ces propositions à partir de `.cours-index/` (arborescence,
