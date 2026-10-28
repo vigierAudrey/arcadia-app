@@ -32,15 +32,28 @@ En pratique : une première passe en `simulation` pour regarder, une seconde en
 | 2 AERO / PSE | `C2. Les notions de base en prévention des risques professionnels` | 3 séances, 32 activités | [`mapping-pedagogique-2-aero-c2.md`](mapping-pedagogique-2-aero-c2.md) |
 | 2 CIEL / PSE | `C1. Les enjeux de la santé et sécurité au travail` | 3 séances, 25 activités | [`mapping-pedagogique-2-ciel.md`](mapping-pedagogique-2-ciel.md) |
 | 2 CIEL / PSE | `C2. Les notions de base en prévention des risques professionnels` | 3 séances, 32 activités | [`mapping-pedagogique-2-ciel-c2.md`](mapping-pedagogique-2-ciel-c2.md) |
+| 2 AERO / PSE | `A1. Mon capital santé et le système de santé qui me protège` | 4 séances, 29 activités | [`mapping-pedagogique-2-aero-a1.md`](mapping-pedagogique-2-aero-a1.md) |
+| 2 CIEL / PSE | `A1. Mon capital santé et le système de santé qui me protège` | 4 séances, 29 activités | [`mapping-pedagogique-2-ciel-a1.md`](mapping-pedagogique-2-ciel-a1.md) |
 | 1 AERO / PSE | `C3. Les acteurs de prévention` | 3 séances, 25 activités | [`mapping-pedagogique-1-aero.md`](mapping-pedagogique-1-aero.md) |
 | 1 AERO / PSE | `C5. L’analyse des risques professionnels` | 4 séances, 37 activités | [`mapping-pedagogique-1-aero-c5.md`](mapping-pedagogique-1-aero-c5.md) |
 | 1 TCI / PSE | `C3. Les acteurs de prévention` | 3 séances, 24 activités | [`mapping-pedagogique-1-tci.md`](mapping-pedagogique-1-tci.md) |
 | 1 TCI / PSE | `C5. L’analyse des risques professionnels` | 4 séances, 37 activités | [`mapping-pedagogique-1-tci-c5.md`](mapping-pedagogique-1-tci-c5.md) |
 | T AERO / PSE | `C7. Le suivi de la santé au travail` | 4 séances, 30 activités | [`mapping-pedagogique-t-aero.md`](mapping-pedagogique-t-aero.md) |
 | T AERO / PSE | `C8. Déclaration et réparation des accidents du travail et des maladies professionnelles` | 2 séances, 26 activités | [`mapping-pedagogique-t-aero-c8.md`](mapping-pedagogique-t-aero-c8.md) |
+| T AERO / PSE | `C9. Les risques psychosociaux` | 4 séances, 50 activités | [`mapping-pedagogique-t-aero-c9.md`](mapping-pedagogique-t-aero-c9.md) |
+| T AERO / PSE | `C10. Les risques liés à l’activité physique` | 3 séances, 18 activités | [`mapping-pedagogique-t-aero-c10.md`](mapping-pedagogique-t-aero-c10.md) |
+| T AERO / PSE | `C11. L’analyse d’une situation de travail` | 4 séances, 21 activités | [`mapping-pedagogique-t-aero-c11.md`](mapping-pedagogique-t-aero-c11.md) |
+| T AERO / PSE | `C12. L’égalité de traitement au travail` | 2 séances, 13 activités | [`mapping-pedagogique-t-aero-c12.md`](mapping-pedagogique-t-aero-c12.md) |
+| T AERO / PSE | `A9. La sécurité alimentaire` | 3 séances, 23 activités | [`mapping-pedagogique-t-aero-a9.md`](mapping-pedagogique-t-aero-a9.md) |
+| T AERO / PSE | `B5. Les ressources en énergie et le développement durable` | 4 séances, 23 activités | [`mapping-pedagogique-t-aero-b5.md`](mapping-pedagogique-t-aero-b5.md) |
 | T TCI / PSE | `C7. Le suivi de la santé au travail` | 5 séances, 39 activités | [`mapping-pedagogique-t-tci.md`](mapping-pedagogique-t-tci.md) |
 | T TCI / PSE | `C8. Déclaration et réparation des accidents du travail et des maladies professionnelles` | 2 séances, 26 activités | [`mapping-pedagogique-t-tci-c8.md`](mapping-pedagogique-t-tci-c8.md) |
 | T TCI / PSE | `C9. Les risques psychosociaux` | 4 séances, 51 activités | [`mapping-pedagogique-t-tci-c9.md`](mapping-pedagogique-t-tci-c9.md) |
+| T TCI / PSE | `C10. Les risques liés à l’activité physique` | 3 séances, 18 activités | [`mapping-pedagogique-t-tci-c10.md`](mapping-pedagogique-t-tci-c10.md) |
+| T TCI / PSE | `C11. L’analyse d’une situation de travail` | 4 séances, 21 activités | [`mapping-pedagogique-t-tci-c11.md`](mapping-pedagogique-t-tci-c11.md) |
+| T TCI / PSE | `C12. L’égalité de traitement au travail` | 2 séances, 13 activités | [`mapping-pedagogique-t-tci-c12.md`](mapping-pedagogique-t-tci-c12.md) |
+| T TCI / PSE | `A9. La sécurité alimentaire` | 3 séances, 23 activités | [`mapping-pedagogique-t-tci-a9.md`](mapping-pedagogique-t-tci-a9.md) |
+| T TCI / PSE | `B5. Les ressources en énergie et le développement durable` | 4 séances, 23 activités | [`mapping-pedagogique-t-tci-b5.md`](mapping-pedagogique-t-tci-b5.md) |
 | T AAGA / PSE | `C1. Les différents contrats de travail` | 3 séances, 25 activités | [`mapping-pedagogique-t-aaga.md`](mapping-pedagogique-t-aaga.md) |
 | T AAGA / PSE | `C5. Les risques liés à l’activité physique du métier` | 3 séances, 36 activités | [`mapping-pedagogique-t-aaga-c5.md`](mapping-pedagogique-t-aaga-c5.md) |
 | T AAGA / Bloc 2 | `CT3. Cadre d’intervention, autonomie et ressources` | 7 séances, 52 activités | [`mapping-pedagogique-t-aaga-bloc2.md`](mapping-pedagogique-t-aaga-bloc2.md) |
