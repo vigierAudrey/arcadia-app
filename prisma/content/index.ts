@@ -10,10 +10,12 @@ import { pse1TciC5Sequence } from "./pse-1tci-c5";
 import { pse1TciC6Sequence } from "./pse-1tci-c6";
 import { pse2AeroA1Sequence } from "./pse-2aero-a1";
 import { pse2AeroA2Sequence } from "./pse-2aero-a2";
+import { pse2AeroA3Sequence } from "./pse-2aero-a3";
 import { pse2AeroC1Sequence } from "./pse-2aero-c1";
 import { pse2AeroC2Sequence } from "./pse-2aero-c2";
 import { pse2CielA1Sequence } from "./pse-2ciel-a1";
 import { pse2CielA2Sequence } from "./pse-2ciel-a2";
+import { pse2CielA3Sequence } from "./pse-2ciel-a3";
 import { pse2CielC1Sequence } from "./pse-2ciel-c1";
 import { pse2CielC2Sequence } from "./pse-2ciel-c2";
 import { pseTAeroA9Sequence } from "./pse-taero-a9";
@@ -121,6 +123,22 @@ export const contentImports: readonly ContentImport[] = [
     teachingArea: "PSE",
     teachingAreaKind: TeachingAreaKind.SUBJECT,
     sequence: pse2CielA2Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Seconde",
+    classroom: "2 AERO",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse2AeroA3Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Seconde",
+    classroom: "2 CIEL",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse2CielA3Sequence,
   },
   {
     program: "BAC PRO",
