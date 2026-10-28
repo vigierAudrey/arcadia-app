@@ -4,8 +4,10 @@ import type { InitialLearningSequence } from "./catalog-types";
 import { bloc2TAagaCt3Sequence } from "./bloc2-taaga-ct3";
 import { pse1AeroC3Sequence } from "./pse-1aero-c3";
 import { pse1AeroC5Sequence } from "./pse-1aero-c5";
+import { pse1AeroC6Sequence } from "./pse-1aero-c6";
 import { pse1TciC3Sequence } from "./pse-1tci-c3";
 import { pse1TciC5Sequence } from "./pse-1tci-c5";
+import { pse1TciC6Sequence } from "./pse-1tci-c6";
 import { pse2AeroA1Sequence } from "./pse-2aero-a1";
 import { pse2AeroA2Sequence } from "./pse-2aero-a2";
 import { pse2AeroC1Sequence } from "./pse-2aero-c1";
@@ -139,6 +141,14 @@ export const contentImports: readonly ContentImport[] = [
   {
     program: "BAC PRO",
     level: "Première",
+    classroom: "1 AERO",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse1AeroC6Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Première",
     classroom: "1 TCI",
     teachingArea: "PSE",
     teachingAreaKind: TeachingAreaKind.SUBJECT,
@@ -151,6 +161,14 @@ export const contentImports: readonly ContentImport[] = [
     teachingArea: "PSE",
     teachingAreaKind: TeachingAreaKind.SUBJECT,
     sequence: pse1TciC5Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Première",
+    classroom: "1 TCI",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse1TciC6Sequence,
   },
   {
     program: "BAC PRO",
