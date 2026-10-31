@@ -2,10 +2,12 @@ import { TeachingAreaKind } from "../../src/generated/prisma/enums";
 
 import type { InitialLearningSequence } from "./catalog-types";
 import { bloc2TAagaCt3Sequence } from "./bloc2-taaga-ct3";
+import { pse1AeroA8Sequence } from "./pse-1aero-a8";
 import { pse1AeroC3Sequence } from "./pse-1aero-c3";
 import { pse1AeroC4Sequence } from "./pse-1aero-c4";
 import { pse1AeroC5Sequence } from "./pse-1aero-c5";
 import { pse1AeroC6Sequence } from "./pse-1aero-c6";
+import { pse1TciA8Sequence } from "./pse-1tci-a8";
 import { pse1TciC3Sequence } from "./pse-1tci-c3";
 import { pse1TciC4Sequence } from "./pse-1tci-c4";
 import { pse1TciC5Sequence } from "./pse-1tci-c5";
@@ -197,6 +199,22 @@ export const contentImports: readonly ContentImport[] = [
     teachingArea: "PSE",
     teachingAreaKind: TeachingAreaKind.SUBJECT,
     sequence: pse1TciC4Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Première",
+    classroom: "1 AERO",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse1AeroA8Sequence,
+  },
+  {
+    program: "BAC PRO",
+    level: "Première",
+    classroom: "1 TCI",
+    teachingArea: "PSE",
+    teachingAreaKind: TeachingAreaKind.SUBJECT,
+    sequence: pse1TciA8Sequence,
   },
   {
     program: "BAC PRO",
